@@ -1,4 +1,4 @@
-# vue-cli4
+# Pay
 
 ## Project setup
 ```

@@ -44,6 +44,16 @@
   }
 }
 
+
+/* 手机端 */
+@media (max-width: 767px) {
+  .top-wrap {
+    padding: 0 24px;
+    .top-content {
+      width: 100%;
+    }
+  }
+}
 </style>
 
 <script>

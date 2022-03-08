@@ -1,140 +1,125 @@
 <template>
-  <div class="header-wrap u-flex u-row-between" :class="{'home-header-wrap': headerStyle == 'home', 'invitation-header-wrap': headerStyle == 'invitation'}">
-    <div class="header-left u-flex">
-      <div class="header-logo">
-        <h1 class="logo" style="color: #fff; margin-bottom: 10px;">
-          <!-- <router-link to="/">
-            <img
-              src="@/assets/images/meta_logo.png"
-              alt="logo"
-              style="width: 142px"
-            />
-          </router-link> -->
-          Meta Pay
-        </h1>
+  <div>
+    <div class="hidden-xs header-wrap u-flex u-row-between" :class="{'home-header-wrap': headerStyle == 'home', 'invitation-header-wrap': headerStyle == 'invitation'}">
+      <div class="header-left u-flex">
+        <div class="header-logo">
+          <h1 class="logo" style="color: #fff; margin-bottom: 10px;">
+            <!-- <router-link to="/">
+              <img
+                src="@/assets/images/meta_logo.png"
+                alt="logo"
+                style="width: 142px"
+              />
+            </router-link> -->
+            Meta Pay
+          </h1>
+        </div>
+        <!-- 导航 -->
+        <div class="header-nav">
+          <router-link to="/otc/trade/buy-usdt" class="link u-m-l-24 u-m-r-24">{{ $t("header.buymoney") }}</router-link>
+          <router-link to="/otc/trade/sell-usdt" class="link u-m-r-24">卖币</router-link>
+          <router-link to="/myads" class="link u-m-r-24">我的广告</router-link>
+        </div>
       </div>
-      <!-- 导航 -->
-      <div class="header-nav">
-        <router-link to="/otc/trade/buy-usdt" class="link u-m-l-24 u-m-r-24">{{ $t("header.buymoney") }}</router-link>
-        <router-link to="/otc/trade/sell-usdt" class="link u-m-r-24">卖币</router-link>
-        <router-link to="/myads" class="link u-m-r-24">我的广告</router-link>
-        <!-- <Menu mode="horizontal" >
-          <MenuItem name="nav-buy" to="/otc/trade/buy-usdt">{{ $t("header.buymoney") }}</MenuItem>
-          <MenuItem name="nav-sell" to="/otc/trade/sell-usdt">卖币</MenuItem>
-          <MenuItem name="nav-myad" to="/myads">我的广告</MenuItem>
-        </Menu> -->
-      </div>
-    </div>
-    <div class="header-right u-flex">
-      <!-- 已登录 -->
-      <div class="u-flex" v-if="isLogin">
-        <!-- 资产 -->
-        <router-link to="/finance/spot" class="link u-m-r-24">钱包</router-link>
-        <!-- <Dropdown>
-          <div style="color: hsla(0,0%,100%,.8); cursor: pointer" class="u-font-14">
-            {{ $t("header.assets") }}
-          </div>
-          <DropdownMenu slot="list">
-            <DropdownItem>
-              <router-link to="/finance/account" class="dropdown-item-link">{{ $t("header.account") }}</router-link>
-            </DropdownItem>
-            <DropdownItem>
-              <router-link to="/finance/spot" class="dropdown-item-link">{{ $t("header.spot") }}</router-link>
-            </DropdownItem>
-            <DropdownItem>
-              <router-link to="/finance/otc" class="dropdown-item-link">{{ $t("header.otc") }}</router-link>
-            </DropdownItem>
-            <DropdownItem>
-              <router-link to="/deposit" class="dropdown-item-link">{{ $t("header.deposit") }}</router-link>
-            </DropdownItem>
-            <DropdownItem>
-              <router-link to="/withdraw" class="dropdown-item-link">{{ $t("header.withdraw") }}</router-link>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown> -->
+      <div class="header-right u-flex">
+        <!-- 已登录 -->
+        <div class="u-flex" v-if="isLogin">
+          <!-- 资产 -->
+          <router-link to="/finance/spot" class="link u-m-r-24">钱包</router-link>
+          
+          <!-- 订单 -->
+          <router-link to="/otc/orders" class="link u-m-r-24">{{ $t("header.order") }}</router-link>
+          
+          <Button to="/deposit" type="primary">充值</Button>
 
-        <!-- 订单 -->
-        <router-link to="/otc/orders" class="link u-m-r-24">{{ $t("header.order") }}</router-link>
-        <!-- <Dropdown class="u-p-l-24">
-          <div style="color: hsla(0,0%,100%,.8); cursor: pointer" class="u-font-14">
-            {{ $t("header.order") }}
-          </div>
-          <DropdownMenu slot="list">
-            <DropdownItem>
-              <router-link to="/transac" class="dropdown-item-link">{{ $t("header.transac") }}</router-link>
-            </DropdownItem>
-            <DropdownItem>
-              <router-link to="/otc/orders" class="dropdown-item-link">{{ $t("header.orders") }}</router-link>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown> -->
+          <!-- 个人中心 -->
+          <Dropdown class="u-p-l-24 u-p-r-24">
+            <div style="color: hsla(0,0%,100%,.8)" class="u-flex">
+              <Icon type="md-person" size="20"></Icon>
+            </div>
+            <DropdownMenu slot="list">
+              <DropdownItem>
+                <router-link to="/security" class="dropdown-item-link">{{ $t("header.security") }}</router-link>
+              </DropdownItem>
+              <DropdownItem>
+                <router-link to="/set-payment" class="dropdown-item-link">{{ $t("header.setPayment") }}</router-link>
+              </DropdownItem>
+              <DropdownItem>
+                <div @click="logout" class="dropdown-item-link">{{ $t("header.logout") }}</div>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <!-- 未登录 -->
+        <div class="u-font-14" v-else>
+          <router-link to="/login" style="color: hsla(0,0%,100%,.8);">{{$t("header.login")}}</router-link>
+          <router-link to="/register" style="color: hsla(0,0%,100%,.8);" class="reg u-m-l-20 u-m-r-20">{{$t("header.reg")}}</router-link>
+        </div>
 
-        <!-- <router-link to="/deposit" style="color: hsla(0,0%,100%,.8);" class="reg u-font-14">充值</router-link> -->
-        <Button to="/deposit" type="primary">充值</Button>
-
-        <!-- 个人中心 -->
-        <Dropdown class="u-p-l-24 u-p-r-24">
-          <div style="color: hsla(0,0%,100%,.8)" class="u-flex">
-            <Icon type="md-person" size="20"></Icon>
-          </div>
-          <DropdownMenu slot="list">
-            <DropdownItem>
-              <router-link to="/security" class="dropdown-item-link">{{ $t("header.security") }}</router-link>
-            </DropdownItem>
-            <DropdownItem>
-              <router-link to="/set-payment" class="dropdown-item-link">{{ $t("header.setPayment") }}</router-link>
-            </DropdownItem>
-            <DropdownItem>
-              <div @click="logout" class="dropdown-item-link">{{ $t("header.logout") }}</div>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
-      <!-- 未登录 -->
-      <div class="u-font-14" v-else>
-        <router-link to="/login" style="color: hsla(0,0%,100%,.8);">{{$t("header.login")}}</router-link>
-        <router-link to="/register" style="color: hsla(0,0%,100%,.8);" class="reg u-m-l-20 u-m-r-20">{{$t("header.reg")}}</router-link>
-      </div>
-
-      <!-- App下载 -->
-      <div class="app-down u-p-l-20">
-        <poptip placement="bottom" width="120" class="appdownload" trigger="hover">
-          <div style="font-size:14px; color: hsla(0,0%,100%,.8);">{{$t("header.appdownlaod")}}
-            <Icon type="md-arrow-dropdown" size="18" />
-          </div>
-          <div class="u-text-center u-p-t-10 u-p-b-10" slot="content">
-            <div class="ios">
-              <img src="@/assets/images/appdownload.png" style="width: 116px;" alt="">
-              <div class="tips">
-                <span>{{$t("header.downloadapp")}}</span>
+        <!-- App下载 -->
+        <div class="app-down u-p-l-20">
+          <poptip placement="bottom" width="120" class="appdownload" trigger="hover">
+            <div style="font-size:14px; color: hsla(0,0%,100%,.8);">{{$t("header.appdownlaod")}}
+              <Icon type="md-arrow-dropdown" size="18" />
+            </div>
+            <div class="u-text-center u-p-t-10 u-p-b-10" slot="content">
+              <div class="ios">
+                <img src="@/assets/images/appdownload.png" style="width: 116px;" alt="">
+                <div class="tips">
+                  <span>{{$t("header.downloadapp")}}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </poptip>
-      </div>
+          </poptip>
+        </div>
 
-      <!-- 语言切换 -->
-      <Menu
-        mode="horizontal"
-        width="auto"
-        @on-select="changelanguage"
-        style="height: 50px; line-height: 50px"
-      >
-        <Submenu name="lang">
-          <template slot="title" class="lang-title">
-            <span style="color: hsla(0,0%,100%,.8)">{{ languageValue }}</span>
-          </template>
-          <MenuItem name="en" class="lang-item">English</MenuItem>
-          <!-- <MenuItem name="ja_JP" class="lang-item">日本語</MenuItem>
-          <MenuItem name="ko_KR" class="lang-item">한국어</MenuItem>
-          <MenuItem name="de_DE" class="lang-item">Deutsche</MenuItem>
-          <MenuItem name="fr_FR" class="lang-item">français</MenuItem>
-          <MenuItem name="it_IT" class="lang-item">italiano</MenuItem>
-          <MenuItem name="es_ES" class="lang-item">Español</MenuItem> -->
-          <MenuItem name="zh" class="lang-item">繁體中文</MenuItem>
-          <MenuItem name="zh-CN" class="lang-item">简体中文</MenuItem>
-        </Submenu>
-      </Menu>
+        <!-- 语言切换 -->
+        <Menu
+          mode="horizontal"
+          width="auto"
+          @on-select="changelanguage"
+          style="height: 50px; line-height: 50px"
+        >
+          <Submenu name="lang">
+            <template slot="title" class="lang-title">
+              <span style="color: hsla(0,0%,100%,.8)">{{ languageValue }}</span>
+            </template>
+            <MenuItem name="en" class="lang-item">English</MenuItem>
+            <MenuItem name="zh" class="lang-item">繁體中文</MenuItem>
+            <MenuItem name="zh-CN" class="lang-item">简体中文</MenuItem>
+          </Submenu>
+        </Menu>
+      </div>
+    </div>
+    <div class="hidden-lg xs-header-wrap u-flex u-row-between">
+      <h1 class="logo" style="color: #fff; margin-bottom: 10px; line-height: 60px; padding-left: 10px">
+        Meta Pay
+      </h1>
+      <div class="u-flex">
+        <div class="u-flex" v-if="isLogin">
+          <Icon type="md-person" size="24" color="#fff" @click="userShow = true"></Icon>
+        </div>
+        <div class="u-font-14" v-else>
+          <!-- <router-link to="/login" style="color: hsla(0,0%,100%,.8);">{{$t("header.login")}}</router-link> -->
+          <!-- <router-link to="/register" style="color: hsla(0,0%,100%,.8);" class="reg u-m-l-20 u-m-r-20">{{$t("header.reg")}}</router-link> -->
+          <Button to="/register" type="primary">{{$t("header.reg")}}</Button>
+        </div>
+        <Icon type="md-menu" size="30" color="#fff" class="u-p-l-20 u-p-r-10" @click="navShow = true"/>
+      </div>
+      <van-popup v-model="navShow" position="right" closeable>
+        <div class="nav-wrap" @click="navShow = false">
+          <van-cell title="买币" to="/otc/trade/buy-usdt" size="large"/>
+          <van-cell title="卖币" to="/otc/trade/sell-usdt" size="large"/>
+          <van-cell title="我的广告" to="/myads" size="large"/>
+        </div>
+      </van-popup>
+      <van-popup v-model="userShow" position="right" closeable>
+        <div class="nav-wrap" @click="userShow = false">
+          <van-cell :title="$t('header.security')" to="/security" size="large"/>
+          <van-cell :title="$t('header.setPayment')" to="/set-payment" size="large"/>
+          <van-cell :title="$t('header.logout')" size="large" @click="logout"/>
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -145,7 +130,8 @@ import { logout } from '@/api/user'
 export default {
   data() {
     return {
-
+      navShow: false,
+      userShow: false,
     };
   },
   created() {
@@ -186,7 +172,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['SET_ATCIVENAV']),
+    ...mapMutations(['SET_ATCIVENAV', 'SET_ISLOGIN']),
     /* 切换语言 */
     changelanguage: function (name) {
       // console.log("change language: " + name);
@@ -339,6 +325,20 @@ export default {
     &:hover {
       background-color: #6ea6ff;
     }
+  }
+}
+
+/* 手机端 */
+@media (max-width: 767px) {
+  .xs-header-wrap {
+    background-color: #0c0c33;
+    padding: 0 8px;
+    height: 64px;
+  }
+  .nav-wrap {
+    width: 100vw;
+    height: 100vh;
+    padding: 28px 0;
   }
 }
 </style>

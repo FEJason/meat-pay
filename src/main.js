@@ -8,10 +8,17 @@ import VueI18n from 'vue-i18n';
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
 import './assets/icons/iconfont.css';
-// import Api from './api/api';
+import 'vant/lib/index.css';
 import Clipboard from 'v-clipboard'
 
 import globalFn from '@/util/index' // 自定义全局方法
+
+import { Popup } from 'vant';
+import { Cell, CellGroup } from 'vant';
+
+Vue.use(Cell);
+Vue.use(CellGroup);
+Vue.use(Popup);
 
 var moment = require('moment');
 var momentTimezone = require('moment-timezone');
