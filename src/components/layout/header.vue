@@ -100,24 +100,35 @@
           <Icon type="md-person" size="24" color="#fff" @click="userShow = true"></Icon>
         </div>
         <div class="u-font-14" v-else>
-          <!-- <router-link to="/login" style="color: hsla(0,0%,100%,.8);">{{$t("header.login")}}</router-link> -->
+          <router-link to="/login" style="color: hsla(0,0%,100%,.8);">{{$t("header.login")}}</router-link>
           <!-- <router-link to="/register" style="color: hsla(0,0%,100%,.8);" class="reg u-m-l-20 u-m-r-20">{{$t("header.reg")}}</router-link> -->
-          <Button to="/register" type="primary">{{$t("header.reg")}}</Button>
+          <Button to="/register" type="primary" class="u-m-l-20">{{$t("header.reg")}}</Button>
         </div>
         <Icon type="md-menu" size="30" color="#fff" class="u-p-l-20 u-p-r-10" @click="navShow = true"/>
       </div>
       <van-popup v-model="navShow" position="right" closeable>
-        <div class="nav-wrap" @click="navShow = false">
-          <van-cell title="买币" to="/otc/trade/buy-usdt" size="large"/>
-          <van-cell title="卖币" to="/otc/trade/sell-usdt" size="large"/>
-          <van-cell title="我的广告" to="/myads" size="large"/>
+        <div class="nav-wrap">
+          <div @click="navShow = false">
+            <van-cell title="买币" to="/otc/trade/buy-usdt" size="large"/>
+            <van-cell title="卖币" to="/otc/trade/sell-usdt" size="large"/>
+            <van-cell title="我的广告" to="/myads" size="large"/>
+          </div>
         </div>
       </van-popup>
       <van-popup v-model="userShow" position="right" closeable>
-        <div class="nav-wrap" @click="userShow = false">
-          <van-cell :title="$t('header.security')" to="/security" size="large"/>
-          <van-cell :title="$t('header.setPayment')" to="/set-payment" size="large"/>
-          <van-cell :title="$t('header.logout')" size="large" @click="logout"/>
+        <div class="nav-wrap">
+          <div @click="userShow = false">
+            <div class="u-p-l-16 u-p-r-16 u-m-b-20" style="font-weight: blod; color: #333">
+              <p class="u-font-20">{{userInfo.username}}</p>
+              <p>UID: {{userInfo.uuid}}</p>
+            </div>
+            <van-cell title="钱包" to="/finance/spot" size="large"/>
+            <van-cell title="订单" to="/otc/orders" size="large"/>
+            <van-cell title="充值" to="/deposit" size="large"/>
+            <van-cell :title="$t('header.security')" to="/security" size="large"/>
+            <van-cell :title="$t('header.setPayment')" to="/set-payment" size="large"/>
+            <van-cell :title="$t('header.logout')" size="large" @click="logout"/>
+          </div>
         </div>
       </van-popup>
     </div>
@@ -126,16 +137,18 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from "vuex";
-import { logout } from '@/api/user'
+import { logout, getUserInfo } from '@/api/user'
 export default {
   data() {
     return {
       navShow: false,
       userShow: false,
+      userInfo: {},
     };
   },
   created() {
     this.$i18n.locale = this.lang;
+    this.getUserInfo() // 获取用户信息
   },
   computed: {
     ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle']),
@@ -173,6 +186,12 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV', 'SET_ISLOGIN']),
+    /* 获取用户信息 */
+    getUserInfo() {
+      getUserInfo().then(res => {
+        this.userInfo = res
+      })
+    },
     /* 切换语言 */
     changelanguage: function (name) {
       // console.log("change language: " + name);

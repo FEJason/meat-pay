@@ -15,7 +15,9 @@ import globalFn from '@/util/index' // 自定义全局方法
 
 import { Popup } from 'vant';
 import { Cell, CellGroup } from 'vant';
+import { Button } from 'vant';
 
+Vue.use(Button);
 Vue.use(Cell);
 Vue.use(CellGroup);
 Vue.use(Popup);

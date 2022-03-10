@@ -116,9 +116,20 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            
+            <Dropdown trigger="click" @on-click="clickRefresh">
+              <Button icon="md-refresh" class="u-m-l-10" :loading="refreshLoading">{{ refreshText }}</Button>
+              <DropdownMenu slot="list">
+                <DropdownItem name="0">暂不处理</DropdownItem>
+                <DropdownItem name="5">5秒自动刷新</DropdownItem>
+                <DropdownItem name="10">10秒自动刷新</DropdownItem>
+                <DropdownItem name="20">20秒自动刷新</DropdownItem>
+              </DropdownMenu>
+          </Dropdown>
           </div>
         </div>
 
+        <!-- PC端买卖列表 -->
         <div class="adv-list-wrap hidden-xs">
           <!-- 手写表格 -->
           <div>
@@ -199,8 +210,20 @@
               </div>
             </div>
           </div>
+          <!-- 分页 -->
+          <div class="page_change">
+            <div style="float: right">
+              <Page
+                v-if="advertiment.ask.totalElement > 0"
+                :pageSize="advertiment.ask.pageNumber"
+                :total="advertiment.ask.totalElement"
+                :current="advertiment.ask.currentPage"
+                @on-change="changePage"
+              ></Page>
+            </div>
+          </div>
 
-          <!-- 弹窗 -->
+          <!-- 买卖弹窗 -->
           <Modal
             v-model="modalShow"
             width="1200px"
@@ -336,18 +359,6 @@
             </div>
           </Modal>
 
-          <!-- 分页 -->
-          <div class="page_change">
-            <div style="float: right">
-              <Page
-                v-if="advertiment.ask.totalElement > 0"
-                :pageSize="advertiment.ask.pageNumber"
-                :total="advertiment.ask.totalElement"
-                :current="advertiment.ask.currentPage"
-                @on-change="changePage"
-              ></Page>
-            </div>
-          </div>
         </div>
 
         <!-- 移动端买卖列表 -->
@@ -414,11 +425,11 @@
                   <Button
                     type="primary"
                     v-if="buyOrSell == 'buy'"
-                    @click="openTradeInfo(row)"
+                    @click="openTradeInfo(row, 'mobile')"
                     >{{ $t('trade.buy') }}
                     {{ coinActive.toUpperCase() }}</Button
                   >
-                  <Button type="primary" v-else @click="openTradeInfo(row)"
+                  <Button type="primary" v-else @click="openTradeInfo(row, 'mobile')"
                     >{{ $t('trade.sell') }}
                     {{ coinActive.toUpperCase() }}</Button
                   >
@@ -426,6 +437,90 @@
               </div>
             </div>
           </div>
+
+          <!-- 移动端弹窗 -->
+          <van-popup v-model="popShow" position="bottom" closeable>
+            <div class="xs-pop-wrap">
+              <h2 class="title">
+                {{ buyOrSell == 'buy'? $t('trade.buy') : $t('trade.sell')}}
+                {{ advInfo.currencyName }}
+              </h2>
+              <div class="u-font-bold u-p-t-28 u-p-b-16 u-font-16">
+                {{ advInfo.adName }} (8888 | 88%)
+              </div>
+              <!-- 单价 -->
+              <div class="u-flex u-font-16">
+                <div class="u-p-r-10">{{ $t('trade.price') }}</div>
+                <div class="u-font-bold" style="color: #007aff">
+                  {{ $yj.transMoney(advInfo.tradePrice) }}
+                  {{ advInfo.fiatCurrency }}
+                </div>
+              </div>
+              <!-- 限额 -->
+              <div class="u-flex u-font-16">
+                <div class="u-p-r-10">{{ $t('trade.xe') }}</div>
+                <div>
+                  {{ $yj.transMoney(advInfo.minOrderAmt) }} -
+                  {{ $yj.transMoney(advInfo.maxOrderAmt) }}
+                  {{ advInfo.fiatCurrency }}
+                </div>
+              </div>
+              <!-- 数量 -->
+              <div class="u-flex u-font-16 u-m-b-30">
+                <div class="u-p-r-10">{{ $t('trade.number') }}</div>
+                <div>{{ advInfo.account }} {{ advInfo.currencyName }}</div>
+              </div>
+              <Form
+                ref="formInline"
+                :model="formInline"
+                :rules="ruleInline"
+                class="u-col-top"
+              >
+                <FormItem
+                  prop="totalPrice"
+                  style="margin-right: 0"
+                >
+                  <div>{{ $t('trade.zj') }}</div>
+                  <Input
+                    size="large"
+                    type="text"
+                    v-model="formInline.totalPrice"
+                    @input.native="totalPriceInput"
+                  >
+                    <!-- <div slot="append">{{ advInfo.fiatCurrency }}</div> -->
+                  </Input>
+                </FormItem>
+                <FormItem
+                  prop="num"
+                  style="margin-right: 0"
+                >
+                  <div>{{ $t('trade.number') }}</div>
+                  <Input
+                    size="large"
+                    type="text"
+                    v-model="formInline.num"
+                    @input.native="numInput"
+                  >
+                    <!-- <div slot="append">{{ advInfo.currencyName || 'USDT' }}</div> -->
+                  </Input>
+                </FormItem>
+              </Form>
+
+              <Button
+                size="large"
+                long
+                type="primary"
+                :disabled="formInline.disabled"
+                @click="submitOrder('formInline')"
+                >{{ $t('trade.xd') }}</Button
+              >
+
+              <div class="u-m-t-30">
+                <h2 class="u-p-b-10">交易条款</h2>
+                <div>{{ advInfo.directions }}</div>
+              </div>
+            </div>
+          </van-popup>
         </div>
       </div>
     </div>
@@ -647,6 +742,7 @@ export default {
       }
     }
     return {
+      popShow: true,
       modalShow: false,
       marketNo: '',
       tradeId: '',
@@ -742,7 +838,10 @@ export default {
         //   pageNumber: 10,
         //   totalElement: 0,
         // },
-      }
+      },
+      refreshText: '刷新设置',
+      refreshTime: null,
+      refreshLoading: false,
     }
   },
   watch: {
@@ -781,6 +880,35 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
+    /* 选择刷新时间 */
+    clickRefresh(name) {
+      console.log(name)
+
+      switch(name) {
+        case '0':
+          this.refreshTime && clearTimeout(this.refreshTime)
+          this.refreshText = '暂不处理'
+          return;
+        case '5':
+          this.refreshText = '5秒自动刷新'
+          break;
+        case '10':
+          this.refreshText = '10秒自动刷新'
+          break;
+        case '20':
+          this.refreshText = '20秒自动刷新'
+          break;
+      }
+      this.refresh(Number(name))
+    },
+    /* 刷新设置 */
+    refresh(time) {
+      this.refreshTime && clearTimeout(this.refreshTime)
+      this.refreshTime = setTimeout(() => {
+        this.loadAd()
+        this.refresh(time)
+      }, time * 1000)
+    },
     /* 下单 */
     submitOrder(name) {
       this.$refs[name].validate(valid => {
@@ -879,11 +1007,16 @@ export default {
       }
     },
     /* 打开详情弹窗 */
-    openTradeInfo(row) {
+    openTradeInfo(row, media) {
+      console.log(media)
       if (this.isLogin) {
         this.formInline = {}
         this.$refs['formInline'] && this.$refs['formInline'].resetFields()
-        this.modalShow = true
+        if (media == 'mobile') {
+          this.popShow = true
+        } else {
+          this.modalShow = true
+        }
         this.marketNo = row.marketNo
         this.tradeId = row.id
         this.getIdAdv()
@@ -1036,6 +1169,7 @@ export default {
       this.currencyScale = fiatId[0].scale
 
       this.tableLoading = true
+      this.refreshLoading = true
       getAdList({
         side: this.buyOrSell == 'buy' ? 2 : 1, // 1买 2卖
         currencyId: currencyId[0].id, // 币种ID
@@ -1052,6 +1186,9 @@ export default {
         })
         .finally(() => {
           this.tableLoading = false
+          setTimeout(() => {
+            this.refreshLoading = false
+          }, 400)
         })
     }
   }
@@ -1316,6 +1453,26 @@ export default {
     font-weight: 400;
   }
 }
+.xs-pop-wrap {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 0 28px;
+  .title {
+    height: 55px;
+    line-height: 55px;
+    text-align: center;
+    font-weight: bold !important;
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      left: -28px;
+      right: -28px;
+      bottom: 0;
+      border-bottom: 1px solid #eee;
+    }
+  }
+}
 
 /* 手机端 */
 @media (max-width: 767px) {
@@ -1358,6 +1515,7 @@ export default {
       padding: 4px;
       border-radius: 2px;
       margin-left: 8px !important;
+      margin-bottom: 8px;
       font-size: 12px;
       text-align: center;
     }
