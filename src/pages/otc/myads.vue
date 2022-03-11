@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="con u-text-center u-p-t-80 u-p-b-80"
-      v-if="this.isMerchant">
+      v-if="!this.isMerchant">
       <img
         src="@/assets/img/myads-01.png"
         alt="icon"
@@ -196,7 +196,8 @@ export default {
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
     getCertification() {
-      getCertification((res) => {
+      console.log(111)
+      getCertification().then(res => {
         this.isMerchant = res
       })
     },
