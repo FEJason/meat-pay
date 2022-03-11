@@ -1,14 +1,14 @@
 <template>
   <div class="orders-wrap">
     <div class="tit">
-      <ul class="u-flex">
+      <ul class="tab-wrap u-flex">
         <li
           :class="{'on': active == index}"
           v-for="(item, index) in tabList"
           :key="index"
           @click="tabBtn(index)">{{ item }}</li>
       </ul>
-      <Table :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" class="hidden-xs">
         <template slot-scope="{ row, index }" slot="slotId">
           <div>
             <span class="u-p-r-6" v-if="row.side == 1" style="color: #19be6b">{{ $t('orders.buy') }}</span>
@@ -32,6 +32,54 @@
           {{ row.createTime }}
         </template>
       </Table>
+      <!-- 移动端列表 -->
+      <ul class="xs-list hidden-lg" v-for="row in data" :key="row.id">
+        <li>
+          <div>订单号</div>
+          <div>
+            <span class="u-p-r-6" v-if="row.side == 1" style="color: #19be6b">{{ $t('orders.buy') }}</span>
+            <span class="u-p-r-6" v-if="row.side == 2" style="color: #f16643">{{ $t('orders.sell') }}</span>
+            <router-link :to="`/otc/orderInfo/${row.id}`">{{ row.id }}</router-link>
+          </div>
+        </li>
+        <li>
+          <div>状态</div>
+          <div>{{ row.status | filterStatus }}</div>
+        </li>
+        <li>
+          <div>总价</div>
+          <div>
+            <span style="color: #19be6b">{{ row.sourceAmount }} {{ row.fiatCurrency}}</span>
+          </div>
+        </li>
+        <li>
+          <div>单价</div>
+          <div>
+            {{ row.tradePrice }} {{ row.fiatCurrency }}
+          </div>
+        </li>
+        <li>
+          <div>数量</div>
+          <div>
+            {{ row.settleAccount }} {{ row.currencyName }}
+          </div>
+        </li>
+        <li>
+          <div>创建时间</div>
+          <div>
+            {{ row.createTime }}
+          </div>
+        </li>
+      </ul>
+      <!-- 分页 -->
+      <div class="u-text-center u-m-t-20 u-m-b-20">
+        <Page
+          :pageSize="page.size"
+          :total="page.total"
+          :current="page.current"
+          @on-change="changePage"
+        ></Page>
+      </div>
     </div>
   </div>
 </template>
@@ -77,7 +125,12 @@ export default {
           align: 'right'
         },
       ],
-      data: []
+      data: [],
+      page: {
+        size: 10,
+        current: 1,
+        total: 0,
+      }
     }
   },
   filters: {
@@ -102,9 +155,28 @@ export default {
     this.getUndoneList()
   },
   methods: {
+    /* 分页 */
+    changePage(val) {
+      this.page.current = val
+      switch(this.active) {
+        case 0:
+          this.getUndoneList()
+          break;
+        case 1:
+          this.getOrderList(4)
+          break;
+        case 2:
+          this.getOrderList(0)
+          break;
+        case 3:
+          this.getOrderList('')
+          break;
+      }
+    },
     /* 切换状态 */
     tabBtn(index) {
       this.active = index
+      this.page.current = 1
       switch(index) {
         // 进行中
         case 0:
@@ -130,9 +202,14 @@ export default {
       this.loading = true
       getOrderList({
         status: status,
-        pages: 2,
+        current: this.page.current,
       }).then(res => {
         this.data = res.records
+        this.page = {
+          current: res.current,
+          size: res.size,
+          total: res.total
+        }
       }).finally(() => {
         this.loading = false
       })
@@ -157,7 +234,7 @@ export default {
   padding-bottom: 100px;
 }
 .tit {
-  ul {
+  .tab-wrap {
     padding: 30px 0;
     li {
       margin-right: 30px;
@@ -171,5 +248,22 @@ export default {
     }
   }
 }
-
+/* 手机端 */
+@media (max-width: 767px) {
+  .orders-wrap {
+    width: 100%;
+    padding: 0 24px;
+  }
+  .xs-list {
+    font-size: 14px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    li {
+      height: 26px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
 </style>

@@ -10,7 +10,8 @@
         <Button type="primary" icon="md-add" @click="releaseModal = true">发布新广告</Button>
       </div>
     </div>
-    <div class="con u-text-center u-p-t-80 u-p-b-80">
+    <div class="con u-text-center u-p-t-80 u-p-b-80"
+      v-if="this.isMerchant">
       <img
         src="@/assets/img/myads-01.png"
         alt="icon"
@@ -20,6 +21,18 @@
       <p class="u-font-16 u-m-t-8">您需要先申请商户</p>
       <Button type="primary" class="u-m-t-40" size="large" @click="modalShow = true">现在申请</Button>
     </div>
+    <div class="con u-text-center u-p-t-80 u-p-b-80"
+      v-else>
+      <img
+        src="@/assets/img/myads-01.png"
+        alt="icon"
+        style="width: 96px; height: 96px"
+      />
+      <p class="u-font-20 u-m-t-32">您是尊贵的商户，去交易吧</p>
+      <!-- <p class="u-font-16 u-m-t-8">您是尊贵的商户</p> -->
+      <!-- <Button type="primary" class="u-m-t-40" size="large" @click="modalShow = true">现在申请</Button> -->
+    </div>
+    
 
     <Modal
       v-model="modalShow"
@@ -46,8 +59,8 @@
               <FormItem :label="$t('trade.gglx')" prop="side">
                   <Select v-model="releaseForm.side" size="large"
                     @on-change="sideChange">
-                      <Option value="1">{{ $t('trade.buy') }}</Option>
-                      <Option value="2">{{ $t('trade.sell') }}</Option>
+                      <Option value="1">我要购买</Option>
+                      <Option value="2">我要出售</Option>
                   </Select>
               </FormItem>
               <div class="u-flex">
@@ -116,10 +129,11 @@
 <script>
 import { mapMutations } from 'vuex'
 import { getCurrencyList, getLegalList, getAdList, release, setRelease, getIdAdv, otcOrder } from '@/api/trade'
-import { getPaymentList } from '@/api/user'
+import { getPaymentList, getCertification } from '@/api/user'
 export default {
   data() {
     return {
+      isMerchant: false,
       submitLoad: false,
       paymentList: [], // 收款列表
       // 法币列表
@@ -177,9 +191,15 @@ export default {
     await this.getCurrencyList()
     await this.getLegalList()
     this.getPaymentList() // 获取收款方式列表
+    this.getCertification()
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
+    getCertification() {
+      getCertification((res) => {
+        this.isMerchant = res
+      })
+    },
     /* 获取收款列表 */
     getPaymentList() {
       getPaymentList().then(res => {

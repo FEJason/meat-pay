@@ -136,14 +136,13 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
-import { logout, getUserInfo } from '@/api/user'
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { logout } from '@/api/user'
 export default {
   data() {
     return {
       navShow: false,
       userShow: false,
-      userInfo: {},
     };
   },
   created() {
@@ -151,7 +150,7 @@ export default {
     this.getUserInfo() // 获取用户信息
   },
   computed: {
-    ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle']),
+    ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle', 'userInfo']),
     languageValue() {
       let curlang = this.lang;
       if (curlang == "en") {
@@ -186,12 +185,7 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV', 'SET_ISLOGIN']),
-    /* 获取用户信息 */
-    getUserInfo() {
-      getUserInfo().then(res => {
-        this.userInfo = res
-      })
-    },
+    ...mapActions(['getUserInfo']),
     /* 切换语言 */
     changelanguage: function (name) {
       // console.log("change language: " + name);

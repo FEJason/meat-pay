@@ -121,7 +121,7 @@
                 $t('trade.jy')
               }}</span>
             </div>
-            <div class="table-list u-m-b-20">
+            <div class="table-list u-font-14 u-m-b-20">
               <div
                 class="item u-flex"
                 v-for="(row, index) in advertiment.ask.rows"
@@ -130,45 +130,47 @@
                 <div class="column width0">
                   <div class="u-font-14 u-font-bold">{{ row.adName }}(99%)</div>
                 </div>
-                <div class="column width1 u-font-18" style="color: #00c096">
+                <div class="column width1 u-font-18 u-font-bold" style="color: #00c096">
                   {{ toFixeds(row.tradePrice, currencyScale) }}
                   {{ row.fiatCurrency }}
                 </div>
                 <div class="column width2">
                   <div>
-                    <span class="u-p-r-12" style="color: #6e7a89">{{
+                    <span class="u-p-r-12" style="color: #9aa5b5">{{
                       $t('trade.number')
                     }}</span>
-                    <span style="color: #6e7a89"
+                    <span style="color: #1c242c"
                       >{{ toFixeds(row.balance, coinActiveScale) }}
                       {{ row.currencyName }}</span
                     >
                   </div>
                   <div>
-                    <span class="u-p-r-12" style="color: #6e7a89">{{
+                    <span class="u-p-r-12" style="color: #9aa5b5">{{
                       $t('trade.xe')
                     }}</span>
-                    <span style="color: #6e7a89"
+                    <span style="color: #1c242c"
                       >{{ toFixeds(row.minOrderAmt) }} -
                       {{ toFixeds(row.maxOrderAmt) }}
                       {{ row.fiatCurrency }}</span
                     >
                   </div>
                 </div>
-                <div class="column width3">
-                  <div class="u-flex" v-if="buyOrSell == 'buy'">
+                <div class="column width3 u-font-12">
+                  <div class="u-flex u-flex-wrap" v-if="buyOrSell == 'buy'">
                     <span
                       v-for="(item, index) in row.paymentList"
                       :key="index"
-                      class="u-m-r-10"
+                      :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
+                      class="pay-btn"
                       >{{ item.payTypeName }}</span
                     >
                   </div>
-                  <div class="u-flex" v-if="buyOrSell == 'sell'">
+                  <div class="u-flex u-flex-wrap" v-if="buyOrSell == 'sell'">
                     <span
                       v-for="(item, index) in row.payTypeList"
                       :key="index"
-                      class="u-m-r-10"
+                      :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
+                      class="pay-btn"
                       >{{ item.payTypeName }}</span
                     >
                   </div>
@@ -199,7 +201,7 @@
             :footer-hide="true"
           >
             <div class="modal-wrap u-flex u-col-top u-row-between">
-              <div class="modal-left">
+              <div class="modal-left u-p-r-16 u-flex-1">
                 <div class="u-font-bold u-p-b-16 u-font-16">
                   {{ advInfo.adName }} (8888 | 88%)
                 </div>
@@ -231,7 +233,7 @@
                 <!-- 广告说明 -->
                 <div>{{ advInfo.directions }}</div>
               </div>
-              <div class="modal-right">
+              <div class="modal-right u-flex-1">
                 <div class="top u-flex">
                   <!-- 数量 -->
                   <div class="u-p-r-26">
@@ -391,7 +393,8 @@
                 <span
                   v-for="(item, index) in row.paymentList"
                   :key="index"
-                  class="payment-block u-m-r-10"
+                  :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
+                  class="pay-btn"
                   >{{ item.payTypeName }}</span
                 >
               </div>
@@ -399,7 +402,8 @@
                 <span
                   v-for="(item, index) in row.payTypeList"
                   :key="index"
-                  class="payment-block u-m-r-10"
+                  :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
+                  class="pay-btn"
                   >{{ item.payTypeName }}</span
                 >
               </div>
@@ -491,28 +495,37 @@
                   style="margin-right: 0"
                 >
                   <div>{{ $t('trade.zj') }}</div>
-                  <Input
-                    size="large"
-                    type="text"
-                    v-model="formInline.totalPrice"
-                    @input.native="totalPriceInput"
-                  >
-                    <!-- <div slot="append">{{ advInfo.fiatCurrency }}</div> -->
-                  </Input>
+                  <div class="u-relative">
+                    <Input
+                      size="large"
+                      type="text"
+                      v-model="formInline.totalPrice"
+                      @input.native="totalPriceInput"
+                    >
+                    </Input>
+                    <div class="abs-right u-p-t-2">
+                      <span class="u-p-l-6">{{ advInfo.fiatCurrency }}</span>
+                    </div>
+                  </div>
                 </FormItem>
                 <FormItem
                   prop="num"
                   style="margin-right: 0"
                 >
                   <div>{{ $t('trade.number') }}</div>
-                  <Input
-                    size="large"
-                    type="text"
-                    v-model="formInline.num"
-                    @input.native="numInput"
-                  >
-                    <!-- <div slot="append">{{ advInfo.currencyName || 'USDT' }}</div> -->
-                  </Input>
+                  <div class="u-relative">
+                    <Input
+                      size="large"
+                      type="text"
+                      v-model="formInline.num"
+                      @input.native="numInput"
+                    >
+                    </Input>
+                    <div class="abs-right u-p-t-2">
+                      <!-- <span class="all">全部</span> -->
+                      <span class="u-p-l-6">{{ advInfo.currencyName }}</span>
+                    </div>
+                  </div>
                 </FormItem>
                 <div class="u-m-b-20" v-if="buyOrSell == 'sell'">
                   <div class="u-p-b-8 u-font-14">支付方式</div>
@@ -745,7 +758,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 import {
   getCurrencyList,
   getLegalList,
@@ -944,9 +957,7 @@ export default {
     // }
   },
   computed: {
-    isLogin: function () {
-      return this.$store.state.isLogin
-    }
+    ...mapState(['isLogin'])
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
@@ -1324,7 +1335,7 @@ export default {
     padding: 0 20px;
     border-radius: 4px;
     .item {
-      height: 80px;
+      min-height: 80px;
       border-bottom: 1px solid #ddd;
     }
     .item:last-child {
@@ -1348,7 +1359,13 @@ export default {
     width: 180px;
   }
 }
-
+.pay-btn {
+  white-space: nowrap;
+  background-color: #f8fafd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 4px 8px 4px 0;
+}
 // 币种tab
 .tab-wrap {
   width: 1200px;
@@ -1521,14 +1538,6 @@ export default {
   .list-line {
     margin: 14px 0;
     border-top: 1px dashed #ecf1f8;
-  }
-  .payment-block {
-    padding: 4px 8px;
-    background-color: #f8fafd;
-    border-radius: 4px;
-    font-size: 12px;
-    cursor: pointer;
-    font-weight: 400;
   }
 }
 .xs-pop-wrap {

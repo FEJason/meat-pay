@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { getUserInfo } from '@/api/user'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -17,6 +18,7 @@ export default new Vuex.Store({
         loginTimes: null,
         // 汇率
         rate: 6.3,
+        userInfo: {}
     },
     mutations: {
         SET_HADERSTYLE(state, val) {
@@ -67,6 +69,9 @@ export default new Vuex.Store({
         },
         setSkin(state,skin){
             state.exchangeSkin=skin;
+        },
+        SETUSERINFO(state, val) {
+            state.userInfo = val
         }
     },
     getters: {
@@ -84,8 +89,11 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        getRate(state) {
-
-        }
+        /* 获取用户信息 */
+        getUserInfo({ commit }) {
+            getUserInfo().then(res => {
+                commit('SETUSERINFO', res)
+            })
+        },
     }
 });
