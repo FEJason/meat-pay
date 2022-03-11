@@ -85,15 +85,15 @@ export default {
       // 0：订单取消 1：待付款 2：确认付款 3：申诉 4：完成
       switch(val) {
         case 0:
-          return this.$t('orders.ddqx')
+          return '订单取消'
         case 1:
-          return this.$t('orders.dfk')
+          return '待付款'
         case 2:
-          return this.$t('orders.qrfk')
+          return '确认付款'
         case 3:
-          return this.$t('orders.ss')
+          return '申诉'
         case 4:
-          return this.$t('orders.ywc')
+          return '已完成'
       }
     }
   },

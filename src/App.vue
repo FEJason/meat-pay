@@ -64,17 +64,17 @@ export default {
 }
 
 /*自定义滚动条样式*/
-::-webkit-scrollbar {
-  width: 6px;
-  background-color: transparent
-}
+// ::-webkit-scrollbar {
+//   width: 6px;
+//   background-color: transparent
+// }
 
-::-webkit-scrollbar-track {
-  background: transparent
-}
+// ::-webkit-scrollbar-track {
+//   background: transparent
+// }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: #39557a
-}
+// ::-webkit-scrollbar-thumb {
+//   border-radius: 4px;
+//   background-color: #39557a
+// }
 </style>

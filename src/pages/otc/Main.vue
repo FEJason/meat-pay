@@ -4,7 +4,7 @@
     <div class="top-wrap">
       <div class="top-content u-flex u-row-between u-col-bottom u-p-b-10">
         <router-link to="/otc/trade/buy-usdt" class="tit u-font-16 u-font-bold">{{ $t('trade.main.zxjy') }}</router-link>
-        <div v-if="isLogin">
+        <div class="hidden-xs" v-if="isLogin">
           <!-- <router-link to="/" class="u-font-16 u-p-r-40" style="color: #515a6e">{{ $t('trade.main.help') }}</router-link> -->
           <Dropdown @on-click="gotoMenu">
             <span class="u-font-16" style="color: #515a6e; cursor: pointer;">

@@ -45,20 +45,12 @@
 
     <div class="table-wrap">
       <div class="table-con">
-        <div class="screen-wrap u-flex u-row-between">
+        <!-- PC-筛选模块 -->
+        <div class="screen-wrap hidden-xs u-flex u-row-between">
           <div class="u-font-16 u-font-bold" style="color: #666">
             {{ $t('trade.zxjy') }}
           </div>
           <div class="u-flex">
-            <!-- <yjuiSelect
-              :value="currentCurrency"
-              :data="legalList"
-              @on-click="changeCurrency"
-              :search="false"
-              :props="{
-                label: 'fiatCurrency'
-              }"
-              /> -->
             <Select
               :value="currentCurrency"
               style="width: 100px"
@@ -90,19 +82,6 @@
                 "
               />
             </div>
-
-            <!-- 选择支付方式 -->
-            <!-- <yjuiSelect
-              class="u-p-l-12"
-              :value="currentPay"
-              :data="payList"
-              :not-found="notFountPay"
-              @on-click="changePay"
-              :search="false"
-              :props="{
-                label: 'name'
-              }"
-              /> -->
             <Select
               class="u-p-l-12"
               :value="currentPay"
@@ -129,7 +108,7 @@
           </div>
         </div>
 
-        <!-- PC端买卖列表 -->
+        <!-- PC-买卖列表 -->
         <div class="adv-list-wrap hidden-xs">
           <!-- 手写表格 -->
           <div>
@@ -142,7 +121,7 @@
                 $t('trade.jy')
               }}</span>
             </div>
-            <div class="table-list">
+            <div class="table-list u-m-b-20">
               <div
                 class="item u-flex"
                 v-for="(row, index) in advertiment.ask.rows"
@@ -210,18 +189,6 @@
               </div>
             </div>
           </div>
-          <!-- 分页 -->
-          <div class="page_change">
-            <div style="float: right">
-              <Page
-                v-if="advertiment.ask.totalElement > 0"
-                :pageSize="advertiment.ask.pageNumber"
-                :total="advertiment.ask.totalElement"
-                :current="advertiment.ask.currentPage"
-                @on-change="changePage"
-              ></Page>
-            </div>
-          </div>
 
           <!-- 买卖弹窗 -->
           <Modal
@@ -267,23 +234,22 @@
               <div class="modal-right">
                 <div class="top u-flex">
                   <!-- 数量 -->
-                  <div class="u-flex-1">
+                  <div class="u-p-r-26">
                     <div class="u-p-b-10">{{ $t('trade.number') }}</div>
                     <div>{{ advInfo.account }} {{ advInfo.currencyName }}</div>
                   </div>
                   <!-- 限额 -->
-                  <div class="u-flex-1">
+                  <div class="u-p-r-26">
                     <div class="u-p-b-10">{{ $t('trade.xe') }}</div>
                     <div>
-                      {{ $yj.transMoney(advInfo.minOrderAmt) }} -
-                      {{ $yj.transMoney(advInfo.maxOrderAmt) }}
+                      {{ $yj.transMoney(advInfo.minOrderAmt) }}-{{ $yj.transMoney(advInfo.maxOrderAmt) }}
                       {{ advInfo.fiatCurrency }}
                     </div>
                   </div>
                   <!-- 单价 -->
-                  <div class="u-flex-1">
+                  <div class="u-p-r-26">
                     <div class="u-p-b-10">{{ $t('trade.price') }}</div>
-                    <div class="u-font-bold" style="color: #007aff">
+                    <div class="u-font-bold" :style="{color: buyOrSell == 'buy' ? '#19be6b' : '#ff5f67'}">
                       {{ $yj.transMoney(advInfo.tradePrice) }}
                       {{ advInfo.fiatCurrency }}
                     </div>
@@ -294,43 +260,87 @@
                     ref="formInline"
                     :model="formInline"
                     :rules="ruleInline"
-                    inline
-                    class="u-flex u-col-top"
                   >
-                    <FormItem
-                      prop="totalPrice"
-                      class="u-flex-1"
-                      style="margin-right: 0"
-                    >
-                      <div>{{ $t('trade.zj') }}</div>
-                      <Input
-                        type="text"
-                        v-model="formInline.totalPrice"
-                        @input.native="totalPriceInput"
+                    <div class="u-flex u-col-top">
+                      <FormItem
+                        prop="totalPrice"
+                        class="u-flex-1"
+                        style="margin-right: 0"
                       >
-                        <!-- <div slot="append">{{ advInfo.fiatCurrency }}</div> -->
-                      </Input>
-                    </FormItem>
-                    <div
-                      class="u-text-center"
-                      style="width: 80px; padding-top: 36px"
-                    >
-                      <Icon type="md-swap" size="26" color="#b7b7b7" />
+                        <div>{{ $t('trade.zj') }}</div>
+                        <div class="u-relative">
+                          <Input
+                            type="text"
+                            v-model="formInline.totalPrice"
+                            @input.native="totalPriceInput"
+                          >
+                            <!-- <div slot="append">{{ advInfo.fiatCurrency }}</div> -->
+                          </Input>
+                          <div class="abs-right">
+                            <!-- <span class="all">全部</span> -->
+                            <span class="u-p-l-6">{{ advInfo.fiatCurrency }}</span>
+                          </div>
+                        </div>
+                      </FormItem>
+                      <div
+                        class="u-text-center"
+                        style="width: 80px; padding-top: 36px"
+                      >
+                        <Icon type="md-swap" size="26" color="#b7b7b7" />
+                      </div>
+                      <FormItem
+                        prop="num"
+                        class="u-flex-1"
+                        style="margin-right: 0"
+                      >
+                        <div>{{ $t('trade.number') }}</div>
+                        <div class="u-relative">
+                          <Input
+                            type="text"
+                            v-model="formInline.num"
+                            @input.native="numInput"
+                          >
+                          </Input>
+                          <div class="abs-right">
+                            <!-- <span class="all">全部</span> -->
+                            <span class="u-p-l-6">{{ advInfo.currencyName }}</span>
+                          </div>
+                        </div>
+                      </FormItem>
                     </div>
-                    <FormItem
-                      prop="num"
-                      class="u-flex-1"
-                      style="margin-right: 0"
-                    >
-                      <div>{{ $t('trade.number') }}</div>
-                      <Input
-                        type="text"
-                        v-model="formInline.num"
-                        @input.native="numInput"
+                    <div class="u-m-b-20" v-if="buyOrSell == 'sell'">
+                      <div class="u-p-b-8">支付方式</div>
+                      <Button long type="primary" ghost
+                        to="/set-payment"
+                        v-if="paymentList.length == 0">设置支付方式</Button>
+                      
+                      <FormItem
+                        prop="paymentId"
+                        v-else
                       >
-                        <!-- <div slot="append">{{ advInfo.currencyName || 'USDT' }}</div> -->
-                      </Input>
-                    </FormItem>
+                        <Select
+                          width="100%"
+                          v-model="formInline.paymentId"
+                          multiple
+                          :placeholder="$t('publice.qxz')"
+                        >
+                          <Option
+                            v-for="item in paymentList"
+                            :value="item.id"
+                            :key="item.id"
+                          >
+                            {{
+                              item.payTypeId == 4
+                                ? $t('trade.zfb')
+                                : item.payTypeId == 3
+                                ? $t('trade.wx')
+                                : $t('trade.yhk')
+                            }}
+                            - {{ item.accountName }} {{ item.account }}
+                          </Option>
+                        </Select>
+                      </FormItem>
+                    </div>
                   </Form>
                   <div class="u-p-b-10 u-font-12">*{{ $t('trade.mffk') }}</div>
                   <div class="u-font-12">
@@ -361,7 +371,7 @@
 
         </div>
 
-        <!-- 移动端买卖列表 -->
+        <!-- 移动端-买卖列表 -->
         <div class="xs-list-wrap hidden-lg">
           <div
             class="card"
@@ -451,7 +461,7 @@
               <!-- 单价 -->
               <div class="u-flex u-font-16">
                 <div class="u-p-r-10">{{ $t('trade.price') }}</div>
-                <div class="u-font-bold" style="color: #007aff">
+                <div class="u-font-bold" :style="{color: buyOrSell == 'buy' ? '#19be6b' : '#ff5f67'}">
                   {{ $yj.transMoney(advInfo.tradePrice) }}
                   {{ advInfo.fiatCurrency }}
                 </div>
@@ -471,7 +481,7 @@
                 <div>{{ advInfo.account }} {{ advInfo.currencyName }}</div>
               </div>
               <Form
-                ref="formInline"
+                ref="formInline2"
                 :model="formInline"
                 :rules="ruleInline"
                 class="u-col-top"
@@ -504,6 +514,40 @@
                     <!-- <div slot="append">{{ advInfo.currencyName || 'USDT' }}</div> -->
                   </Input>
                 </FormItem>
+                <div class="u-m-b-20" v-if="buyOrSell == 'sell'">
+                  <div class="u-p-b-8 u-font-14">支付方式</div>
+                  <Button long type="primary" ghost
+                    to="/set-payment"
+                    v-if="paymentList.length == 0">设置支付方式</Button>
+                  
+                  <FormItem
+                    prop="paymentId"
+                    v-else
+                  >
+                    <Select
+                      size="large"
+                      width="100%"
+                      v-model="formInline.paymentId"
+                      multiple
+                      :placeholder="$t('publice.qxz')"
+                    >
+                      <Option
+                        v-for="item in paymentList"
+                        :value="item.id"
+                        :key="item.id"
+                      >
+                        {{
+                          item.payTypeId == 4
+                            ? $t('trade.zfb')
+                            : item.payTypeId == 3
+                            ? $t('trade.wx')
+                            : $t('trade.yhk')
+                        }}
+                        - {{ item.accountName }} {{ item.account }}
+                      </Option>
+                    </Select>
+                  </FormItem>
+                </div>
               </Form>
 
               <Button
@@ -511,7 +555,7 @@
                 long
                 type="primary"
                 :disabled="formInline.disabled"
-                @click="submitOrder('formInline')"
+                @click="submitOrder('formInline2')"
                 >{{ $t('trade.xd') }}</Button
               >
 
@@ -521,6 +565,19 @@
               </div>
             </div>
           </van-popup>
+        </div>
+
+        <!-- 分页 -->
+        <div class="page_change">
+          <div class="u-text-center">
+            <Page
+              v-if="advertiment.ask.total > 0"
+              :pageSize="advertiment.ask.size"
+              :total="advertiment.ask.total"
+              :current="advertiment.ask.pages"
+              @on-change="changePage"
+            ></Page>
+          </div>
         </div>
       </div>
     </div>
@@ -709,7 +766,7 @@ export default {
     const validateTotalPrice = (rule, value, callback) => {
       let minOrderAmt = parseFloat(this.advInfo.minOrderAmt)
       let maxOrderAmt = parseFloat(this.advInfo.maxOrderAmt)
-      if (value == '') {
+      if (value == '' || value == undefined) {
         callback(new Error('总价不能为空'))
       } else if (parseFloat(value) < minOrderAmt) {
         // 最小下单金额为
@@ -732,7 +789,7 @@ export default {
     // 数量效验
     const validateNum = (rule, value, callback) => {
       let maxNum = parseFloat(this.advInfo.account)
-      if (value == '') {
+      if (value == '' || value == undefined) {
         callback(new Error('数量不能为空'))
       } else if (parseFloat(value) > maxNum) {
         // 最大下单数量为
@@ -741,8 +798,17 @@ export default {
         callback()
       }
     }
+    const validatePaymentId = (rule, value, callback) => {
+      console.log(value)
+      if (value == '' || value == undefined) {
+        callback(new Error('请选择支付方式'))
+      } else {
+        callback()
+      }
+    }
+    
     return {
-      popShow: true,
+      popShow: false,
       modalShow: false,
       marketNo: '',
       tradeId: '',
@@ -765,11 +831,15 @@ export default {
       },
       formInline: {
         totalPrice: '',
-        num: ''
+        num: '',
+        paymentId: []
       },
       ruleInline: {
         totalPrice: [{ validator: validateTotalPrice, trigger: 'change' }],
-        num: [{ validator: validateNum, trigger: 'change' }]
+        num: [{ validator: validateNum, trigger: 'change' }],
+        paymentId: [
+          { validator: validatePaymentId, trigger: 'change' }
+        ]
       },
 
       tradeAmount: '', // 金额
@@ -869,9 +939,9 @@ export default {
       this.loadAd(1) // 获取广告
     } catch {}
 
-    if (this.isLogin) {
-      this.getPaymentList() // 获取收款方式列表
-    }
+    // if (this.isLogin) {
+    //   this.getPaymentList() // 获取收款方式列表
+    // }
   },
   computed: {
     isLogin: function () {
@@ -911,9 +981,10 @@ export default {
     },
     /* 下单 */
     submitOrder(name) {
+      console.log(JSON.parse(JSON.stringify(this.formInline)))
       this.$refs[name].validate(valid => {
         if (valid) {
-          console.log(this.formInline)
+          
           this.formInline.disabled = true
           otcOrder({
             // 交易数量不能为空
@@ -925,9 +996,9 @@ export default {
             marketId: this.tradeId,
             // "marketId": '90',
             // 资金密码
-            password: ''
+            // password: '',
             // 支付方式
-            // "paymentId": ''
+            paymentId: this.buyOrSell == 'sell' ? this.formInline.paymentId.join(',') : ''
           })
             .then(res => {
               console.log(res)
@@ -1010,7 +1081,13 @@ export default {
     openTradeInfo(row, media) {
       console.log(media)
       if (this.isLogin) {
-        this.formInline = {}
+        this.formInline = {
+          totalPrice: '',
+          num: '',
+          paymentId: []
+        }
+        this.getPaymentList() // 获取收款方式列表
+
         this.$refs['formInline'] && this.$refs['formInline'].resetFields()
         if (media == 'mobile') {
           this.popShow = true
@@ -1020,18 +1097,6 @@ export default {
         this.marketNo = row.marketNo
         this.tradeId = row.id
         this.getIdAdv()
-      } else {
-        this.$router.push({
-          path: '/login'
-        })
-      }
-    },
-    /* 跳转到详情 */
-    gotoTradeInfo(row) {
-      if (this.isLogin) {
-        this.$router.push({
-          path: `/otc/tradeInfo?tradeId=${row.marketNo}&id=${row.id}`
-        })
       } else {
         this.$router.push({
           path: '/login'
@@ -1049,7 +1114,10 @@ export default {
     /* 获取收款列表 */
     getPaymentList() {
       getPaymentList().then(res => {
-        this.paymentList = res
+        this.paymentList = res.filter(item => {
+          return item.status == 1
+        })
+        this.formInline.paymentId = [this.paymentList[0].id]
       })
     },
     /* 发布广告 */
@@ -1430,9 +1498,19 @@ export default {
     }
   }
 }
+.abs-right {
+  position: absolute;
+  right: 10px;
+  top: 2px;
+  font-size: 12px;
+  .all {
+    cursor: pointer;
+    color: #007aff;
+  }
+}
 
 .xs-list-wrap {
-  padding: 0 24px;
+  padding: 30px 24px 0;
   .card {
     background-color: #fff;
     border: 1px solid #ecf1f8;
@@ -1456,7 +1534,7 @@ export default {
 .xs-pop-wrap {
   width: 100vw;
   min-height: 100vh;
-  padding: 0 28px;
+  padding: 0 28px 28px;
   .title {
     height: 55px;
     line-height: 55px;

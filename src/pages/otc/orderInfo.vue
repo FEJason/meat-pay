@@ -5,8 +5,8 @@
         <div class="tit u-p-20 u-flex u-row-between">
           <div class="u-font-20 u-font-bold" v-if="orderInfo.status == 0">{{ $t('orderInfo.ddyqx') }}</div>
           <div class="u-font-20 u-font-bold" v-if="orderInfo.status == 1">
-            <div v-if="!orderInfo.isAcceptor">{{ $t('orderInfo.dwzf') }}</div>
-            <div v-if="orderInfo.isAcceptor">{{ $t('orderInfo.ddfzf') }}</div>
+            <div v-if="orderInfo.side == 1">{{ $t('orderInfo.dwzf') }}</div>
+            <div v-if="orderInfo.side == 2">{{ $t('orderInfo.ddfzf') }}</div>
             <div>
               <div class="u-font-14">
                 <u-count-down
@@ -22,8 +22,8 @@
               </div>
             </div>
           </div>
-          <div class="u-font-20 u-font-bold" v-if="!orderInfo.isAcceptor && orderInfo.status == 2">{{ $t('orderInfo.ddmjqr') }}</div>
-          <div class="u-font-20 u-font-bold" v-if="orderInfo.isAcceptor && orderInfo.status == 2">{{ $t('orderInfo.dwfb') }}</div>
+          <div class="u-font-20 u-font-bold" v-if="orderInfo.side == 1 && orderInfo.status == 2">{{ $t('orderInfo.ddmjqr') }}</div>
+          <div class="u-font-20 u-font-bold" v-if="orderInfo.side == 2 && orderInfo.status == 2">{{ $t('orderInfo.dwfb') }}</div>
           <div class="u-font-20 u-font-bold" v-if="orderInfo.status == 3">{{ $t('orderInfo.ss') }}</div>
           <div class="u-font-20 u-font-bold" v-if="orderInfo.status == 4">
             {{ $t('orderInfo.ywc') }}
@@ -56,7 +56,7 @@
             <span style="width: 100%; height: 1px; border-bottom: 1px solid #515a6e"></span>
           </div>
           <div v-if="orderInfo.status != 0">
-            <div class="init u-flex u-m-t-30" v-if="!orderInfo.isAcceptor">
+            <div class="init u-flex u-m-t-30">
               <Icon type="ios-alert" size="20" sytle="color: #f90"/>
               <span class="u-p-l-8" style="color: #333">{{ $t('orderInfo.qwbsy') }}（李四）{{ $t('orderInfo.zxzz') }}</span>
             </div>
@@ -70,10 +70,10 @@
               <span>{{ item.accountInfo }}</span>
             </div>
             <div class="u-flex u-m-t-30">
-              <Button type="primary" @click="confirmModel = true" v-if="orderInfo.status == 1 && !orderInfo.isAcceptor">我已转账，下一步</Button>
-              <Button type="primary" @click="receivedModal = true" v-if="orderInfo.isAcceptor && orderInfo.status == 2">我已收到转账，下一步</Button>
+              <Button type="primary" @click="confirmModel = true" v-if="orderInfo.status == 1 && orderInfo.side == 1">我已转账，下一步</Button>
+              <Button type="primary" @click="receivedModal = true" v-if="orderInfo.status == 1 && orderInfo.side == 2">我已收到转账，下一步</Button>
 
-              <div v-if="orderInfo.status == 2 && !orderInfo.isAcceptor">
+              <div v-if="orderInfo.status == 2 && orderInfo.side == 1">
                 <span class="u-p-r-10">{{ $t('orderInfo.ddmj') }}</span>
                 <Button type="primary" @click="">{{ $t('orderInfo.ss') }}</Button>
               </div>
@@ -231,7 +231,7 @@ export default {
         this.cancelLoading = false
       })
     },
-    /* 确认收到对方转账，放币 */
+    /* 我已收到转账，下一步 */
     confirmCollection() {
       confirmCollection({
         userId: '1',
@@ -247,7 +247,7 @@ export default {
         this.getOrderInfo()
       })
     },
-    /* 确认转账 */
+    /* 我已转账，下一步 */
     confirmPayment() {
       confirmPayment({
         userId: '1',

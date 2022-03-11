@@ -57,7 +57,7 @@
         </div>
 
         <!-- App下载 -->
-        <div class="app-down u-p-l-20">
+        <!-- <div class="app-down u-p-l-20">
           <poptip placement="bottom" width="120" class="appdownload" trigger="hover">
             <div style="font-size:14px; color: hsla(0,0%,100%,.8);">{{$t("header.appdownlaod")}}
               <Icon type="md-arrow-dropdown" size="18" />
@@ -71,7 +71,7 @@
               </div>
             </div>
           </poptip>
-        </div>
+        </div> -->
 
         <!-- 语言切换 -->
         <Menu
