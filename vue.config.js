@@ -41,9 +41,9 @@ module.exports = {
             [process.env.VUE_APP_BASE_API]: {
                 // target: 'https://api.bizzans.com', // 测试环境
                 // target: 'https://api.bizzan.pro', // 测试环境
-                target: 'http://192.168.0.67:9999', // 测试环境
-                // target: 'http://192.168.0.57:9999', // 本地联调
-                // target: 'http://192.168.0.110:9999', // 本地联调
+                // target: 'http://192.168.0.67:9999', // 测试环境
+                // target: 'https://861a-119-137-54-93.ngrok.io', // 本地联调
+                target: 'http://81.71.137.210:7080', // 本地联调
                 
                 changeOrigin: true, //开启代理
                 ws: true, // 是否启用websockets
