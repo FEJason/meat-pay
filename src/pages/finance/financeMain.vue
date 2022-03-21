@@ -1,6 +1,7 @@
 <template>
   <div class="page-wrap u-flex u-col-top">
-    <div class="menu-wrap">
+    <!-- PC端导航 -->
+    <div class="menu-wrap hidden-xs">
       <Menu :active-name="activeName" width="180px">
           <MenuGroup title="钱包">
               <!-- <MenuItem name="1" to="/finance/account">
@@ -23,6 +24,18 @@
       </Menu>
     </div>
     <div class="con">
+      <!-- 移动端导航 -->
+      <div class="hidden-lg">
+        <van-cell is-link @click="showPop = true">资金账户</van-cell>
+        <van-popup v-model="showPop" position="left">
+          <div class="pop-wrap">
+            <van-sidebar v-model="activeKey" @change="onChange">
+              <van-sidebar-item title="资金账户" to="/finance/spot" />
+              <van-sidebar-item title="充币&提币记录" to="/finance/record"/>
+            </van-sidebar>
+          </div>
+        </van-popup>
+      </div>
       <router-view @setactive="setactive"></router-view>
     </div>
   </div>
@@ -32,6 +45,8 @@
 export default {
   data() {
     return {
+      showPop: false,
+      activeKey: 0,
       activeName: '1'
     }
   },
@@ -39,6 +54,9 @@ export default {
     /* 设置导航选中 */
     setactive(val) {
       this.activeName = val
+    },
+    onChange() {
+      this.showPop = false
     }
   }
 }
@@ -57,5 +75,24 @@ export default {
   margin-left: 20px;
   margin-right: 20px;
   width: 100%;
+}
+.pop-wrap {
+  height: 100vh;
+  width: 80vw;
+}
+::v-deep .van-sidebar {
+  width: 100%;
+}
+::v-deep .van-sidebar-item--select::before {
+  background-color: #2d8cf0;
+  height: 100%;
+}
+
+/* 手机端 */
+@media (max-width: 767px) {
+  .con {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 </style>

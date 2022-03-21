@@ -147,7 +147,7 @@ export default {
   },
   created() {
     this.$i18n.locale = this.lang;
-    this.getUserInfo() // 获取用户信息
+    // this.getUserInfo() // 获取用户信息
   },
   computed: {
     ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle', 'userInfo']),

@@ -1,28 +1,19 @@
 <template>
   <div class="page-wrap">
     <div class="top">
-      <div class="top-con u-flex u-row-between u-col-top">
+      <div class="top-con">
         <div class="top-con-left">
           <div class="tit">
             <span>资金账户</span>
-            <!-- <Icon type="ios-eye" size="26" class="u-p-l-10"/> -->
           </div>
           <div>
             <span class="num">{{ spot.latestAmount || '--' }} USDT</span>
             <span class="sec u-p-l-10">≈ {{toFixeds( NP.times(spot.latestAmount, CNY)) }} CNY</span>
           </div>
-          <!-- <div class="profit">
-            <span class="profit-left">{{ $t('finance.jrsy') }}</span>
-            <span class="profit-right u-p-l-10">+0.888888 CNY</span>
-          </div> -->
         </div>
         <div class="top-con-right">
           <Button size="large" to="/deposit">充值</Button>
           <Button size="large" class="u-m-l-16" to="/withdraw">{{ $t('finance.tb') }}</Button>
-          <!-- <router-link to="/record" class="u-p-l-16">
-            {{ $t('finance.cwjl') }}
-            <Icon type="ios-play" />
-          </router-link> -->
         </div>
       </div>
     </div>
@@ -199,5 +190,11 @@ export default {
   padding: 30px;
   background-color: #fff;
   border-radius: 10px;
+}
+@media (min-width: 768px) {
+  .top-con {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 </style>

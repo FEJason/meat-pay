@@ -11,8 +11,13 @@
           </p>
         </div>
         <div class="list-wrap u-font-14">
+          <div class="u-flex u-row-right u-p-t-20 u-p-b-20">
+            <Button type="primary" icon="md-add" @click="addShow = true"
+              >添加收款方式</Button
+            >
+          </div>
           <div
-            class="list u-flex u-row-between"
+            class="list"
             v-for="(item, index) in paymentList"
             :key="index"
           >
@@ -24,7 +29,7 @@
               </div>
 
             </div>
-            <div class="right u-flex u-row-between">
+            <div class="right">
               <div class="u-flex">
                 <p class="u-p-r-60">{{ realNameInfo.cardName }}</p>
 
@@ -40,7 +45,7 @@
                 <p v-else>{{ item.account }}</p>
               </div>
 
-              <div class="u-flex">
+              <div class="u-flex edit">
                 <div class="u-m-r-20 u-link" @click="edit(item)">修改</div>
                 <i-switch
                   size="large"
@@ -52,11 +57,6 @@
                 </i-switch>
               </div>
             </div>
-          </div>
-          <div class="u-flex u-row-right u-p-t-20 u-p-b-20">
-            <Button type="primary" icon="md-add" @click="addShow = true"
-              >添加收款方式</Button
-            >
           </div>
         </div>
       </div>
@@ -444,7 +444,13 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   background: #f2f6fd;
-  min-height: 100vh;
+}
+/* PC端 */
+@media (min-width: 768px) {
+  .page-wrap {
+    // min-height: 100vh;
+    height: 100%;
+  }
 }
 .page-con {
   width: 1200px;
@@ -467,26 +473,55 @@ export default {
       color: #999;
     }
   }
-  .list-wrap {
-    padding: 10px 20px 0;
-    border-radius: 7px;
-    .list {
-      .left {
-        width: 112px;
-      }
-      .right {
-        margin-left: 10px;
-        flex: 1;
-        border-bottom: 1px solid #eee;
-        padding: 30px 0;
-      }
+}
+.list-wrap {
+  padding: 10px 20px 0;
+  border-radius: 7px;
+  .list {
+    display: flex;
+    justify-content: space-between;
+    .left {
+      width: 112px;
     }
-    .icon-wrap {
-      border-radius: 2px;
-      border: 1px solid #DDDDDD;
-      padding: 5px 10px;
-      min-width: 100px;
-      text-align: center;
+    .right {
+      display: flex;
+      justify-content: space-between;
+      margin-left: 10px;
+      flex: 1;
+      border-bottom: 1px solid #eee;
+      padding: 30px 0;
+    }
+  }
+  .icon-wrap {
+    border-radius: 2px;
+    border: 1px solid #DDDDDD;
+    padding: 5px 10px;
+    min-width: 100px;
+    text-align: center;
+  }
+}
+
+/* 手机端 */
+@media (max-width: 767px) {
+  .page-con {
+    width: 100%;
+  }
+  .list-wrap {
+    .list {
+      display: block;
+      .right {
+        display: block;
+        margin-bottom: 10px;
+        margin-left: 0;
+        padding: 10px 0 20px;
+        .u-flex {
+          display: block !important;
+        }
+        .edit {
+          display: flex !important;;
+          justify-content: flex-end;
+        }
+      }
     }
   }
 }

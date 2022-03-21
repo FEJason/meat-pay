@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="header u-flex u-row-between">
+    <div class="header">
       <h2>我的广告</h2>
-      <div>
+      <div class="btn-wrap">
         <router-link to="/otc/ad" class="u-font-14 u-m-r-24">
           <Icon type="md-albums" color="#007AFF" size="16" />
           历史广告
@@ -63,7 +63,7 @@
                       <Option value="2">我要出售</Option>
                   </Select>
               </FormItem>
-              <div class="u-flex">
+              <div class="p-flex">
                 <!-- 数字货币 -->
                 <FormItem :label="$t('trade.szhb')" prop="currencyId" class="u-flex-1">
                     <Select v-model="releaseForm.currencyId" size="large" :placeholder="$t('publice.qxz')">
@@ -294,4 +294,29 @@ export default {
     font-size: 30px;
   }
 }
+/* PC端 */
+@media (min-width: 768px) {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .p-flex {
+    display: flex;
+  }
+}
+/* 手机端 */
+@media (max-width: 767px) {
+  .header {
+    padding: 10px;
+    h2 {
+      font-size: 22px;
+      font-weight: bold !important;
+    }
+    .btn-wrap {
+      padding-top: 10px;
+    }
+  }
+}
+
 </style>

@@ -17,7 +17,10 @@ import { Popup } from 'vant';
 import { Cell, CellGroup } from 'vant';
 import { Button } from 'vant';
 import { Collapse, CollapseItem } from 'vant';
+import { Sidebar, SidebarItem } from 'vant';
 
+Vue.use(Sidebar);
+Vue.use(SidebarItem);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Button);

@@ -1,12 +1,13 @@
-/* 手机端 */
-@media (max-width: 767px) {
-  .hidden-xs {
-    display: none !important;
-  }
-}
 /* PC端 */
 @media (min-width: 768px) {
   .hidden-lg {
     display: none !important;
   }
 }
+/* 手机端 */
+@media (max-width: 767px) {
+  .hidden-xs {
+    display: none !important;
+  }
+}
+
