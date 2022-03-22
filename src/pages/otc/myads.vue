@@ -242,11 +242,11 @@ export default {
           this.submitLoad = true
           release({
             ...this.releaseForm,
-            currencyId,
-            currencyName,
-            fiatId,
-            fiatCurrency,
-            paymentIds
+            currencyId, // 币种ID
+            currencyName, // 币种名称
+            fiatId, // 币种法币ID
+            fiatCurrency, // 法币token 如CNY
+            paymentIds // 收款方式
           }).then(res => {
             // 接口成功，弹窗是否上架，不上架去个人中心
             this.$Modal.confirm({

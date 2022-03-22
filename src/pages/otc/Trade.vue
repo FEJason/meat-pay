@@ -363,7 +363,7 @@
               >
               <Button
                 type="primary"
-                :disabled="formInline.disabled"
+                :loading="formInline.disabled"
                 @click="submitOrder('formInline')"
                 style="width: 100px"
                 >{{ $t('trade.xd') }}</Button
@@ -567,7 +567,7 @@
                 size="large"
                 long
                 type="primary"
-                :disabled="formInline.disabled"
+                :loading="formInline.disabled"
                 @click="submitOrder('formInline2')"
                 >{{ $t('trade.xd') }}</Button
               >
@@ -996,7 +996,7 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           
-          this.formInline.disabled = true
+          this.$set(this.formInline, 'disabled', true)
           otcOrder({
             // 交易数量不能为空
             amount: this.formInline.num,
@@ -1024,7 +1024,7 @@ export default {
               }
             })
             .finally(() => {
-              this.formInline.disabled = false
+              this.$set(this.formInline, 'disabled', false)
             })
         }
       })

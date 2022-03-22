@@ -101,6 +101,7 @@ service.interceptors.response.use(
       if (status == 424) {
         errorLog(data.msg || status)
         router.push('/login')
+        localStorage.clear()
         store.commit("SET_ISLOGIN", false)
         return Promise.reject(data)
       }

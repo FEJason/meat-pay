@@ -159,4 +159,16 @@ import request from '@/request/request'
     })
 }
 
+/**
+ * 订单申述
+ */
+ export const plead = query => {
+    return request({
+        url: `/otc/appeal/commit`,
+        method: 'post',
+        data: query
+    })
+}
+
+
 

@@ -219,6 +219,11 @@ export default {
       this.loading = true
       getUndoneList().then(res => {
         this.data = res.records
+        this.page = {
+          current: res.current,
+          size: res.size,
+          total: res.total
+        }
       }).finally(() => {
         this.loading = false
       })

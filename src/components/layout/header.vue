@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import { logout } from '@/api/user'
 export default {
   data() {
@@ -205,6 +205,7 @@ export default {
           desc: "退出成功！"
         })
         this.SET_ISLOGIN(false)
+        localStorage.clear()
         location.href = "/";
       })
     },

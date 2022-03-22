@@ -73,8 +73,8 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       // 通过 `vm` 访问组件实例
-      console.log('to', to)
-      console.log('from', from)
+      // console.log('to', to)
+      // console.log('from', from)
       // 记录上个页面路径
       vm.backPath = from.fullPath
     })
@@ -107,14 +107,16 @@ export default {
                 desc: this.$t('login.dlcg')
               })
               this.SET_ISLOGIN(res.data.access_token)
-              // 登录后跳转到上一个路由（排除注册）
-              console.log('backPath', this.backPath)
-              if (this.backPath.indexOf('register') != -1 || this.backPath.indexOf('reset-password') != -1) {
+              // 上个页面是注册 or 重置页面，跳转到首页
+              if (this.backPath.indexOf('register') != -1 ||
+                  this.backPath.indexOf('reset-password') != -1 ) {
                 this.$router.push({
                   path: '/'
                 })
-              } else {
-                this.$router.go(-1)
+              }
+              // 返回上个页面
+              else {
+                this.$router.push(this.backPath)
               }
             }
           }).catch(error => {

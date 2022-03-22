@@ -387,12 +387,12 @@
                   </FormItem>
                   <!-- Button -->
                   <div class="u-text-right">
-                    <Button type="text" @click="emailShow = false">{{ $t('security.qx') }}</Button>
+                    <Button type="text" @click="emailShow = false">{{ $t('publice.qx') }}</Button>
                     <Button
                       type="primary"
                       @click="handleSubmit('formValidate2')"
                       class="u-m-l-8"
-                      >{{ $t('security.qd') }}</Button
+                      >{{ $t('publice.qd') }}</Button
                     >
                   </div>
                 </Form>
@@ -1167,6 +1167,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import {
   getCertification,
   certification,
@@ -1174,8 +1175,7 @@ import {
   sendCode,
   setVerify,
   getCountryList,
-  getGoogle,
-  getUserInfo
+  getGoogle
 } from '@/api/user'
 import uVerificationCode from '@/components/u-verification-code/u-verification-code'
 import safeModal from '@/components/safeModal/safeModal'
@@ -1266,7 +1266,6 @@ export default {
       countryList: [], // 国家区列表
       realNameShow: false, // 实名认证弹窗
       realNameInfo: {}, // 实名认证详情
-      userInfo: {}, // 用户信息
       // 安全认证详情
       securityInfo: {
         mobileSetting: [false, false, false],
@@ -1520,8 +1519,13 @@ export default {
     this.getCountryList() // 查询国家地区区号
     this.getCertification() // 查询实名认证信息
     this.getSecurity() // 查询用户安全认证
+    console.log(this.userInfo)
+  },
+  computed: {
+    ...mapState(['userInfo']),
   },
   methods: {
+    ...mapActions(['getUserInfo']),
     /* 复制地址 */
     copySuccess() {
       this.$Notice.success({
@@ -1534,12 +1538,6 @@ export default {
       this.$Notice.info({
         title: '提示',
         desc: '后期改成提示用户下载App完成高级认证'
-      })
-    },
-    /* 获取用户信息 */
-    getUserInfo() {
-      getUserInfo().then(res => {
-        this.userInfo = res
       })
     },
     /* 开启、关闭谷歌验证 */
@@ -2147,14 +2145,6 @@ export default {
           break
       }
     },
-  },
-  computed: {
-    member: function () {
-      return this.$store.getters.member
-    },
-    lang() {
-      return this.$store.state.lang
-    }
   }
 }
 </script>

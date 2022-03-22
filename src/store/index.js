@@ -18,7 +18,7 @@ export default new Vuex.Store({
         loginTimes: null,
         // 汇率
         rate: 6.3,
-        userInfo: {}
+        userInfo: (localStorage.USER && JSON.parse(localStorage.USER)) || {}
     },
     mutations: {
         SET_HADERSTYLE(state, val) {
@@ -72,6 +72,7 @@ export default new Vuex.Store({
         },
         SETUSERINFO(state, val) {
             state.userInfo = val
+            localStorage.USER = JSON.stringify(val)
         }
     },
     getters: {
