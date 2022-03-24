@@ -117,8 +117,9 @@
  * 【Events 事件】
  *  submit - 确认提交回调 submit(name, type, this.formValidate)
  */
-import { getSecurity, sendCode } from '@/api/user'
+import { sendCode } from '@/api/user'
 import uVerificationCode from '@/components/u-verification-code/u-verification-code'
+import { mapState } from 'vuex'
 export default {
   name: 'safeModal',
   components: {
@@ -142,15 +143,15 @@ export default {
       timeTips: '',
       timeTips200: '',
       visible: this.value,
-      securityInfo: {
-        mobileSetting: [false, false, false],
-        emailSetting: [false, false, false],
-        googleSetting: [false, false, false],
-        tradeSetting: [false],
-        loginSetting: [true],
-        mobile: '',
-        email: ''
-      },
+      // securityInfo: {
+      //   mobileSetting: [false, false, false],
+      //   emailSetting: [false, false, false],
+      //   googleSetting: [false, false, false],
+      //   tradeSetting: [false],
+      //   loginSetting: [true],
+      //   mobile: '',
+      //   email: ''
+      // },
       formValidate: {
         emailCode: '',
         mobileCode: '',
@@ -199,7 +200,10 @@ export default {
   },
   created() {
     // 查询用户安全认证
-    this.getSecurity()
+    // this.getSecurity()
+  },
+  computed: {
+    ...mapState(['securityInfo']),
   },
   methods: {
     /* 打开弹窗，清空表单、重置倒计时 */
@@ -248,15 +252,6 @@ export default {
           disName && (this.formValidate[disName] = false)
         })
     },
-    /* 查询用户安全认证 */
-    getSecurity() {
-      getSecurity().then(res => {
-        this.securityInfo = res
-        // console.log('是否绑定手机', this.securityInfo.mobileSetting[0])
-
-        // this.securityInfo.emailSetting[0] = false // 调试邮箱
-      })
-    }
   }
 }
 </script>

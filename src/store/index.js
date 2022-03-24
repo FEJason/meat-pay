@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { getUserInfo } from '@/api/user'
+import { getUserInfo, getSecurity, getCertification } from '@/api/user'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
         // 登录态
-        isLogin: localStorage.token,
+        isLogin: localStorage.token || false,
         // 当前选中的导航
         activeNav: '',
         // 语言你
@@ -18,7 +18,12 @@ export default new Vuex.Store({
         loginTimes: null,
         // 汇率
         rate: 6.3,
-        userInfo: (localStorage.USER && JSON.parse(localStorage.USER)) || {}
+        // 用户信息
+        userInfo: (localStorage.userInfo && JSON.parse(localStorage.userInfo)) || {},
+        // 安全信息
+        securityInfo: (localStorage.securityInfo && JSON.parse(localStorage.securityInfo)) || {},
+        // 实名信息
+        certificationInfo: (localStorage.certificationInfo && JSON.parse(localStorage.certificationInfo)) || null,
     },
     mutations: {
         SET_HADERSTYLE(state, val) {
@@ -72,7 +77,15 @@ export default new Vuex.Store({
         },
         SETUSERINFO(state, val) {
             state.userInfo = val
-            localStorage.USER = JSON.stringify(val)
+            localStorage.userInfo = JSON.stringify(val)
+        },
+        SETSECURITYINFO(state, val) {
+            state.securityInfo = val
+            localStorage.securityInfo = JSON.stringify(val)
+        },
+        SETCERTIFICATION(state, val) {
+            state.certificationInfo = val
+            localStorage.certificationInfo = JSON.stringify(val)
         }
     },
     getters: {
@@ -95,6 +108,22 @@ export default new Vuex.Store({
             getUserInfo().then(res => {
                 commit('SETUSERINFO', res)
             })
+        },
+        /* 查询用户实名认证 */
+        getCertification({ commit }) {
+            getCertification().then(res => {
+                if (res) {
+                    commit('SETCERTIFICATION', res)
+                } else {
+                    commit('SETCERTIFICATION', '')
+                }
+            })
+        },
+        /* 查询用户安全认证 */
+        getSecurity({ commit }) {
+            getSecurity().then((res) => {
+                commit('SETSECURITYINFO', res)
+            });
         },
     }
 });

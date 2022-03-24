@@ -1411,10 +1411,10 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import {
   getCertification,
   certification,
-  getSecurity,
   sendCode,
   setVerify,
   getCountryList,
@@ -1530,15 +1530,15 @@ export default {
       realNameInfo: {}, // 实名认证详情
       userInfo: {}, // 用户信息
       // 安全认证详情
-      securityInfo: {
-        mobileSetting: [false, false, false],
-        emailSetting: [false, false, false],
-        googleSetting: [false, false, false],
-        tradeSetting: [false],
-        loginSetting: [true],
-        mobile: "",
-        email: "",
-      },
+      // securityInfo: {
+      //   mobileSetting: [false, false, false],
+      //   emailSetting: [false, false, false],
+      //   googleSetting: [false, false, false],
+      //   tradeSetting: [false],
+      //   loginSetting: [true],
+      //   mobile: "",
+      //   email: "",
+      // },
       safeShow: false, // 安全验证弹窗
       safeType: "", // 安全验证类型
       emailShow: false, // 绑定邮箱弹窗
@@ -1829,15 +1829,18 @@ export default {
     };
   },
   created() {
-    this.getUserInfo()
+    // this.getUserInfo()
     this.getCountryList(); // 查询国家地区区号
     this.getCertification(); // 查询实名认证信息
-    this.getSecurity(); // 查询用户安全认证
+    // this.getSecurity(); // 查询用户安全认证
     // this.getMember();
     // let level = this.$store.getters.member.memberRate;
     // level == 0 && (this.memberlevel = "普通会员");
     // level == 1 && (this.memberlevel = "超级群主");
     // level == 2 && (this.memberlevel = "超级合伙人");
+  },
+  computed: {
+    ...mapState(['securityInfo'])
   },
   methods: {
     /* 获取用户信息 */
@@ -1895,15 +1898,6 @@ export default {
     getCountryList() {
       getCountryList().then((res) => {
         this.countryList = res;
-      });
-    },
-    /* 查询用户安全认证 */
-    getSecurity() {
-      getSecurity().then((res) => {
-        this.securityInfo = res;
-        // console.log('是否绑定手机', this.securityInfo.mobileSetting[0])
-
-        // this.securityInfo.emailSetting[0] = false // 调试邮箱
       });
     },
     /* 查询实名认证信息 */

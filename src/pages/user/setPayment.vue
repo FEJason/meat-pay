@@ -215,9 +215,11 @@
           placeholder="请输入关键字"
           @on-change="changePayType"
         >
-          <Option v-for="item in payTypeList" :value="item.id" :key="item.id">{{
-            item.name
-          }}</Option>
+          <Option v-for="item in payTypeList" :value="item.id" :key="item.id" class="u-flex">
+            <img :src="'http://192.168.0.67:9999' + item.image" alt="img" style="width: 21px;"/>
+            <!-- <img :src="VUE_APP_IMGURL + item.image" alt="img" /> -->
+            <span class="u-p-l-6">{{item.name}}</span>
+          </Option>
         </Select>
         <div class="u-flex u-row-right u-p-t-20">
           <Button type="text" @click="addShow = false">取消</Button>
@@ -239,6 +241,7 @@ import {
 export default {
   data() {
     return {
+      VUE_APP_IMGURL: process.env.VUE_APP_IMGURL,
       realNameInfo: {},
       blankLoading: false,
       blankSwitch: false,
@@ -448,8 +451,7 @@ export default {
 /* PC端 */
 @media (min-width: 768px) {
   .page-wrap {
-    // min-height: 100vh;
-    height: 100%;
+    min-height: 60vh;
   }
 }
 .page-con {

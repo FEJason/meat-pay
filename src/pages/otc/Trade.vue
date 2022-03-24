@@ -128,7 +128,12 @@
                 :key="index"
               >
                 <div class="column width0">
-                  <div class="u-font-14 u-font-bold">{{ row.adName }}(99%)</div>
+                  <div class="u-font-14 u-font-bold u-flex">
+                    <div class="avatar u-m-r-10">
+                      <em>{{row.adName.substring(0, 1).toUpperCase()}}</em>
+                    </div>
+                    <div>{{ row.adName }}(99%)</div>
+                  </div>
                 </div>
                 <div class="column width1 u-font-18 u-font-bold" style="color: #00c096">
                   {{ toFixeds(row.tradePrice, currencyScale) }}
@@ -957,7 +962,7 @@ export default {
     // }
   },
   computed: {
-    ...mapState(['isLogin'])
+    ...mapState(['isLogin', 'certificationInfo'])
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
@@ -1090,8 +1095,14 @@ export default {
     },
     /* 打开详情弹窗 */
     openTradeInfo(row, media) {
-      console.log(media)
       if (this.isLogin) {
+        if (!this.certificationInfo) {
+          this.$Notice.info({
+            title: '提示',
+            desc: "请先完成实名认证！"
+          })
+          return
+        }
         this.formInline = {
           totalPrice: '',
           num: '',
@@ -1558,6 +1569,18 @@ export default {
       bottom: 0;
       border-bottom: 1px solid #eee;
     }
+  }
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  border-radius: 64px;
+  background-color: #007aff;
+  em {
+    font-style: normal;
+    color: #fff;
   }
 }
 

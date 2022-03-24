@@ -4,17 +4,17 @@
       <div class="top-con u-flex u-row-between u-col-top">
         <div class="top-con-left">
           <div class="tit">
-            <span>{{ $t('finance.fbzh') }}</span>
+            <span>资金账户</span>
             <!-- <Icon type="ios-eye" size="26" class="u-p-l-10"/> -->
           </div>
           <div>
             <span class="num">{{ otc.latestAmount || '--'}} USDT</span>
-            <span class="sec u-p-l-10">≈ 8888.88 CNY 【等待接口数据。。。】</span>
+            <span class="sec u-p-l-10">≈ {{toFixeds( NP.times(otc.latestAmount, CNY)) }} CNY</span>
           </div>
-          <div class="profit">
+          <!-- <div class="profit">
             <span class="profit-left">{{ $t('finance.jrsy') }}</span>
             <span class="profit-right u-p-l-10">+0.888888 CNY</span>
-          </div>
+          </div> -->
         </div>
         <div class="top-con-right">
           <Button size="large" to="/transfer?account=otc">{{ $t('finance.hz') }}</Button>
@@ -38,8 +38,9 @@
 
       <Table :columns="columns5" :data="assetList" :loading="tableLoading">
         <template slot-scope="{ row, index }" slot="slotOperation">
-          <router-link to="/otc/trade/buy-usdt" style="color: #28c878">{{ $t('finance.gm') }}</router-link>
-          <router-link :to="`/transfer?account=otc&currency=${row.currencyName}`" class="u-m-l-20">{{ $t('finance.hz') }}</router-link>
+          <!-- <router-link to="/otc/trade/buy-usdt" style="color: #28c878">{{ $t('finance.gm') }}</router-link> -->
+          <!-- <router-link :to="`/transfer?account=otc&currency=${row.currencyName}`" class="u-m-l-20">{{ $t('finance.hz') }}</router-link> -->
+          <router-link :to="`/deposit`">充值</router-link>
           <router-link to="/withdraw" class="u-m-l-20">{{ $t('finance.tb') }}</router-link>
         </template>
       </Table>
@@ -50,9 +51,11 @@
 
 <script>
 import { getAccount, getAssetList } from '@/api/finance'
+import { getRate } from '@/api/user'
 export default {
   data() {
     return {
+      CNY: '',
       searchValue: '',
       searchList: [],
       tableLoading: false,
@@ -95,11 +98,18 @@ export default {
     }
   },
   created() {
-    this.$emit('setactive', '3')
+    this.$emit('setactive', '2')
     this.getAccount() // 资产总览
     this.getAssetList()
+    this.getRate()
   },
   methods: {
+    /* 获取汇率 */
+    getRate() {
+      getRate().then(res => {
+        this.CNY = res.CNY
+      })
+    },
     /* 搜索 */
     search() {
       if (!this.searchValue) {

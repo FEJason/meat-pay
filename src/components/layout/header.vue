@@ -25,7 +25,7 @@
         <!-- 已登录 -->
         <div class="u-flex" v-if="isLogin">
           <!-- 资产 -->
-          <router-link to="/finance/spot" class="link u-m-r-24">钱包</router-link>
+          <router-link to="/finance/otc" class="link u-m-r-24">钱包</router-link>
           
           <!-- 订单 -->
           <router-link to="/otc/orders" class="link u-m-r-24">{{ $t("header.order") }}</router-link>
@@ -147,7 +147,6 @@ export default {
   },
   created() {
     this.$i18n.locale = this.lang;
-    // this.getUserInfo() // 获取用户信息
   },
   computed: {
     ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle', 'userInfo']),
@@ -185,7 +184,6 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV', 'SET_ISLOGIN']),
-    ...mapActions(['getUserInfo']),
     /* 切换语言 */
     changelanguage: function (name) {
       // console.log("change language: " + name);

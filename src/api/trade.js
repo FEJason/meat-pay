@@ -170,5 +170,14 @@ import request from '@/request/request'
     })
 }
 
+/**
+ * 历史聊天记录
+ */
+ export const getHistoryMessage = query => {
+    return request({
+        url: `/chat/room/otc/getHistoryMessage/${query.id}`,
+        params: query
+    })
+}
 
 

@@ -40,10 +40,60 @@
       :mask-closable="false"
       :footer-hide="true"
     >
-      <div class="u-text-center u-p-b-20">
+      <!-- <div class="u-text-center u-p-b-20">
         <img src="@/assets/img/home/code.png" alt="code">
         <p>请扫码下载App，完成商户申请</p>
-      </div>
+      </div> -->
+
+      <Form
+        ref="formApply"
+        :model="formApply"
+        :rules="rules"
+        :label-width="136"
+      >
+        <FormItem label="商家昵称" prop="storeName">
+          <Input v-model="formApply.storeName" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="联系方式" prop="concat">
+          <Input v-model="formApply.concat" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="总计划投入 (CNY)" prop="planInvestment">
+          <Input v-model="formApply.planInvestment" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="总数字货币 (USDT)" prop="totalDigitalCurrency">
+          <Input v-model="formApply.totalDigitalCurrency" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="微信">
+          <Input v-model="formApply.wechat" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="Facebook (选填)" prop="facebook">
+          <Input v-model="formApply.facebook" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="Twitter (选填)" prop="twitter">
+          <Input v-model="formApply.twitter" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="视频认证">
+          <Upload action="//jsonplaceholder.typicode.com/posts/">
+            <Button icon="ios-cloud-upload-outline">选择视频</Button>
+          </Upload>
+        </FormItem>
+        <FormItem label="资产截图">
+          <Upload action="//jsonplaceholder.typicode.com/posts/">
+            <Button icon="ios-cloud-upload-outline">选择图片</Button>
+          </Upload>
+        </FormItem>
+
+        <div class="u-text-right">
+          <Button type="text" @click="formApply = false">{{ $t('publice.qx') }}</Button>
+          <Button
+            type="primary"
+            @click="handleSubmit('formApply')"
+            :loading="applyLoading"
+            class="u-m-l-8"
+            >{{ $t('publice.qd') }}</Button
+          >
+        </div>
+      </Form>
     </Modal>
 
 
@@ -128,14 +178,18 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import { getCurrencyList, getLegalList, getAdList, release, setRelease, getIdAdv, otcOrder } from '@/api/trade'
-import { getPaymentList, getCertification } from '@/api/user'
+import { getCurrencyList, getLegalList, release, setRelease } from '@/api/trade'
+import { getPaymentList } from '@/api/user'
+import { getAdvertisers, merchantApply } from '@/api/myads'
 export default {
   data() {
     return {
+      formApply: {},
+      applyLoading: false,
       isMerchant: false,
       submitLoad: false,
-      paymentList: [], // 收款列表
+      // 收款列表
+      paymentList: [],
       // 法币列表
       legalList: [],
       // 币种列表
@@ -174,6 +228,20 @@ export default {
         paymentIds: [
           { required: true, type: 'array', message: '请选择', trigger: "change" }
         ],
+
+        storeName: [
+          { required: true, message: '请输入', trigger: "blur" }
+        ],
+        concat: [
+          { required: true, message: '请输入', trigger: "blur" }
+        ],
+        planInvestment: [
+          { required: true, message: '请输入', trigger: "blur" }
+        ],
+        totalDigitalCurrency: [
+          { required: true, message: '请输入', trigger: "blur" }
+        ],
+
       },
     }
   },
@@ -183,7 +251,6 @@ export default {
     }
   },
   async created() {
-    // this.SET_ATCIVENAV('nav-myad')
     if (!this.isLogin) {
       this.$router.push('/login')
       return
@@ -191,13 +258,38 @@ export default {
     await this.getCurrencyList()
     await this.getLegalList()
     this.getPaymentList() // 获取收款方式列表
-    this.getCertification()
+    this.getAdvertisers() // 获取商户信息
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
-    getCertification() {
-      console.log(111)
-      getCertification().then(res => {
+    /* 商户申请 */
+    handleSubmit(name) {
+      console.log(JSON.parse(JSON.stringify(this.formApply)))
+      // return
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.applyLoading = true
+          merchantApply({
+            ...this.formApply,
+            // 视频认证 路径 必填
+            "videoProve": "/and/123123",
+            // 资产截图 路径 必填
+            "assetsProve": "/and/1223",
+          }).then(() => {
+            this.$Notice.success({
+              title: '提示',
+              desc: "申请成功"
+            })
+            this.modalShow = false
+          }).finally(() => {
+            this.applyLoading = false
+          })
+        }
+      })
+    },
+    /* 获取商户信息 */
+    getAdvertisers() {
+      getAdvertisers().then(res => {
         this.isMerchant = res
       })
     },

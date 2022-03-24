@@ -70,7 +70,7 @@
                 v-if="isBuy"
                 >
                 <Icon type="ios-alert" size="20" sytle="color: #f90"/>
-                <span class="u-p-l-8" style="color: #333">{{ $t('orderInfo.qwbsy') }}（{{userInfo.username}}）{{ $t('orderInfo.zxzz') }}</span>
+                <span class="u-p-l-8" style="color: #333">{{ $t('orderInfo.qwbsy') }}（{{certificationInfo.cardName}}）{{ $t('orderInfo.zxzz') }}</span>
               </div>
               <div class="u-m-t-30 u-flex u-font-14" v-for="(item, index) in orderInfo.paymentList" :key="item.paymentId">
                 <span class="u-m-r-30 icon-btn"
@@ -96,7 +96,7 @@
                 <div v-if="orderInfo.status == 2">
                   <!-- 我已收到转账，下一步 -->
                   <Button type="primary" @click="receivedModal = true"
-                    v-if="(orderInfo.side == 2 && orderInfo.adSide == null) || (orderInfo.side == 1 && orderInfo.adSide == 2)"
+                    v-if="isSell"
                     >我已收到转账，下一步</Button>
                   <!-- 未收到资产，申述 -->
                   <div v-if="isBuy">
@@ -126,7 +126,7 @@
         </div>
         <div class="right hidden-xs">
           <div class="r-top u-p-20">
-            <h4 class="u-font-18">聊天室开发中。。。</h4>
+            <h4 class="u-font-18">{{orderInfo.adName}}</h4>
             <p>
               认证广告方 
               <Icon type="ios-checkmark-circle" size="16" color="#007AFF"/>
@@ -145,19 +145,24 @@
           <div class="r-con u-relative">
             <div class="u-text-center">
               <p class="u-p-t-20">{{orderInfo.createTime}}</p>
-              <p class="u-p-t-10">您已下单成功。</p>
+              <p class="u-p-t-10">下单成功。</p>
             </div>
-            <div class="chat-content">
-              <div class="chat-left">
-                <p>哈哈哈哈</p>
-              </div>
-              <div class="chat-right">
-                <p>赶紧付款赶紧付款赶紧付款赶紧付款赶</p>
+            <div class="chat-content" id="chat_content">
+              <div :class="item.uuid == userInfo.uuid ? 'chat-right' : 'chat-left'" v-for="(item, index) in messageList" :key="index">
+                <p v-if="item.message.indexOf('base64') != -1">
+                  <img :src="item.message" alt="img" style="width: 100px;" @click="previewImg(item.message)">
+                </p>
+                <p v-else>{{item.message}}</p>
               </div>
             </div>
             <div class="u-p-10 bot-wrap u-flex">
-              <Input style="width: 100%;" placeholder="输入消息，回车发送"></Input>
-              <Icon class="u-p-l-10" type="md-image" size="26" color="#909399"/>
+              <Input style="width: 100%;" v-model="message" placeholder="输入消息，回车发送" @on-enter="sendMessages"></Input>
+              <div class="u-relative">
+                <input accept=".jpg,.jpeg,.png,.gif" type="file" style="position: absolute; width: 100%; opacity: 0;"
+                  id="img_file"
+                  @input="imgChange">
+                <Icon class="u-p-l-10" type="md-image" size="26" color="#909399"/>
+              </div>
             </div>
           </div>
         </div>
@@ -170,6 +175,16 @@
         <p>3. {{ $t('orderInfo.qryfk') }}</p>
       </div>
     </div>
+
+    <!-- 大图预览 -->
+    <Modal v-model="imgModel"
+      draggable scrollable
+      :closable="false"
+      :footer-hide="true">
+      <div class="u-text-center">
+        <img :src="imgUrl" alt="img" style="max-width: 100%">
+      </div>
+    </Modal>
 
     <!-- 我已转账 -->
     <Modal v-model="confirmModel"
@@ -272,8 +287,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-// import io from 'socket.io'
-import { getOrderInfo, confirmPayment, cancelOrder, confirmCollection, plead } from '@/api/trade'
+import io from 'socket.io-client'
+import { getOrderInfo, confirmPayment, cancelOrder, confirmCollection, plead, getHistoryMessage } from '@/api/trade'
 import uCountDown from '@/components/u-count-down/u-count-down'
 export default {
   components: {
@@ -281,6 +296,10 @@ export default {
   },
   data() {
     return {
+      imgUrl: '',
+      imgFile: '',
+      message: '',
+      messageList: [],
       pleadList: [
         { name: '卖家不放币', value: '1'},
         { name: '买家长时间不付款', value: '2'},
@@ -330,25 +349,29 @@ export default {
       },
       // 倒计时 毫秒
       timestamp: 0,
+      imgModel: false,
       confirmModel: false,
       cancelModel: false,
       orderId: this.$route.params.id,
       receivedModal: false,
+      socket: null,
+      token: 'Bearer ' + localStorage.token
     }
   },
-  mounted() {
+  async mounted() {
     // 查询订单详情
-    this.getOrderInfo()
-    this.getUserInfo()
-    // this.initChat()
+    await this.getOrderInfo()
+    this.initChat()
+    this.getHistoryMessage()
   },
   computed: {
-    ...mapState(['isLogin', 'userInfo']),
+    ...mapState(['isLogin', 'userInfo', 'certificationInfo']),
     isBuy() {
+      // side - 订单买卖方向；adSide - 1 商家买入、2商家卖出、null 非商家
       if (
-        // 买入 or 商家买入 (side == 1 && adSide == null) || (side == 1 && adSide == 1)
+        // 买入 or 商家买入 (side == 1 && adSide == null) || (side == 2 && adSide == 1)
         (this.orderInfo.side == 1 && this.orderInfo.adSide == null) ||
-        (this.orderInfo.side == 1 && this.orderInfo.adSide == 1)
+        (this.orderInfo.side == 2 && this.orderInfo.adSide == 1)
       ) {
         return true
       } else {
@@ -357,7 +380,7 @@ export default {
     },
     isSell() {
       if (
-        // 卖出 or 商家卖出 (side == 1 && adSide == null) || (side == 1 && adSide == 1)
+        // 卖出 or 商家卖出 (side == 2 && adSide == null) || (side == 1 && adSide == 2)
         (this.orderInfo.side == 2 && this.orderInfo.adSide == null) ||
         (this.orderInfo.side == 1 && this.orderInfo.adSide == 2)
       ) {
@@ -368,29 +391,104 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserInfo']),
+    /* 历史聊天记录 */
+    getHistoryMessage() {
+      getHistoryMessage({
+        id: this.orderInfo.id,
+        time: new Date().getTime()
+      }).then(res => {
+        this.messageList = res.reverse()
+        this.scollToBottom()
+      })
+    },
+    /* 大图预览 */
+    previewImg(val) {
+      this.imgUrl = val
+      this.imgModel = true
+    },
+    /* 选择图片 */
+    imgChange()  {
+      let fileObj = document.getElementById('img_file').files[0]
+      let reader = new FileReader()
+      // 转成base64
+      reader.readAsDataURL(fileObj)
+      reader.onload = (e) => {
+        let groupRequest = {
+            token: this.token,
+            roomId: this.orderInfo.id,
+            message: e.target.result
+        };
+        this.socket.emit('message', groupRequest, () => {
+          this.message = ''
+          this.scollToBottom()
+        });
+      }
+    },
     /* 连接聊天室 */
     initChat() {
-      var url = 'http://192.168.0.67:8081/otc?Authorization=' + localStorage.token;
-      var socket = io.connect(url);
-      socket.on('connect', function () {
+      let url = 'http://192.168.0.67:8081/otc?Authorization=' + this.token;
+      this.socket = io.connect(url);
+      this.socket.on('connect', function () {
         console.log('连接成功')
-          // output("<span class=sys-msg>系统通知: " + token + "成功连接至websocket服务器</span>");
       });
 
-      socket.on('message', function (data) {
+      // 加入聊天
+      let joinRequest = {
+          token: this.token,
+          roomId: this.orderInfo.id
+
+      }
+      console.log(11)
+      this.socket.emit('join_room', joinRequest, function(data) {
+        console.log('加入成功')
+      });
+      console.log(22)
+
+      // 插入聊天消息
+      this.socket.on('message', (data) => {
+        console.log(data)
+          this.messageList.push(data)
           // var uuid = $('#uuid').val();
-          if (data.uuid == uuid) {
+          if (data.uuid == this.userInfo.uuid) {
+            // console.log('插入')
               // output("<span class=username-msg>" + data.roomId + " 群消息: " + data.uuid + " 说: " + data.message + "</span>");
           } else {
               // output("<span class=connect-msg>" + data.roomId + " 群消息: " + data.uuid + " 说: " + data.message + "</span>");
           }
       });
 
-      socket.on('disconnect', function () {
-        console.log('断开连接')
-          // output("<span class=disconnect-msg>系统通知: " + token + "已从websocket服务器断开连接</span>", null);
+      // socket.on('disconnect', function () {
+      //   console.log('断开连接')
+      //     // output("<span class=disconnect-msg>系统通知: " + token + "已从websocket服务器断开连接</span>", null);
+      // });
+    },
+    sendMessages() {
+      console.log('回车')
+      if (this.message === '') {
+        return;
+      }
+      
+      // 发送消息
+      let groupRequest = {
+          token: this.token,
+          roomId: this.orderInfo.id,
+          message: this.message
+      };
+      this.socket.emit('message', groupRequest, () => {
+        this.message = ''
+        this.scollToBottom()
       });
+    },
+    /* 滚动到底部 */
+    scollToBottom() {
+      this.$nextTick(() => {
+        let chat = document.getElementById('chat_content')
+        chat.scrollTop = chat.scrollHeight
+      })
+    },
+    /* 断开连接 */
+    sendDisconnect() {
+      this.socket.disconnect();
     },
     /* 申述 */
     confirmPlead(name) {
@@ -479,16 +577,22 @@ export default {
     },
     /* 查询订单详情 */
     getOrderInfo() {
-      getOrderInfo({
-        id: this.orderId
-      }).then(res => {
-        this.orderInfo = res
-
-        this.timestamp = (this.orderInfo.expirationTime - new Date().getTime()) / 1000
-        console.log(this.timestamp)
+      return new Promise(resolve => {
+        getOrderInfo({
+          id: this.orderId
+        }).then(res => {
+          this.orderInfo = res
+  
+          this.timestamp = (this.orderInfo.expirationTime - new Date().getTime()) / 1000
+          console.log(this.timestamp)
+          resolve()
+        })
       })
     },
 
+  },
+  destroyed() {
+    this.sendDisconnect()
   }
 }
 </script>
@@ -527,13 +631,14 @@ export default {
       border-radius: 4px;
       display: flex;
       justify-content: space-between;
+      height: 580px;
       .left{
         background-color: #FFF;
         border-radius: 8px;
       }
       .right {
+        width: 340px;
         margin-left: 20px;
-        flex: 1;
         display: flex;
         flex-direction: column;
         background-color: #FFF;
@@ -545,13 +650,18 @@ export default {
           flex: 1;
         }
         .chat-content {
+          height: 340px;
+          overflow: auto;
           padding: 10px;
           .chat-left {
+            margin-top: 10px;
             p {
               display: inline-block;
               padding: 10px;
               border-radius: 8px;
               background-color: #d1e7ff;
+              max-width: 100%;
+              word-break: break-word;
             }
           }
           .chat-right {
@@ -563,6 +673,8 @@ export default {
               padding: 10px;
               border-radius: 8px;
               background-color: #eee;
+              max-width: 100%;
+              word-break: break-word;
             }
           }
         }
@@ -610,8 +722,9 @@ export default {
 }
 @media (min-width: 768px) {
   .content {
+    min-height: 465px;
     .left{
-      width: 70%;
+      flex: 1;
     }
   }
 }

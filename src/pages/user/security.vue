@@ -8,7 +8,7 @@
           </div>
           <div class="u-p-l-10">
             <div class="user-name u-flex">
-              <span class="u-font-20">{{ userInfo.username }}</span>
+              <span class="u-font-20">{{ certificationInfo && certificationInfo.cardName || userInfo.username }}</span>
               <span class="u-m-l-20">UID: {{ userInfo.uuid }}</span>
             </div>
             <p class="user-ip u-p-t-6">
@@ -29,48 +29,49 @@
             {{ $t('security.wcsf') }}
           </p>
           <div class="u-p-t-10">
-            <span class="u-link" v-if="realNameInfo.level == 1">
+            <span class="u-link" v-if="certificationInfo.level == 1">
               <Icon type="md-checkmark-circle" size="14" />
-              {{ $t('security.jcrz') }}
+              实名认证
             </span>
             <span
               class="u-link"
               @click="realNameShow = true"
-              v-if="!realNameInfo || realNameInfo.level == 0"
+              v-if="!certificationInfo || certificationInfo.level == 0"
             >
               <Icon type="md-close-circle" size="14" />
-              {{ $t('security.jcrz') }}
+              实名认证
             </span>
-            <span class="u-link u-m-l-20" v-if="realNameInfo.level == 2">
+            <!-- 目前没有高级认证 -->
+            <!-- <span class="u-link u-m-l-20" v-if="certificationInfo.level == 2">
               <Icon type="md-checkmark-circle" size="14" />
               {{ $t('security.gjrz') }}
             </span>
             <span
               class="u-link u-m-l-20"
               @click="toDownloadApp"
-              v-if="realNameInfo.level != 2"
+              v-if="certificationInfo.level != 2"
             >
               <Icon
                 type="md-close-circle"
                 size="14"
-                v-if="realNameInfo.level != 2"
+                v-if="certificationInfo.level != 2"
               />
               {{ $t('security.gjrz') }}
-            </span>
+            </span> -->
           </div>
         </div>
         <!-- 未认证 -->
-        <p v-if="!realNameInfo">
-          <span class="u-link">{{ $t('security.wrz') }}</span>
+        <p v-if="!certificationInfo">
+          <span class="u-link" @click="realNameShow = true">去认证</span>
         </p>
         <!-- 实名认证 [0:待审核,1:审核中,2:审核通过,3:审核失败] -->
-        <p v-if="realNameInfo.state == 0">
+        <p v-if="certificationInfo.state == 0">
           <span>{{ $t('security.dsh') }}</span>
         </p>
-        <p v-if="realNameInfo.state == 1">
+        <p v-if="certificationInfo.state == 1">
           <span>{{ $t('security.shz') }}</span>
         </p>
-        <p v-if="realNameInfo.state == 3">
+        <p v-if="certificationInfo.state == 3">
           <span class="u-link" @click="realNameShow = true">
             {{ $t('security.shwtg') }}</span
           >
@@ -91,83 +92,94 @@
               :model="formValidate6"
               :rules="ruleValidate"
               :label-width="85"
-              style="text-align: center"
             >
+              <FormItem label="国家" prop="country">
+                <Select v-model="formValidate6.country" filterable size="large">
+                  <Option v-for="(item, index) in countryList" :value="item.code.toString() + '-' + item.name" :key="index">{{ item.name }}</Option>
+                </Select>
+              </FormItem>
+              <FormItem label="证件类型" prop="type">
+                <Select v-model="formValidate6.type" size="large">
+                  <Option v-for="item in typeList" :value="item.value.toString()" :key="item.value">{{ item.name }}</Option>
+                </Select>
+              </FormItem>
               <!-- 真实姓名 -->
-              <FormItem :label="$t('security.xm')" prop="realName">
-                <Input v-model="formValidate6.realName" size="large"></Input>
+              <FormItem :label="$t('security.xm')" prop="cardName">
+                <Input v-model="formValidate6.cardName" size="large"></Input>
               </FormItem>
               <!-- 身份证号 -->
-              <FormItem :label="$t('security.sfzh')" prop="idCard">
-                <Input v-model="formValidate6.idCard" size="large"></Input>
+              <FormItem label="证件号码" prop="cardId">
+                <Input v-model="formValidate6.cardId" size="large"></Input>
               </FormItem>
-              <div style="height: 220px">
-                <Col span="8">
-                  <input type="hidden" name="imgPreview" :value="imgPreview" />
-                  <div class="idcard-title">
-                    {{ $t('security.sfzzm') }}
-                  </div>
-                  <img
-                    id="frontCardImg"
-                    style="width: 180px; height: 120px"
-                    :src="frontCardImg"
-                  />
-                  <div class="acc_sc">
-                    <Upload
-                      ref="upload1"
-                      :before-upload="beforeUpload"
-                      :on-success="frontHandleSuccess"
-                      :headers="uploadHeaders"
-                      :action="uploadUrl"
-                    >
-                      <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
-                    </Upload>
-                  </div>
-                </Col>
-                <Col span="8">
-                  <input type="hidden" name="imgNext" :value="imgNext" />
-                  <div class="idcard-title">
-                    {{ $t('security.sfzfm') }}
-                  </div>
-                  <img
-                    id="backCardImg"
-                    style="width: 180px; height: 120px"
-                    :src="backCardImg"
-                  />
-                  <div class="acc_sc">
-                    <Upload
-                      ref="upload2"
-                      :before-upload="beforeUpload"
-                      :on-success="backHandleSuccess"
-                      :headers="uploadHeaders"
-                      :action="uploadUrl"
-                    >
-                      <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
-                    </Upload>
-                  </div>
-                </Col>
-                <Col span="8">
-                  <input type="hidden" name="imgLast" :value="imgLast" />
-                  <div class="idcard-title">
-                    {{ $t('security.scsfz') }}
-                  </div>
-                  <img
-                    id="handCardImg"
-                    style="width: 180px; height: 120px"
-                    :src="handCardImg"
-                  />
-                  <div class="acc_sc">
-                    <Upload
-                      ref="upload3"
-                      :before-upload="beforeUpload"
-                      :on-success="handHandleSuccess"
-                      :headers="uploadHeaders"
-                      :action="uploadUrl"
-                    >
-                      <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
-                    </Upload>
-                  </div>
-                </Col>
+              <div style="height: 220px" class="u-text-center">
+                <Row>
+                  <Col span="8">
+                    <input type="hidden" name="imgPreview" :value="imgPreview" />
+                    <div class="idcard-title">
+                      证件正面照
+                    </div>
+                    <img
+                      id="frontCardImg"
+                      style="width: 180px; height: 120px"
+                      :src="frontCardImg"
+                    />
+                    <div class="acc_sc">
+                      <Upload
+                        ref="upload1"
+                        :before-upload="beforeUpload"
+                        :on-success="frontHandleSuccess"
+                        :headers="uploadHeaders"
+                        :action="uploadUrl"
+                      >
+                        <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
+                      </Upload>
+                    </div>
+                  </Col>
+                  <Col span="8">
+                    <input type="hidden" name="imgNext" :value="imgNext" />
+                    <div class="idcard-title">
+                      证件反面照
+                    </div>
+                    <img
+                      id="backCardImg"
+                      style="width: 180px; height: 120px"
+                      :src="backCardImg"
+                    />
+                    <div class="acc_sc">
+                      <Upload
+                        ref="upload2"
+                        :before-upload="beforeUpload"
+                        :on-success="backHandleSuccess"
+                        :headers="uploadHeaders"
+                        :action="uploadUrl"
+                      >
+                        <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
+                      </Upload>
+                    </div>
+                  </Col>
+                  <Col span="8">
+                    <input type="hidden" name="imgLast" :value="imgLast" />
+                    <div class="idcard-title">
+                      手持证件与个人签名照
+                    </div>
+                    <img
+                      id="handCardImg"
+                      style="width: 180px; height: 120px"
+                      :src="handCardImg"
+                    />
+                    <div class="acc_sc">
+                      <Upload
+                        ref="upload3"
+                        :before-upload="beforeUpload"
+                        :on-success="handHandleSuccess"
+                        :headers="uploadHeaders"
+                        :action="uploadUrl"
+                      >
+                        <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
+                      </Upload>
+                    </div>
+                  </Col>
+                </Row>
               </div>
               <div class="idcard-desc u-text-left">
                 <p>{{ $t('security.zcjpg') }}</p>
@@ -1169,9 +1181,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import {
-  getCertification,
   certification,
-  getSecurity,
   sendCode,
   setVerify,
   getCountryList,
@@ -1247,6 +1257,12 @@ export default {
     }
     
     return {
+      typeList: [
+        { value: 1, name: '身份证'},
+        { value: 2, name: '护照'},
+        { value: 3, name: '驾驶证'},
+        { value: 0, name: '其他'},
+      ],
       submitLoading: false,
       // 倒计时文字
       timeTips: '',
@@ -1265,17 +1281,6 @@ export default {
       timeTips280: '',
       countryList: [], // 国家区列表
       realNameShow: false, // 实名认证弹窗
-      realNameInfo: {}, // 实名认证详情
-      // 安全认证详情
-      securityInfo: {
-        mobileSetting: [false, false, false],
-        emailSetting: [false, false, false],
-        googleSetting: [false, false, false],
-        tradeSetting: [false],
-        loginSetting: [true],
-        mobile: '',
-        email: ''
-      },
       safeShow: false, // 安全验证弹窗
       safeType: 0, // 安全验证类型
       emailShow: false, // 绑定邮箱弹窗
@@ -1349,8 +1354,10 @@ export default {
         // vailCode5: '',
       },
       formValidate6: {
-        realName: '',
-        idCard: ''
+        country: '',
+        type: '',
+        cardName: '',
+        cardId: ''
       },
       formValidate7: {
         pw7: '',
@@ -1488,14 +1495,28 @@ export default {
             trigger: 'blur'
           }
         ],
-        realName: [
+        country: [
+          {
+            required: true,
+            message: '请选择',
+            trigger: 'change'
+          }
+        ],
+        type: [
+          {
+            required: true,
+            message: '请选择',
+            trigger: 'change'
+          }
+        ],
+        cardName: [
           {
             required: true,
             message: '请输入真实姓名',
             trigger: 'blur'
           }
         ],
-        idCard: [
+        cardId: [
           {
             required: true,
             message: '请输入身份证号码',
@@ -1511,21 +1532,17 @@ export default {
       sendMsgDisabled1: false,
       sendMsgDisabled2: false,
       sendMsgDisabled3: false,
-      sendMsgDisabled5: false
+      sendMsgDisabled5: false,
     }
   },
   created() {
-    this.getUserInfo() // 获取用户信息
     this.getCountryList() // 查询国家地区区号
-    this.getCertification() // 查询实名认证信息
-    this.getSecurity() // 查询用户安全认证
-    console.log(this.userInfo)
   },
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo', 'securityInfo', 'certificationInfo']),
   },
   methods: {
-    ...mapActions(['getUserInfo']),
+    ...mapActions(['getSecurity']),
     /* 复制地址 */
     copySuccess() {
       this.$Notice.success({
@@ -1589,23 +1606,6 @@ export default {
     getCountryList() {
       getCountryList().then(res => {
         this.countryList = res
-      })
-    },
-    /* 查询用户安全认证 */
-    getSecurity() {
-      getSecurity().then(res => {
-        this.securityInfo = res
-        // console.log('是否绑定手机', this.securityInfo.mobileSetting[0])
-
-        // this.securityInfo.googleSetting[0] = false
-      })
-    },
-    /* 查询实名认证信息 */
-    getCertification() {
-      getCertification().then(res => {
-        this.realNameInfo = res || ''
-        // this.realNameInfo.state = 3
-        // this.realNameInfo.level = 0
       })
     },
     /* 实名认证 */
@@ -1703,28 +1703,31 @@ export default {
           // console.log(JSON.parse(JSON.stringify(this.formValidate6)))
           // return
           certification({
-            cardId: this.formValidate6.idCard,
-            cardName: this.formValidate6.realName,
-            auditLevel: 1,
+            // 认证级别[0:未认证,1:基础认证,2:视频认证]，初次认证：默认1
+            level: 1,
+            // 国家/地区
+            country: this.formValidate6.country.split('-')[1],
+            // 国家/地区——CODE
+            countryId: this.formValidate6.country.split('-')[0],
+            // 证件类型
+            type: this.formValidate6.type,
+            // 证件名
+            cardName: this.formValidate6.cardName,
+            // 证件号
+            cardId: this.formValidate6.cardId,
             // 证件正面照片
             frontPage: 'dasdadas.jpg',
             // 证件反面照片
             backPage: 'dadfsfsdf.jpg',
             // 手持证件照片
             holdPage: 'dadfsfsdf.jpg',
-            // 国家/地区
-            country: '中国',
-            // 国家/地区——CODE
-            countryId: 1,
-            // 证件类型
-            type: 1
           }).then(() => {
-            this.realNameShow = false
-            this.getSecurity()
             this.$Notice.success({
               title: '提示',
               desc: '提交成功'
             })
+            this.realNameShow = false
+            this.getSecurity()
           })
           break
         // 修改登录密码
@@ -1886,8 +1889,6 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           this.submit(name, type)
-        } else {
-          // this.$Message.error(this.$t("uc.safe.save_failure"));
         }
       })
     },

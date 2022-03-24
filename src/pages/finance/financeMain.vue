@@ -8,7 +8,7 @@
                   <Icon type="md-document" />
                   {{ $t('finance.zczl') }}
               </MenuItem> -->
-              <MenuItem name="2" to="/finance/spot">
+              <MenuItem name="2" to="/finance/otc">
                   <Icon type="md-chatbubbles" />
                   资金账户
               </MenuItem>
@@ -30,7 +30,7 @@
         <van-popup v-model="showPop" position="left">
           <div class="pop-wrap">
             <van-sidebar v-model="activeKey" @change="onChange">
-              <van-sidebar-item title="资金账户" to="/finance/spot" />
+              <van-sidebar-item title="资金账户" to="/finance/otc" />
               <van-sidebar-item title="充币&提币记录" to="/finance/record"/>
             </van-sidebar>
           </div>
@@ -47,12 +47,13 @@ export default {
     return {
       showPop: false,
       activeKey: 0,
-      activeName: '1'
+      activeName: '2'
     }
   },
   methods: {
     /* 设置导航选中 */
     setactive(val) {
+      console.log(val)
       this.activeName = val
     },
     onChange() {

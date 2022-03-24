@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 import { encryption } from '@/util/util'
 import { login } from '@/api/user'
 export default {
@@ -80,6 +80,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions(['getUserInfo', 'getSecurity', 'getCertification']),
     ...mapMutations(['SET_ISLOGIN']),
     init() {
       this.$store.commit("navigate", "nav-other")
@@ -107,6 +108,14 @@ export default {
                 desc: this.$t('login.dlcg')
               })
               this.SET_ISLOGIN(res.data.access_token)
+
+              // 获取用户信息
+              this.getUserInfo()
+              // 获取用户安全信息
+              this.getSecurity()
+              // 实名信息
+              this.getCertification()
+
               // 上个页面是注册 or 重置页面，跳转到首页
               if (this.backPath.indexOf('register') != -1 ||
                   this.backPath.indexOf('reset-password') != -1 ) {
