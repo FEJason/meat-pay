@@ -216,8 +216,8 @@
           @on-change="changePayType"
         >
           <Option v-for="item in payTypeList" :value="item.id" :key="item.id" class="u-flex">
-            <img :src="'http://192.168.0.67:9999' + item.image" alt="img" style="width: 21px;"/>
-            <!-- <img :src="VUE_APP_IMGURL + item.image" alt="img" /> -->
+            <!-- <img :src="'http://192.168.0.67:9999' + item.image" alt="img" style="width: 21px;"/> -->
+            <img :src="VUE_APP_WS + item.image" alt="img" style="width: 21px;"/>
             <span class="u-p-l-6">{{item.name}}</span>
           </Option>
         </Select>
@@ -241,7 +241,7 @@ import {
 export default {
   data() {
     return {
-      VUE_APP_IMGURL: process.env.VUE_APP_IMGURL,
+      VUE_APP_WS: process.env.VUE_APP_WS,
       realNameInfo: {},
       blankLoading: false,
       blankSwitch: false,

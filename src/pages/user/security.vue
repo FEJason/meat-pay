@@ -29,7 +29,7 @@
             {{ $t('security.wcsf') }}
           </p>
           <div class="u-p-t-10">
-            <span class="u-link" v-if="certificationInfo.level == 1">
+            <span class="u-link" v-if="certificationInfo && certificationInfo.level == 1">
               <Icon type="md-checkmark-circle" size="14" />
               实名认证
             </span>
@@ -41,23 +41,6 @@
               <Icon type="md-close-circle" size="14" />
               实名认证
             </span>
-            <!-- 目前没有高级认证 -->
-            <!-- <span class="u-link u-m-l-20" v-if="certificationInfo.level == 2">
-              <Icon type="md-checkmark-circle" size="14" />
-              {{ $t('security.gjrz') }}
-            </span>
-            <span
-              class="u-link u-m-l-20"
-              @click="toDownloadApp"
-              v-if="certificationInfo.level != 2"
-            >
-              <Icon
-                type="md-close-circle"
-                size="14"
-                v-if="certificationInfo.level != 2"
-              />
-              {{ $t('security.gjrz') }}
-            </span> -->
           </div>
         </div>
         <!-- 未认证 -->
@@ -65,16 +48,22 @@
           <span class="u-link" @click="realNameShow = true">去认证</span>
         </p>
         <!-- 实名认证 [0:待审核,1:审核中,2:审核通过,3:审核失败] -->
-        <p v-if="certificationInfo.state == 0">
+        <p v-if="certificationInfo && certificationInfo.state === 0">
           <span>{{ $t('security.dsh') }}</span>
         </p>
-        <p v-if="certificationInfo.state == 1">
+        <p v-if="certificationInfo && certificationInfo.state === 1">
           <span>{{ $t('security.shz') }}</span>
         </p>
-        <p v-if="certificationInfo.state == 3">
-          <span class="u-link" @click="realNameShow = true">
+        <!-- 审核未通过 -->
+        <p v-if="certificationInfo && certificationInfo.state === 3">
+          <Poptip trigger="hover" word-wrap width="200">
+            <div slot="content" class="u-p-10">
+              {{ certificationInfo.remark }}
+            </div>
+            <span class="u-link" @click="realNameShow = true">
             {{ $t('security.shwtg') }}</span
           >
+          </Poptip>
         </p>
 
         <!-- 实名认证弹窗 -->
@@ -130,6 +119,7 @@
                         :on-success="frontHandleSuccess"
                         :headers="uploadHeaders"
                         :action="uploadUrl"
+                        :show-upload-list="false"
                       >
                         <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
                       </Upload>
@@ -152,6 +142,7 @@
                         :on-success="backHandleSuccess"
                         :headers="uploadHeaders"
                         :action="uploadUrl"
+                        :show-upload-list="false"
                       >
                         <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
                       </Upload>
@@ -174,6 +165,7 @@
                         :on-success="handHandleSuccess"
                         :headers="uploadHeaders"
                         :action="uploadUrl"
+                        :show-upload-list="false"
                       >
                         <Button icon="ios-cloud-upload-outline">{{ $t('security.djsc') }}</Button>
                       </Upload>
@@ -1182,6 +1174,7 @@
 import { mapState, mapActions } from "vuex";
 import {
   certification,
+  certificationEdit,
   sendCode,
   setVerify,
   getCountryList,
@@ -1305,8 +1298,8 @@ export default {
       backCardImg: require('../../assets/images/backCardImg.png'),
       handCardImg: require('../../assets/images/HandCardImg.png'),
 
-      uploadHeaders: { 'x-auth-token': localStorage.getItem('TOKEN') },
-      uploadUrl: this.host + '/uc/upload/oss/image',
+      uploadHeaders: { 'Authorization': 'Bearer ' + localStorage.token },
+      uploadUrl: this.host + '/admin/sys-file/upload',
 
       usernameS: '',
       user: {},
@@ -1537,12 +1530,13 @@ export default {
   },
   created() {
     this.getCountryList() // 查询国家地区区号
+    this.getCertification()
   },
   computed: {
     ...mapState(['userInfo', 'securityInfo', 'certificationInfo']),
   },
   methods: {
-    ...mapActions(['getSecurity']),
+    ...mapActions(['getSecurity', 'getCertification']),
     /* 复制地址 */
     copySuccess() {
       this.$Notice.success({
@@ -1608,7 +1602,7 @@ export default {
         this.countryList = res
       })
     },
-    /* 实名认证 */
+    /* 图片上传前 */
     beforeUpload(data) {
       if (data && data.size >= 1024000 * 2) {
         this.$Message.error('上传图片大小不能超过2M')
@@ -1616,25 +1610,25 @@ export default {
       }
     },
     frontHandleSuccess(res, file, fileList) {
-      this.$refs.upload1.fileList = [fileList[fileList.length - 1]]
+      // this.$refs.upload1.fileList = [fileList[fileList.length - 1]]
       if (res.code == 0) {
-        this.frontCardImg = this.imgPreview = res.data
+        this.frontCardImg = this.imgPreview = res.data.url
       } else {
         this.$Message.error(res.message)
       }
     },
     backHandleSuccess(res, file, fileList) {
-      this.$refs.upload2.fileList = [fileList[fileList.length - 1]]
+      // this.$refs.upload2.fileList = [fileList[fileList.length - 1]]
       if (res.code == 0) {
-        this.backCardImg = this.imgNext = res.data
+        this.backCardImg = this.imgNext = res.data.url
       } else {
         this.$Message.error(res.message)
       }
     },
     handHandleSuccess(res, file, fileList) {
-      this.$refs.upload3.fileList = [fileList[fileList.length - 1]]
+      // this.$refs.upload3.fileList = [fileList[fileList.length - 1]]
       if (res.code == 0) {
-        this.handCardImg = this.imgLast = res.data
+        this.handCardImg = this.imgLast = res.data.url
       } else {
         this.$Message.error(res.message)
       }
@@ -1660,22 +1654,6 @@ export default {
       }).finally(() => {
         this.submitLoading = false
       })
-
-      // setVerify({
-      //   // emailCode: this.formValidate.emailCode,
-      //   // mobileCode: this.formValidate.mobileCode,
-      //   // googleAuthCode: this.formValidate.googleAuthCode,
-      //   stepsKey: this.stepsKey,
-      //   verifyType: type,
-      //   ...formData
-      // }).then(() => {
-      //   this.safeShow = false
-      //   this.getSecurity()
-      //   this.$Notice.success({
-      //     title: '提示',
-      //     desc: '成功'
-      //   })
-      // })
     },
     /* 提交 */
     submit(name, type) {
@@ -1702,7 +1680,9 @@ export default {
         case 'formValidate6':
           // console.log(JSON.parse(JSON.stringify(this.formValidate6)))
           // return
-          certification({
+          // state == 3 被驳回调另一个接口
+          let request = this.certificationInfo.state == 3 ? certificationEdit : certification
+          request({
             // 认证级别[0:未认证,1:基础认证,2:视频认证]，初次认证：默认1
             level: 1,
             // 国家/地区
@@ -1716,18 +1696,18 @@ export default {
             // 证件号
             cardId: this.formValidate6.cardId,
             // 证件正面照片
-            frontPage: 'dasdadas.jpg',
+            frontPage: this.frontCardImg,
             // 证件反面照片
-            backPage: 'dadfsfsdf.jpg',
+            backPage: this.backCardImg,
             // 手持证件照片
-            holdPage: 'dadfsfsdf.jpg',
+            holdPage: this.handCardImg,
           }).then(() => {
             this.$Notice.success({
               title: '提示',
               desc: '提交成功'
             })
             this.realNameShow = false
-            this.getSecurity()
+            this.getCertification()
           })
           break
         // 修改登录密码

@@ -182,6 +182,17 @@ export const register = query => {
 }
 
 /**
+ * 更新认证信息
+ */
+ export const certificationEdit = query => {
+    return request({
+        url: `/approve/kcy/identification/edit`,
+        method: 'put',
+        data: query
+    })
+}
+
+/**
  * 查询认证信息
  */
  export const getCertification = () => {

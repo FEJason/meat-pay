@@ -8,7 +8,7 @@
             <!-- <Icon type="ios-eye" size="26" class="u-p-l-10"/> -->
           </div>
           <div>
-            <span class="num">{{ otc.latestAmount || '--'}} USDT</span>
+            <span class="num">{{ toFixeds(otc.latestAmount) }} USDT</span>
             <span class="sec u-p-l-10">≈ {{toFixeds( NP.times(otc.latestAmount, CNY)) }} CNY</span>
           </div>
           <!-- <div class="profit">

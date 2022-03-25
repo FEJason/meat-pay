@@ -426,7 +426,7 @@ export default {
     },
     /* 连接聊天室 */
     initChat() {
-      let url = 'http://192.168.0.67:8081/otc?Authorization=' + this.token;
+      let url = `${process.env.VUE_APP_OTC_WS}/otc?Authorization=` + this.token;
       this.socket = io.connect(url);
       this.socket.on('connect', function () {
         console.log('连接成功')

@@ -112,7 +112,7 @@
         <div class="adv-list-wrap hidden-xs">
           <!-- 手写表格 -->
           <div>
-            <div class="table-title u-flex">
+            <div class="table-title u-flex u-font-12">
               <span class="column width0">{{ $t('trade.ggf') }}</span>
               <span class="column width1">{{ $t('trade.price') }}</span>
               <span class="column width2">{{ $t('trade.slxe') }}</span>

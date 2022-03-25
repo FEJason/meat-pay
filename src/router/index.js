@@ -83,6 +83,12 @@ const routes = [
         component: () => import('../pages/otc/myads'),
         meta: { title: '我的广告' }
       },
+      // 认证广告方申请
+      {
+        path: '/application',
+        component: () => import('../pages/otc/application'),
+        meta: { title: '申请' }
+      },
       // 资产
       {
         path: '/finance',
