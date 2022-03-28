@@ -25,7 +25,7 @@
               <Input type="password" password v-model="formEmail.password" :placeholder="$t('register.dlmm')">
               </Input>
             </FormItem>
-            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')">
+            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')" v-show="!$route.query.ref">
               <Input type="text" v-model="formEmail.sourceInviteCode" :placeholder="$t('register.yqm')"></Input>
             </FormItem>
             <div class="check-agree">
@@ -76,7 +76,7 @@
               <Input type="password" password v-model="formMobile.password" :placeholder="$t('register.dlmm')">
               </Input>
             </FormItem>
-            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')">
+            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')" v-show="!$route.query.ref">
               <Input type="text" v-model="formMobile.sourceInviteCode" :placeholder="$t('register.yqm')"></Input>
             </FormItem>
             <div class="check-agree">
@@ -132,13 +132,13 @@ export default {
         code: "", // 验证码
         areaCode: 1, // 国家地区区号
         password: "",
-        sourceInviteCode: "YU7DE927", // 邀请码
+        sourceInviteCode: this.$route.query.ref || "", // 邀请码
       },
       formEmail: {
         email: "",
         code: "",
         password: "",
-        sourceInviteCode: "YU7DE927"
+        sourceInviteCode: this.$route.query.ref || ""
       },
       rules: {
         mobile: [

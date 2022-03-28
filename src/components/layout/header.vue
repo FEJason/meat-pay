@@ -3,7 +3,7 @@
     <div class="hidden-xs header-wrap u-flex u-row-between" :class="{'home-header-wrap': headerStyle == 'home', 'invitation-header-wrap': headerStyle == 'invitation'}">
       <div class="header-left u-flex">
         <div class="header-logo">
-          <h1 class="logo" style="color: #fff; margin-bottom: 10px;">
+          <h1 class="logo" style="color: #fff; margin-bottom: 20px;">
             <!-- <router-link to="/">
               <img
                 src="@/assets/images/meta_logo.png"
@@ -11,7 +11,7 @@
                 style="width: 142px"
               />
             </router-link> -->
-            Meta Pay
+            <router-link to="/" style="color: #fff">Expay</router-link>
           </h1>
         </div>
         <!-- 导航 -->
@@ -34,7 +34,7 @@
 
           <!-- 个人中心 -->
           <Dropdown class="u-p-l-24 u-p-r-24">
-            <div style="color: hsla(0,0%,100%,.8)" class="u-flex">
+            <div style="color: hsla(0,0%,100%,.8); cursor: pointer;" class="u-flex">
               <Icon type="md-person" size="20"></Icon>
             </div>
             <DropdownMenu slot="list">
@@ -49,6 +49,13 @@
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
+
+          <!-- 消息 -->
+          <div class="u-m-r-24" style="cursor: pointer;">
+            <Badge :count="3">
+              <Icon type="ios-notifications-outline" size="26" color="#fff"></Icon>
+            </Badge>
+          </div>
         </div>
         <!-- 未登录 -->
         <div class="u-font-14" v-else>
@@ -212,6 +219,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .ivu-menu-submenu {
+  padding: 0;
+}
+// 修改徽标样式
+::v-deep .ivu-badge-count {
+  padding: 0 3px;
+  height: 14px;
+  font-size: 12px;
+  line-height: 12px;
+  box-shadow: none;
+  top: -3px;
+  background-color: #fa4d56;
+}
 // 下拉框
 .ivu-select-dropdown {
   a {

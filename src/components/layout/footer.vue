@@ -10,7 +10,7 @@
               style="width: 142px;"
             />
           </router-link> -->
-          Meta Pay
+          Expay
         </h2>
         <p class="u-m-b-25">{{ $t('footer.bah') }}</p>
         <div class="social-list">
@@ -80,7 +80,7 @@
       </div>
       <div class="u-text-center u-m-t-20">
         <h2 class="logo u-m-b-10" style="color: #fff; margin-bottom: 10px;">
-          Meta Pay
+          Expay
         </h2>
         <p class="u-m-b-25" style="color: #697080">{{ $t('footer.bah') }}</p>
       </div>

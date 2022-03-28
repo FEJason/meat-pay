@@ -189,7 +189,7 @@
         <div class="three-wrap u-text-center" v-if="stepsCurrent == 2">
           <img src="@/assets/img/submit.png" alt="icon" style="width: 141px;">
           <p>已提交，请等待审核</p>
-          <Button type="primary" class="u-m-t-50">返回首页</Button>
+          <Button type="primary" class="u-m-t-50" to="/">返回首页</Button>
         </div>
 
       </div>
@@ -204,7 +204,7 @@ import { merchantApply } from '@/api/myads'
 export default {
   data() {
     return {
-      stepsCurrent: 2,
+      stepsCurrent: 0,
       formApply: {},
       rules: {
         storeName: [
@@ -224,7 +224,7 @@ export default {
         ]
       },
       applyLoading: false,
-      applicationShow: true,
+      applicationShow: false,
       isDisabled: true,
       loading: false,
       assetList: [{balance: 0}]
@@ -245,7 +245,7 @@ export default {
   methods: {
     /* 第一步 */
     handleNext(name) {
-      console.log(JSON.parse(JSON.stringify(this.formApply)))
+      // console.log(JSON.parse(JSON.stringify(this.formApply)))
       // return
       this.$refs[name].validate((valid) => {
         if (valid) {

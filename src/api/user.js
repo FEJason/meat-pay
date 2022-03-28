@@ -193,7 +193,7 @@ export const register = query => {
 }
 
 /**
- * 查询认证信息
+ * 查询商家信息
  */
  export const getCertification = () => {
     return request({

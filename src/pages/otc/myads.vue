@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <h2>我的广告</h2>
-      <div class="btn-wrap">
+      <div class="btn-wrap" v-if="merchantInfo && merchantInfo.status == 1">
         <router-link to="/otc/ad" class="u-font-14 u-m-r-24">
           <Icon type="md-albums" color="#007AFF" size="16" />
           历史广告
@@ -11,18 +11,7 @@
       </div>
     </div>
     <div class="con u-text-center u-p-t-80 u-p-b-80"
-      v-if="!this.isMerchant">
-      <img
-        src="@/assets/img/myads-01.png"
-        alt="icon"
-        style="width: 96px; height: 96px"
-      />
-      <p class="u-font-20 u-m-t-32">申请商户</p>
-      <p class="u-font-16 u-m-t-8">您需要先申请商户</p>
-      <Button type="primary" class="u-m-t-40" size="large" @click="modalShow = true">现在申请</Button>
-    </div>
-    <div class="con u-text-center u-p-t-80 u-p-b-80"
-      v-else>
+      v-if="merchantInfo && merchantInfo.status == 1">
       <img
         src="@/assets/img/myads-01.png"
         alt="icon"
@@ -32,7 +21,30 @@
       <!-- <p class="u-font-16 u-m-t-8">您是尊贵的商户</p> -->
       <!-- <Button type="primary" class="u-m-t-40" size="large" @click="modalShow = true">现在申请</Button> -->
     </div>
-    
+    <div class="con u-text-center u-p-t-80 u-p-b-80"
+      v-else>
+      <img
+        src="@/assets/img/myads-01.png"
+        alt="icon"
+        style="width: 96px; height: 96px"
+      />
+      <p class="u-font-20 u-m-t-32">申请商户</p>
+      <p class="u-font-16 u-m-t-8">您需要先申请商户</p>
+      <Button type="primary" class="u-m-t-40"
+        size="large" to="/application" v-if="!merchantInfo">现在申请</Button>
+      <Button
+        type="primary" class="u-m-t-40"
+        :disabled="true"
+        size="large" v-if="merchantInfo && merchantInfo.status == 0">申请中...请您耐心等待，24小时内会有工作人员审核</Button>
+      <Button
+        type="primary" class="u-m-t-40"
+        size="large" to="/application"
+        v-if="merchantInfo && merchantInfo.status == 2">申请未通过，请重新申请</Button>
+      <Button
+        type="primary" class="u-m-t-40"
+        :disabled="true"
+        size="large" v-if="merchantInfo && merchantInfo.status == 3">该商户已被禁用</Button>
+    </div>
 
     <Modal
       v-model="modalShow"
@@ -186,7 +198,13 @@ export default {
     return {
       formApply: {},
       applyLoading: false,
+      // 商户信息
+      // 商户状态： 0:申请中，1：正常，2：申请成为广告商未通过，3：禁用
+      merchantInfo: {},
+      // 是否商户
       isMerchant: false,
+      // 商户状态： 0:申请中，1：正常，2：申请成为广告商未通过，3：禁用
+      merchantStatus: null,
       submitLoad: false,
       // 收款列表
       paymentList: [],
@@ -290,7 +308,7 @@ export default {
     /* 获取商户信息 */
     getAdvertisers() {
       getAdvertisers().then(res => {
-        this.isMerchant = res
+        this.merchantInfo = res || null
       })
     },
     /* 获取收款列表 */

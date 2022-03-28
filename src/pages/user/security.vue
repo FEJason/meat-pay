@@ -19,13 +19,41 @@
         </div>
         <div class="right u-font-12">{{ $t('security.zhdl') }} xxxxxx</div>
       </div>
+      <!-- 邀请链接 -->
+      <div
+        class="certification u-m-t-20 u-p-20 u-flex u-row-between u-col-bottom"
+      >
+        <div>
+          <h2>邀请</h2>
+          <div class="u-p-t-10 u-flex">
+            <div>
+              <p class="u-font-12">邀请链接</p>
+              <div class="u-flex">
+                <p>{{ `http://192.168.0.109:8016/#/register?ref=${userInfo.inviteCode}` }}</p>
+                <Icon type="md-copy" size="24" class="u-tips-color" style="cursor: pointer;"
+                  v-clipboard="() => `http://192.168.0.109:8016/#/register?ref=${userInfo.inviteCode}`"
+                  v-clipboard:success="copySuccess"/>
+              </div>
+            </div>
+            <div class="u-m-l-40">
+              <p class="u-font-12">我的邀请码</p>
+              <div class="u-flex">
+                <p>{{ userInfo.inviteCode }}</p>
+                <Icon type="md-copy" size="24" class="u-tips-color" style="cursor: pointer;"
+                  v-clipboard="() => userInfo.inviteCode"
+                  v-clipboard:success="copySuccess"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- 身份认证 -->
       <div
         class="certification u-m-t-20 u-p-20 u-flex u-row-between u-col-bottom"
       >
         <div>
           <h2>{{ $t('security.sfrz') }}</h2>
-          <p class="u-p-t-6">
+          <p class="u-p-t-6 u-font-12 u-tips-color">
             {{ $t('security.wcsf') }}
           </p>
           <div class="u-p-t-10">
@@ -201,7 +229,7 @@
               <Icon type="ios-mail" size="28" color="#faad14" />
               <div class="text u-p-l-14">
                 <h3 class="u-m-b-4">{{ $t('security.yx') }}</h3>
-                <p>
+                <p class="u-font-12">
                   {{ $t('security.yydl') }}
                 </p>
               </div>
@@ -409,7 +437,7 @@
               <Icon type="ios-call" size="28" color="#367de1" />
               <div class="text u-p-l-14">
                 <h3 class="u-m-b-4">{{ $t('security.sjhm') }}</h3>
-                <p>
+                <p class="u-font-12">
                   {{ $t('security.yydl') }}
                 </p>
               </div>
@@ -671,7 +699,7 @@
               <Icon type="logo-google" size="28" color="#367de1" />
               <div class="text u-p-l-14">
                 <h3 class="u-m-b-4">{{ $t('security.ggyz') }}</h3>
-                <p>
+                <p class="u-font-12">
                   {{ $t('security.yydl') }}
                 </p>
               </div>
@@ -761,7 +789,7 @@
               <Icon type="ios-lock" size="28" color="#faad14" />
               <div class="text u-p-l-14">
                 <h3 class="u-m-b-4">{{ $t('security.dlma') }}</h3>
-                <p>{{ $t('security.yybh') }}</p>
+                <p class="u-font-12">{{ $t('security.yybh') }}</p>
               </div>
             </div>
             <div>
@@ -904,7 +932,7 @@
               <Icon type="logo-bitcoin" size="28" color="#367de1" />
               <div class="text u-p-l-14">
                 <h3 class="u-m-b-4">{{$t('security.zjmm')}}</h3>
-                <p>{{$t('security.yybhzc')}}</p>
+                <p class="u-font-12">{{$t('security.yybhzc')}}</p>
               </div>
             </div>
             <div>
@@ -2200,7 +2228,7 @@ export default {
       }
       .text {
         p {
-          color: #999;
+          color: #909399;
         }
       }
     }

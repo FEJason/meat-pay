@@ -53,19 +53,28 @@
           <div class="u-flex">
             <Select
               :value="currentCurrency"
-              style="width: 100px"
+              style="width: 120px"
               filterable
               @on-change="changeCurrency"
             >
+              <!-- <Avatar :src="currentImg" slot="prefix" size="small" /> -->
+              <img :src="currentImg" alt="ico" slot="prefix"  style="width: 20px; height: 20px;" />
               <Option
                 v-for="item in legalList"
+                :label="item.fiatCurrency"
                 :value="item.fiatCurrency"
-                :key="item.value"
-                >{{ item.fiatCurrency }}</Option
+                :key="item.fiatCurrency"
+                >
+                <!-- {{ item.fiatCurrency }} -->
+                <div class="u-flex">
+                  <img :src="item.imageUrl" alt="" style="width: 18px; height: 18px;">
+                  <span class="u-p-l-10">{{ item.fiatCurrency }}</span>
+                </div>
+              </Option
               >
             </Select>
-
-            <div class="u-p-l-12 hidden-xs">
+            <!-- 金额筛选 -->
+            <!-- <div class="u-p-l-12 hidden-xs">
               <Input
                 search
                 :enter-button="$t('trade.confirm')"
@@ -81,8 +90,9 @@
                   }
                 "
               />
-            </div>
-            <Select
+            </div> -->
+            <!-- 支付方式筛选 -->
+            <!-- <Select
               class="u-p-l-12"
               :value="currentPay"
               style="width: 140px"
@@ -94,7 +104,7 @@
                 :key="item.value"
                 >{{ item.name }}</Option
               >
-            </Select>
+            </Select> -->
             
             <Dropdown trigger="click" @on-click="clickRefresh">
               <Button icon="md-refresh" class="u-m-l-10" :loading="refreshLoading">{{ refreshText }}</Button>
@@ -826,6 +836,7 @@ export default {
     }
     
     return {
+      VUE_APP_WS: process.env.VUE_APP_WS,
       popShow: false,
       modalShow: false,
       marketNo: '',
@@ -887,6 +898,7 @@ export default {
         ]
       },
       currentCurrency: 'CNY', // 当前币种
+      currentImg: 'https://sosolx-prod.oss-cn-shenzhen.aliyuncs.com/currency/CNY.png', // 当前币种图片
       notFountPay: false,
       currentPay: '全部支付方式', // 选择支付方式
       payList: [
@@ -1202,7 +1214,12 @@ export default {
     },
     /* 选择币种 */
     changeCurrency(val) {
+      console.log(val)
       this.currentCurrency = val
+      const arr = this.legalList.filter(item => {
+        return item.fiatCurrency == val
+      })
+      this.currentImg = arr[0].imageUrl
       this.loadAd(1)
     },
     /* 查询法定货币列表 */
@@ -1286,6 +1303,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// select
+::v-deep .ivu-select-single .ivu-select-prefix {
+  padding-top: 4px;
+}
+::v-deep .ivu-select-input {
+  height: 30px;
+  line-height: 30px;
+}
 ::v-deep .ivu-btn-error {
   background-color: #ff5f67;
 }

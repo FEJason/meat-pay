@@ -75,10 +75,17 @@ export default {
               key: 'balance',
               sortable: true
           },
+          // {
+          //     title: '交易冻结',
+          //     key: 'tradeFreeze',
+          // },
           {
-              title: this.$t('finance.dj'),
-              key: 'tradeFreeze',
-              sortable: true
+              title: '其它冻结',
+              key: 'freeze',
+          },
+          {
+              title: '提现冻结',
+              key: 'payOutFreeze',
           },
           // {
           //     title: 'BTC估值',
