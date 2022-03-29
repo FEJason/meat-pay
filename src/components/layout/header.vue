@@ -51,8 +51,8 @@
           </Dropdown>
 
           <!-- 消息 -->
-          <div class="u-m-r-24" style="cursor: pointer;">
-            <Badge :count="3">
+          <div class="u-m-r-24" style="cursor: pointer;" @click="handleNotice">
+            <Badge :count="notRead">
               <Icon type="ios-notifications-outline" size="26" color="#fff"></Icon>
             </Badge>
           </div>
@@ -156,7 +156,7 @@ export default {
     this.$i18n.locale = this.lang;
   },
   computed: {
-    ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle', 'userInfo']),
+    ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle', 'userInfo', 'notRead']),
     languageValue() {
       let curlang = this.lang;
       if (curlang == "en") {
@@ -191,6 +191,10 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV', 'SET_ISLOGIN']),
+    /* 通知 */
+    handleNotice() {
+      this.$router.push('/inmail')
+    },
     /* 切换语言 */
     changelanguage: function (name) {
       // console.log("change language: " + name);

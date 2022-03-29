@@ -58,7 +58,7 @@
               @on-change="changeCurrency"
             >
               <!-- <Avatar :src="currentImg" slot="prefix" size="small" /> -->
-              <img :src="currentImg" alt="ico" slot="prefix"  style="width: 20px; height: 20px;" />
+              <img :src="currentImg" alt="ico" slot="prefix"  style="width: 18px; height: 18px;" />
               <Option
                 v-for="item in legalList"
                 :label="item.fiatCurrency"
@@ -92,7 +92,7 @@
               />
             </div> -->
             <!-- 支付方式筛选 -->
-            <!-- <Select
+            <Select
               class="u-p-l-12"
               :value="currentPay"
               style="width: 140px"
@@ -100,11 +100,12 @@
             >
               <Option
                 v-for="item in payList"
-                :value="item.name"
-                :key="item.value"
-                >{{ item.name }}</Option
+                :label="item.payTypeName"
+                :value="item.payTypeId"
+                :key="item.payTypeId"
+                >{{ item.payTypeName }}</Option
               >
-            </Select> -->
+            </Select>
             
             <Dropdown trigger="click" @on-click="clickRefresh">
               <Button icon="md-refresh" class="u-m-l-10" :loading="refreshLoading">{{ refreshText }}</Button>
@@ -781,7 +782,8 @@ import {
   release,
   setRelease,
   getIdAdv,
-  otcOrder
+  otcOrder,
+  queryPayWay
 } from '@/api/trade'
 import { getPaymentList } from '@/api/user'
 import yjuiSelect from '@/components/yjui-select/yjui-select'
@@ -900,13 +902,8 @@ export default {
       currentCurrency: 'CNY', // 当前币种
       currentImg: 'https://sosolx-prod.oss-cn-shenzhen.aliyuncs.com/currency/CNY.png', // 当前币种图片
       notFountPay: false,
-      currentPay: '全部支付方式', // 选择支付方式
-      payList: [
-        { name: '全部支付方式' },
-        { name: '银行卡' },
-        { name: '支付宝' },
-        { name: '微信' }
-      ],
+      currentPay: -1, // 选择支付方式
+      payList: [],
       // 法币列表
       legalList: [],
       // 币种列表
@@ -967,17 +964,21 @@ export default {
       await this.getCurrencyList()
       await this.getLegalList()
       this.loadAd(1) // 获取广告
+      this.queryPayWay() // 获取支付方式
     } catch {}
-
-    // if (this.isLogin) {
-    //   this.getPaymentList() // 获取收款方式列表
-    // }
+   
   },
   computed: {
     ...mapState(['isLogin', 'certificationInfo'])
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
+    /* 获取支付方式 */
+    queryPayWay() {
+      queryPayWay().then(res => {
+        this.payList = res
+      })
+    },
     /* 选择刷新时间 */
     clickRefresh(name) {
       console.log(name)
@@ -1211,6 +1212,7 @@ export default {
     /* 选择支付方式 */
     changePay(val) {
       this.currentPay = val
+      this.loadAd(1)
     },
     /* 选择币种 */
     changeCurrency(val) {
@@ -1284,7 +1286,7 @@ export default {
         fiatId: fiatId[0].id, // 法定货币币种ID
         fiatCurrency: this.currentCurrency.toUpperCase(), // 法币token 如CNY
         userSide: this.buyOrSell == 'buy' ? 1 : 2, // 用户交易买卖方向[1:买,2:卖] ---1
-        payWay: '', // 支付方式
+        payWay: this.currentPay, // 支付方式
         tradeAmount: this.tradeAmount // 金额
       })
         .then(res => {

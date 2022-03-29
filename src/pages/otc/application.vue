@@ -80,7 +80,7 @@
           </div>
           <div class="u-flex" v-if="!isGreater">
             <Icon type="md-refresh" size="20" class="u-m-r-10"/>
-            <Button type="primary" size="small">去充值</Button>
+            <Button type="primary" size="small" to="/deposit">去充值</Button>
           </div>
         </div>
       </div>
@@ -274,7 +274,7 @@ export default {
         this.assetList = res.filter(item => {
           return item.currencyName == 'USDT'
         })
-        this.assetList = [{balance: 15000}] // 调试
+        // this.assetList = [{balance: 15000}] // 调试
         if (this.bindMobileAndEmail && this.certificationInfo && this.isGreater) {
           this.isDisabled = false
         }

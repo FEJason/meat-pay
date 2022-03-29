@@ -25,8 +25,10 @@
               <Input type="password" password v-model="formEmail.password" :placeholder="$t('register.dlmm')">
               </Input>
             </FormItem>
-            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')" v-show="!$route.query.ref">
-              <Input type="text" v-model="formEmail.sourceInviteCode" :placeholder="$t('register.yqm')"></Input>
+            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')">
+              <Input type="text" v-model="formEmail.sourceInviteCode"
+                :placeholder="$t('register.yqm')"
+                :disabled="$route.query.ref"></Input>
             </FormItem>
             <div class="check-agree">
               <label>
@@ -76,8 +78,10 @@
               <Input type="password" password v-model="formMobile.password" :placeholder="$t('register.dlmm')">
               </Input>
             </FormItem>
-            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')" v-show="!$route.query.ref">
-              <Input type="text" v-model="formMobile.sourceInviteCode" :placeholder="$t('register.yqm')"></Input>
+            <FormItem prop="sourceInviteCode" :label="$t('register.yqm')">
+              <Input type="text" v-model="formMobile.sourceInviteCode"
+                :placeholder="$t('register.yqm')"
+                :disabled="$route.query.ref"></Input>
             </FormItem>
             <div class="check-agree">
               <label>

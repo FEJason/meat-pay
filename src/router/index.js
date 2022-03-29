@@ -31,7 +31,8 @@ const routes = [
       },
       {
         path: '/home',
-        component: () => import('../pages/index/index.vue')
+        component: () => import('../pages/index/index.vue'),
+        meta: { title: '首页' }
       },
       {
         path: '/login',
@@ -149,6 +150,18 @@ const routes = [
         path: '/record',
         component: () => import('../pages/finance/record'),
         meta: { title: '财务记录' }
+      },
+      // 消息中心
+      {
+        path: '/inmail',
+        component: () => import('../pages/user/inmail'),
+        meta: { title: '消息中心' }
+      },
+      // 消息详情
+      {
+        path: '/inmail-info/:id',
+        component: () => import('../pages/user/inmailInfo'),
+        meta: { title: '消息' }
       },
       // 账户&安全
       {
@@ -345,7 +358,7 @@ const routes = [
   // 公共模块之外的路由
   {
     path: '*',
-    component: () => import('../pages/index/index')
+    redirect: '/home'
   },
   // 手机下载页
   // {

@@ -249,3 +249,59 @@ export const setVerify = (query) => {
         url: `/configure/app/common/currencyRate/list`,
     })
 }
+
+/**
+ * 获取计价单位
+ */
+ export const priceUnit = () => {
+    return request({
+        url: `/sexchange/extExchange/priceUnit`,
+    })
+}
+
+/**
+ * 分页查询消息
+ */
+ export const getMessage = () => {
+    return request({
+        url: `msg/app/messageCenter/page`,
+    })
+}
+
+/**
+ * 消息未读数量
+ */
+ export const getAllNotRead = () => {
+    return request({
+        url: `/msg/app/messageCenter/getAllNotRead`,
+    })
+}
+
+/**
+ * 消息详情
+ */
+ export const getMessageInfo = (id) => {
+    return request({
+        url: `/msg/app/messageCenter/${id}`,
+    })
+}
+
+/**
+ * 修改为已读状态
+ */
+ export const editMessageRead = (id) => {
+    return request({
+        url: `/msg/app/messageCenter/${id}`,
+        method: 'put'
+    })
+}
+
+/**
+ * 全部已读
+ */
+ export const allRead = () => {
+    return request({
+        url: `/msg/app/messageCenter`,
+        method: 'put'
+    })
+}

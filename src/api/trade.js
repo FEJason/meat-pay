@@ -180,4 +180,12 @@ import request from '@/request/request'
     })
 }
 
+/**
+ * 支付方式
+ */
+ export const queryPayWay = () => {
+    return request({
+        url: `/otc/pay/type/queryPayWay`
+    })
+}
 

@@ -80,7 +80,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getUserInfo', 'getSecurity', 'getCertification']),
+    ...mapActions(['getUserInfo', 'getSecurity', 'getCertification', 'getAllNotRead']),
     ...mapMutations(['SET_ISLOGIN']),
     init() {
       this.$store.commit("navigate", "nav-other")
@@ -90,6 +90,7 @@ export default {
         this.handleSubmit()
       }
     },
+    
     handleSubmit() {
       this.$refs['form'].validate(valid => {
         if (valid) {
@@ -115,6 +116,8 @@ export default {
               this.getSecurity()
               // 实名信息
               this.getCertification()
+              // 获取消息
+              this.getAllNotRead()
 
               // 上个页面是注册 or 重置页面，跳转到首页
               if (this.backPath.indexOf('register') != -1 ||

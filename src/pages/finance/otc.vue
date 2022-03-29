@@ -4,11 +4,11 @@
       <div class="top-con u-flex u-row-between u-col-top">
         <div class="top-con-left">
           <div class="tit">
-            <span>资金账户</span>
+            <span>资产估值</span>
             <!-- <Icon type="ios-eye" size="26" class="u-p-l-10"/> -->
           </div>
           <div>
-            <span class="num">{{ toFixeds(otc.latestAmount) }} USDT</span>
+            <span class="num">{{ otc.latestAmount }} BTC</span>
             <span class="sec u-p-l-10">≈ {{toFixeds( NP.times(otc.latestAmount, CNY)) }} CNY</span>
           </div>
           <!-- <div class="profit">
@@ -51,17 +51,20 @@
 
 <script>
 import { getAccount, getAssetList } from '@/api/finance'
-import { getRate } from '@/api/user'
+import { getRate, priceUnit } from '@/api/user'
 export default {
   data() {
     return {
-      CNY: '',
+      btcPrice: 0,
+      CNY: 0,
       searchValue: '',
       searchList: [],
       tableLoading: false,
       wallet: {},
       spot: {},
-      otc: {},
+      otc: {
+        latestAmount: 0.00000000
+      },
       single: false,
       assetList: [],
       columns5: [
@@ -104,8 +107,11 @@ export default {
       ],
     }
   },
-  created() {
+  async created() {
     this.$emit('setactive', '2')
+    try {
+      await this.priceUnit()
+    } catch (e) { }
     this.getAccount() // 资产总览
     this.getAssetList()
     this.getRate()
@@ -115,6 +121,20 @@ export default {
     getRate() {
       getRate().then(res => {
         this.CNY = res.CNY
+      })
+    },
+    /* 获取计价单位 */
+    priceUnit() {
+      return new Promise((resolve, reject) => {
+        priceUnit().then(res => {
+          const arr = res.filter(item => {
+            return item.symbol == 'BTC'
+          })
+          this.btcPrice = arr[0].price
+          resolve()
+        }).case(() => {
+          reject()
+        })
       })
     },
     /* 搜索 */
@@ -141,20 +161,10 @@ export default {
     getAccount() {
       getAccount().then(res => {
         if (res && res.length) {
-          let wallet = res.filter(item => {
-            return item.account == 'wallet'
-          })
-          this.wallet = wallet[0]
-
-          let spot = res.filter(item => {
-            return item.account == 'spot'
-          })
-          this.spot = spot[0]
-
-          let otc = res.filter(item => {
+          const otc = res.filter(item => {
             return item.account == 'otc'
           })
-          this.otc = otc[0]
+          this.otc.latestAmount = this.toFixeds(this.NP.divide(otc[0].latestAmount, this.btcPrice), 8)
         }
       })
     }

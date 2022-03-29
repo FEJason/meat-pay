@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { getUserInfo, getSecurity, getCertification } from '@/api/user'
+import { getUserInfo, getSecurity, getCertification, getAllNotRead } from '@/api/user'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -18,6 +18,8 @@ export default new Vuex.Store({
         loginTimes: null,
         // 汇率
         rate: 6.3,
+        // 未读消息
+        notRead: (localStorage.notRead && JSON.parse(localStorage.notRead)) || 0,
         // 用户信息
         userInfo: (localStorage.userInfo && JSON.parse(localStorage.userInfo)) || {},
         // 安全信息
@@ -86,6 +88,10 @@ export default new Vuex.Store({
         SETCERTIFICATION(state, val) {
             state.certificationInfo = val
             localStorage.certificationInfo = JSON.stringify(val)
+        },
+        SETOTREAD(state, val) {
+            state.notRead = val
+            localStorage.notRead = JSON.stringify(val)
         }
     },
     getters: {
@@ -124,6 +130,12 @@ export default new Vuex.Store({
             getSecurity().then((res) => {
                 commit('SETSECURITYINFO', res)
             });
+        },
+        /* 消息未读数量 */
+        getAllNotRead({ commit }) {
+            getAllNotRead().then(res => {
+                commit('SETOTREAD', Number(res))
+            })
         },
     }
 });

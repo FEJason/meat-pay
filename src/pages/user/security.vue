@@ -98,7 +98,7 @@
         <Modal
           class="detail"
           v-model="realNameShow"
-          width="700px"
+          width="800px"
           :title="$t('security.smrz')"
           :mask-closable="false"
           :footer-hide="true"
@@ -201,10 +201,11 @@
                   </Col>
                 </Row>
               </div>
-              <div class="idcard-desc u-text-left">
-                <p>{{ $t('security.zcjpg') }}</p>
-                <p>{{ $t('security.zpxmg') }}</p>
-                <p>{{ $t('security.xyts') }}</p>
+              <div class="idcard-desc u-text-left u-font-12">
+                <h3 class="u-p-b-10">证件上传要求</h3>
+                <p class="u-p-b-6">{{ $t('security.zcjpg') }}</p>
+                <p class="u-p-b-6">{{ $t('security.zpxmg') }}</p>
+                <p class="u-p-b-20">{{ $t('security.xyts') }}</p>
               </div>
               <div class="u-text-right">
                 <Button type="text" @click="realNameShow = false">{{ $t('publice.qx') }}</Button>
