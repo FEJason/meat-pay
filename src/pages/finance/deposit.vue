@@ -137,15 +137,23 @@
       <div class="title u-flex u-row-between">
         <div>{{ coinName }} {{ $t('deposit.cbjl') }}<span style="color: #999">{{ $t('deposit.zj') }}</span></div>
         <div>
-          <router-link to="/">{{ $t('deposit.ckqb') }}</router-link>
+          <router-link to="/finance/record">{{ $t('deposit.ckqb') }}</router-link>
         </div>
       </div>
-      <Table :columns="columns5" :data="data5"></Table>
+      <Table :columns="columns" :data="tableData">
+        <template slot-scope="{ row, index }" slot="billType">
+          充币
+        </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <div style="color: red">等待接口返回字段...</div>
+        </template>
+      </Table>
     </div>
   </div>
 </template>
 
 <script>
+import { getRecord } from '@/api/finance'
 import { getCurrencyList, getDepositAddress } from '@/api/finance'
 import QrcodeVue from "qrcode.vue"
 
@@ -162,39 +170,52 @@ export default {
       chainActive: {}, // 当前网络对象
       coinList: [],
       chainList: [],
-      columns5: [
-          {
-              title: this.$t('deposit.sj'),
-              key: 'date',
-          },
-          {
-              title: this.$t('deposit.bz'),
-              key: 'name'
-          },
-          {
-              title: this.$t('deposit.lx'),
-              key: 'age',
-          },
-          {
-              title: this.$t('deposit.sl'),
-              key: 'address'
-          },
-          {
-              title: this.$t('deposit.zt'),
-              key: 'address',
-              align: 'right'
-          }
+      columns: [
+        {
+            title: this.$t('deposit.sj'),
+            key: 'createTime',
+        },
+        {
+            title: this.$t('deposit.bz'),
+            key: 'currencyName'
+        },
+        {
+            title: this.$t('deposit.lx'),
+            slot: 'billType',
+        },
+        {
+            title: this.$t('deposit.sl'),
+            key: 'amount'
+        },
+        {
+            title: this.$t('deposit.zt'),
+            slot: 'status',
+            align: 'right'
+        }
       ],
-      data5: []
+      tableData: []
     }
   },
   async created() {
+    this.getRecord()
     try {
       await this.getCurrencyList()
       this.getDepositAddress()
     } catch { }
   },
   methods: {
+    /* 获取财务记录 */
+    getRecord() {
+      getRecord({
+        walletType: 'otc',
+        type: 1,
+        timeStamp: '',
+        size: 10,
+        current: 1
+      }).then(res => {
+        this.tableData = res.records
+      })
+    },
     /* 复制地址 */
     copySuccess() {
       this.$Notice.success({

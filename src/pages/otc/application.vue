@@ -57,7 +57,9 @@
             <span>完成手机号及邮箱绑定</span>
           </div>
           <div class="u-flex" v-if="!bindMobileAndEmail">
-            <Icon type="md-refresh" size="20" class="u-m-r-10"/>
+            <Button type="text" icon="md-refresh" size="small"
+              :loading="bindLoading"
+              @click="refresh(0)"></Button>
             <Button type="primary" size="small" to="/security">去绑定</Button>
           </div>
         </div>
@@ -68,7 +70,9 @@
             <span>完成身份验证</span>
           </div>
           <div class="u-flex" v-if="!certificationInfo">
-            <Icon type="md-refresh" size="20" class="u-m-r-10"/>
+            <Button type="text" icon="md-refresh" size="small"
+              :loading="idLoading"
+              @click="refresh(1)"></Button>
             <Button type="primary" size="small" to="/security">去验证</Button>
           </div>
         </div>
@@ -79,7 +83,9 @@
             <span>资金账户USDT数量至少大于等于15000</span>
           </div>
           <div class="u-flex" v-if="!isGreater">
-            <Icon type="md-refresh" size="20" class="u-m-r-10"/>
+            <Button type="text" icon="md-refresh" size="small"
+              :loading="depLoading"
+              @click="refresh(2)"></Button>
             <Button type="primary" size="small" to="/deposit">去充值</Button>
           </div>
         </div>
@@ -198,12 +204,15 @@
 </template>
 
 <script>
-import { mapState } from "vuex"
+import { mapActions, mapState } from "vuex"
 import { getAssetList } from '@/api/finance'
 import { merchantApply } from '@/api/myads'
 export default {
   data() {
     return {
+      bindLoading: false,
+      idLoading: false,
+      depLoading: false,
       stepsCurrent: 0,
       formApply: {},
       rules: {
@@ -243,6 +252,36 @@ export default {
     this.getAssetList()
   },
   methods: {
+    ...mapActions(['getSecurity', 'getCertification']),
+    /* 刷新 */
+    refresh(val) {
+      switch(val) {
+        case 0 :
+          this.bindLoading = true
+          this.getSecurity().finally(() => {
+            setTimeout(() => {
+              this.bindLoading = false
+            }, 300)
+          })
+          break;
+        case 1 :
+          this.idLoading = true
+          this.getCertification().finally(() => {
+            setTimeout(() => {
+              this.idLoading = false
+            }, 300)
+          })
+          break;
+        case 2 :
+          this.depLoading = true
+          this.getAssetList().finally(() => {
+            setTimeout(() => {
+              this.depLoading = false
+            }, 300)
+          })
+          break;
+      }
+    },
     /* 第一步 */
     handleNext(name) {
       // console.log(JSON.parse(JSON.stringify(this.formApply)))
@@ -270,14 +309,21 @@ export default {
     },
     /* 获取资产列表 */
     getAssetList() {
-      getAssetList('otc').then(res => {
-        this.assetList = res.filter(item => {
-          return item.currencyName == 'USDT'
-        })
-        // this.assetList = [{balance: 15000}] // 调试
-        if (this.bindMobileAndEmail && this.certificationInfo && this.isGreater) {
-          this.isDisabled = false
-        }
+      return new Promise((resolve, reject) => {
+        getAssetList('otc')
+          .then(res => {
+            this.assetList = res.filter(item => {
+              return item.currencyName == 'USDT'
+            })
+            // this.assetList = [{balance: 15000}] // 调试
+            if (this.bindMobileAndEmail && this.certificationInfo && this.isGreater) {
+              this.isDisabled = false
+            }
+            resolve()
+          })
+          .catch(() => {
+            reject()
+          })
       })
     }
   }

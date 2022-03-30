@@ -215,8 +215,7 @@
           placeholder="请输入关键字"
           @on-change="changePayType"
         >
-          <Option v-for="item in payTypeList" :value="item.id" :key="item.id" class="u-flex">
-            <!-- <img :src="'http://192.168.0.67:9999' + item.image" alt="img" style="width: 21px;"/> -->
+          <Option v-for="item in payTypeList" :label="item.name" :value="item.id" :key="item.id" class="u-flex">
             <img :src="VUE_APP_WS + item.image" alt="img" style="width: 21px;"/>
             <span class="u-p-l-6">{{item.name}}</span>
           </Option>
@@ -346,6 +345,7 @@ export default {
     },
     /* 选择收款方式 */
     changePayType(value) {
+      console.log(value)
       this.saveOrEdit = 'save'
       switch (value) {
         // 微信

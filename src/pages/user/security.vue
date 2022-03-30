@@ -135,11 +135,13 @@
                     <div class="idcard-title">
                       证件正面照
                     </div>
-                    <img
-                      id="frontCardImg"
-                      style="width: 180px; height: 120px"
-                      :src="frontCardImg"
-                    />
+                    <div class="idcard-bg">
+                      <img
+                        id="frontCardImg"
+                        style="width: 180px; height: 120px"
+                        :src="frontCardImg"
+                      />
+                    </div>
                     <div class="acc_sc">
                       <Upload
                         ref="upload1"
@@ -158,11 +160,13 @@
                     <div class="idcard-title">
                       证件反面照
                     </div>
-                    <img
-                      id="backCardImg"
-                      style="width: 180px; height: 120px"
-                      :src="backCardImg"
-                    />
+                    <div class="idcard-bg">
+                      <img
+                        id="backCardImg"
+                        style="width: 180px; height: 120px"
+                        :src="backCardImg"
+                      />
+                    </div>
                     <div class="acc_sc">
                       <Upload
                         ref="upload2"
@@ -181,11 +185,13 @@
                     <div class="idcard-title">
                       手持证件与个人签名照
                     </div>
-                    <img
-                      id="handCardImg"
-                      style="width: 180px; height: 120px"
-                      :src="handCardImg"
-                    />
+                    <div class="idcard-bg">
+                      <img
+                        id="handCardImg"
+                        style="width: 180px; height: 120px"
+                        :src="handCardImg"
+                      />
+                    </div>
                     <div class="acc_sc">
                       <Upload
                         ref="upload3"
@@ -201,7 +207,7 @@
                   </Col>
                 </Row>
               </div>
-              <div class="idcard-desc u-text-left u-font-12">
+              <div class="idcard-desc u-text-left u-font-12 u-m-t-20">
                 <h3 class="u-p-b-10">证件上传要求</h3>
                 <p class="u-p-b-6">{{ $t('security.zcjpg') }}</p>
                 <p class="u-p-b-6">{{ $t('security.zpxmg') }}</p>
@@ -2234,5 +2240,14 @@ export default {
       }
     }
   }
+}
+.idcard-bg {
+  display: inline-block;
+  background-color: #f6f8fa;
+  padding: 10px;
+  width: 200px;
+  height: 140px;
+  border-radius: 8px;
+  margin: 10px 0;
 }
 </style>

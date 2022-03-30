@@ -52,11 +52,6 @@
       :mask-closable="false"
       :footer-hide="true"
     >
-      <!-- <div class="u-text-center u-p-b-20">
-        <img src="@/assets/img/home/code.png" alt="code">
-        <p>请扫码下载App，完成商户申请</p>
-      </div> -->
-
       <Form
         ref="formApply"
         :model="formApply"

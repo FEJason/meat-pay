@@ -25,13 +25,18 @@
           <!-- <router-link to="/">查看全部</router-link> -->
         </div>
       </div>
-      <Table :columns="columns" :data="tableData" :loading="tableLoading" size="small">
-        <template slot-scope="{ row, index }" slot="slotBillType">
-          {{ formatType[row.billType.toString()] }}
-        </template>
-      </Table>
+      <div class="table-wrap">
+        <Table :columns="columns" :data="tableData" :loading="tableLoading">
+          <template slot-scope="{ row, index }" slot="slotBillType">
+            {{ formatType[row.billType.toString()] }}
+          </template>
+          <template slot-scope="{ row, index }" slot="status">
+            <div>{{ formatStatus[row.status] }}</div>
+          </template>
+        </Table>
+      </div>
     </div>
-    <div class="u-text-right u-p-t-30" v-if="totalPage > 10">
+    <div class="u-text-center u-p-t-30">
       <Page :total="totalPage" @on-change="onChange" />
     </div>
   </div>
@@ -52,9 +57,15 @@ export default {
       active: this.$route.query.active || 0,
       tableTitle: '充币记录',
       tabList: ['充币记录', '提币记录'],
+      formatStatus: {
+        0: '待审核',
+        1: '进行中',
+        2: '失败',
+        3: '完成'
+      },
       formatType: {
-        8: '币币划转法币',
-        10: '法币划转币币'
+        1: '充值',
+        2: '提币'
       },
       coinList: [],
       tableLoading: false,
@@ -66,7 +77,6 @@ export default {
         },
         {
           title: '币种',
-          align: 'right',
           key: 'currencyName'
         },
         {
@@ -79,7 +89,12 @@ export default {
           title: '数量',
           align: 'right',
           key: 'amount'
-        }
+        },
+        {
+          title: '状态',
+          align: 'right',
+          slot: 'status'
+        },
       ],
       queryData: {
         type: 1,
@@ -122,7 +137,7 @@ export default {
       }
       this.tableLoading = true
       getRecord({
-        walletType: 'spot',
+        walletType: 'otc',
         ...this.queryData
       }).then(res => {
         if (res.records && res.records.length) {
@@ -204,4 +219,5 @@ fieldset[disabled] .ivu-input {
     }
   }
 }
+
 </style>

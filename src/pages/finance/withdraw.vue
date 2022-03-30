@@ -39,7 +39,7 @@
                 <span>{{ chainActive.confirmNum }}次区块确认</span>
               </p>
             </div> -->
-            <div class="sp-tips">
+            <div class="sp-tips u-font-12">
               <p>
                 <span>{{ $t('withdraw.tbsx') }}</span>
                 <span>{{ chainActive.payOutFee }} {{ coinName }}</span>
@@ -53,7 +53,11 @@
                 <span>{{ chainActive.mostPayOut }} {{ coinName }}</span>
               </p>
             </div>
-            <div class="content u-m-t-16">
+            <p class="u-flex u-row-between u-font-12 u-p-t-8">
+              <span>可用</span>
+              <span>{{ balance }}  {{ coinName }}</span>
+            </p>
+            <div class="content u-m-t-16 u-font-12">
               <p>
                 <em>• </em>
                 {{ $t('withdraw.zxtb') }}{{ chainActive.leastPayOut }} {{ coinName }}。
@@ -109,6 +113,7 @@
               v-model="withdrawNum"
               size="large"
               :placeholder="$t('withdraw.zxtbsl') + chainActive.leastPayOut"
+              @input.native="onInput"
             />
           </div>
           <div class="deposit-internet u-m-b-24">
@@ -127,7 +132,7 @@
             </div>
             <div class="info-amount u-m-t-8 u-flex u-row-between">
               <span>{{ $t('withdraw.sjdz') }}</span>
-              <span class="u-font-20 u-font-bold">0000 {{ coinName }}</span>
+              <span class="u-font-20 u-font-bold">{{ actual }} {{ coinName }}</span>
             </div>
           </div>
           <Button type="primary" long size="large" @click.stop="submit"
@@ -143,10 +148,17 @@
           {{ coinName }} {{ $t('withdraw.tbjl') }}<span style="color: #999">{{ $t('withdraw.zj10') }}</span>
         </div>
         <div>
-          <router-link to="/">{{ $t('deposit.ckqb') }}</router-link>
+          <router-link to="/finance/record">{{ $t('deposit.ckqb') }}</router-link>
         </div>
       </div>
-      <Table :columns="columns5" :data="data5"></Table>
+      <Table :columns="columns" :data="tableData">
+        <template slot-scope="{ row, index }" slot="billType">
+          提币
+        </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <div>{{ formatStatus[row.status] }}</div>
+        </template>
+      </Table>
     </div>
 
     <!-- 安全验证 -->
@@ -158,10 +170,10 @@
 <script>
 import {
   getCurrencyList,
-  getDepositAddress,
   getRecord,
   withdraw
 } from '@/api/finance'
+import { getBalance } from '@/api/exchange'
 import safeModal from '@components/safeModal/safeModal'
 // import QrcodeVue from "qrcode.vue"
 
@@ -172,6 +184,12 @@ export default {
   },
   data() {
     return {
+      formatStatus: {
+        0: '待审核',
+        1: '进行中',
+        2: '失败',
+        3: '完成'
+      },
       submitLoading: false,
       safeShow: false, // 安全验证
       formValidate: {
@@ -183,7 +201,9 @@ export default {
       withdrawForm: {}, // 提币表单
       withdrawNum: '', // 提币数量
       withdrawFee: '', // 提币手续费
+      actual: 0, // 实际到账
       address: '', // 提币地址
+      balance: 0, // 可用余额
       qrcodeValue: '',
       coinName: '', // 币种名
       coinId: '', // 币种ID
@@ -191,50 +211,68 @@ export default {
       chainActive: {}, // 当前网络对象
       coinList: [],
       chainList: [],
-      columns5: [
+      columns: [
         {
             title: this.$t('deposit.sj'),
-            key: 'date',
+            key: 'createTime',
         },
         {
             title: this.$t('deposit.bz'),
-            key: 'name'
+            key: 'currencyName'
         },
         {
             title: this.$t('deposit.lx'),
-            key: 'age',
+            slot: 'billType',
         },
         {
             title: this.$t('deposit.sl'),
-            key: 'address'
+            key: 'amount'
         },
         {
             title: this.$t('deposit.zt'),
-            key: 'address',
+            slot: 'status',
             align: 'right'
         }
       ],
-      data5: []
+      tableData: []
     }
   },
   async created() {
     this.getRecord()
     try {
       await this.getCurrencyList()
-      // this.getDepositAddress()
     } catch {}
+    this.getBalance()
   },
   methods: {
+    /* 获取币种余额 */
+    getBalance() {
+      return new Promise(resolve => {
+        getBalance({
+          type: 'otc',
+          currency: this.coinName
+        }).then(res => {
+          this.balance = res.balance
+          resolve()
+        })
+      })
+    },
+    /* 输入数量 */
+    onInput() {
+      if (this.withdrawNum == '') return
+      this.withdrawNum = this.withdrawNum.replace(/^\D*(\d*(?:\.\d{0,8})?).*$/g, '$1')
+      this.actual = this.NP.minus(this.withdrawNum, this.chainActive.payOutFee)
+    },
     /* 获取财务记录 */
     getRecord() {
       getRecord({
-        walletType: 'spot',
+        walletType: 'otc',
         type: 2,
         timeStamp: '',
         size: 10,
         current: 1
       }).then(res => {
-        console.log(res)
+        this.tableData = res.records
       })
     },
     /* 确认提交 */
@@ -290,12 +328,6 @@ export default {
         desc: '复制成功'
       })
     },
-    /* 获取充币地址 */
-    getDepositAddress() {
-      getDepositAddress(this.chainId).then(res => {
-        this.qrcodeValue = res
-      })
-    },
     /* 切换网络 */
     chainChange(val) {
       let list = this.chainList.filter(item => {
@@ -303,8 +335,7 @@ export default {
       })
       this.chainActive = list[0]
 
-      this.qrcodeValue = ''
-      // this.getDepositAddress()
+      this.onInput()
     },
     /* 切换币种 */
     coinChange(val) {
@@ -318,7 +349,6 @@ export default {
       this.chainId = activeList[0].tokenChainList[0].chainId
 
       this.qrcodeValue = ''
-      // this.getDepositAddress()
     },
     /* 获取币种列表 */
     getCurrencyList() {
@@ -408,7 +438,7 @@ fieldset[disabled] .ivu-input {
     }
     .des-content {
       .sp-tips {
-        padding: 16px;
+        padding: 16px 10px;
         border-radius: 4px;
         background: rgba(127, 152, 227, 0.1);
         p {

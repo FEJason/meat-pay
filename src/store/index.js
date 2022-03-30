@@ -19,15 +19,21 @@ export default new Vuex.Store({
         // 汇率
         rate: 6.3,
         // 未读消息
-        notRead: (localStorage.notRead && JSON.parse(localStorage.notRead)) || 0,
+        notRead: Number(localStorage.notRead) || 0,
         // 用户信息
         userInfo: (localStorage.userInfo && JSON.parse(localStorage.userInfo)) || {},
         // 安全信息
         securityInfo: (localStorage.securityInfo && JSON.parse(localStorage.securityInfo)) || {},
         // 实名信息
         certificationInfo: (localStorage.certificationInfo && JSON.parse(localStorage.certificationInfo)) || null,
+        // 隐藏资产
+        hideBalance: (localStorage.hideBalance && JSON.parse(localStorage.hideBalance)) || false,
     },
     mutations: {
+        SETISHIDDENAMOUNT(state, val) {
+            state.hideBalance = val
+            localStorage.hideBalance = val
+        },
         SET_HADERSTYLE(state, val) {
             state.headerStyle = val
         },
@@ -117,19 +123,33 @@ export default new Vuex.Store({
         },
         /* 查询用户实名认证 */
         getCertification({ commit }) {
-            getCertification().then(res => {
-                if (res) {
-                    commit('SETCERTIFICATION', res)
-                } else {
-                    commit('SETCERTIFICATION', '')
-                }
+            return new Promise((resolve, reject) => {
+                getCertification()
+                    .then(res => {
+                        if (res) {
+                            commit('SETCERTIFICATION', res)
+                        } else {
+                            commit('SETCERTIFICATION', '')
+                        }
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
             })
         },
         /* 查询用户安全认证 */
         getSecurity({ commit }) {
-            getSecurity().then((res) => {
-                commit('SETSECURITYINFO', res)
-            });
+            return new Promise((resolve, reject) => {
+                getSecurity()
+                    .then((res) => {
+                        commit('SETSECURITYINFO', res)
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+            })
         },
         /* 消息未读数量 */
         getAllNotRead({ commit }) {

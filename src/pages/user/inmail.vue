@@ -56,6 +56,7 @@ export default {
           title: '提示',
           desc: "成功"
         })
+        this.getMessage()
       })
     }
   }

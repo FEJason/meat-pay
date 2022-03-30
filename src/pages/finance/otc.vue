@@ -5,11 +5,16 @@
         <div class="top-con-left">
           <div class="tit">
             <span>资产估值</span>
-            <!-- <Icon type="ios-eye" size="26" class="u-p-l-10"/> -->
+            <span style="cursor: pointer;">
+              <Icon
+                :type="hideBalance ? 'ios-eye-off' : 'ios-eye'"
+                size="26" color="#9aa5b5" class="u-p-l-10" @click="hiddenAmount"/>
+            </span>
+            
           </div>
           <div>
-            <span class="num">{{ otc.latestAmount }} BTC</span>
-            <span class="sec u-p-l-10">≈ {{toFixeds( NP.times(otc.latestAmount, CNY)) }} CNY</span>
+            <span class="num">{{ hideBalance ? '****' : otc.latestAmount}} BTC</span>
+            <span class="sec u-p-l-10">≈ {{hideBalance ? '****' : toFixeds( NP.times(otc.usdAmount, CNY)) }} CNY</span>
           </div>
           <!-- <div class="profit">
             <span class="profit-left">{{ $t('finance.jrsy') }}</span>
@@ -17,7 +22,7 @@
           </div> -->
         </div>
         <div class="top-con-right">
-          <Button size="large" to="/transfer?account=otc">{{ $t('finance.hz') }}</Button>
+          <Button size="large" to="/deposit">充值</Button>
           <Button size="large" class="u-m-l-16" to="/withdraw">{{ $t('finance.tb') }}</Button>
           <router-link to="/otc/orders" class="u-p-l-16">
             {{ $t('finance.fbjyjl') }}
@@ -31,15 +36,35 @@
       <div class="u-flex u-row-between">
         <Input v-model="searchValue" prefix="ios-search" :placeholder="$t('finance.ss')" style="width: auto" @on-change="search"/>
         <div>
-          <Checkbox v-model="single">{{ $t('finance.ycxe') }}</Checkbox>
+          <Checkbox v-model="single" @on-change="hiddenMin" style="user-select: none;">隐藏0资产</Checkbox>
         </div>
       </div>
       <div class="u-font-16 u-p-t-20 u-p-b-10">{{ $t('finance.jmhb') }}</div>
 
       <Table :columns="columns5" :data="assetList" :loading="tableLoading">
+        <template slot-scope="{ row, index }" slot="currencyName">
+          <div class="u-flex">
+            <img :src="row.imageUrl" alt="img" style="width: 28px; height: 28px;"/>
+            <div class="u-p-l-16">
+              <p class="u-font-16">{{ row.currencyName }}</p>
+              <p class="u-tips-color">{{ row.fullName }}</p>
+            </div>
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="balance">
+          {{ hideBalance ? '****' : row.balance }}
+        </template>
+        <template slot-scope="{ row, index }" slot="freeze">
+          {{ hideBalance ? '****' : row.freeze }}
+        </template>
+        <template slot-scope="{ row, index }" slot="payOutFreeze">
+          {{ hideBalance ? '****' : row.payOutFreeze }}
+        </template>
+        <template slot-scope="{ row, index }" slot="tradeFreeze">
+          {{ hideBalance ? '****' : row.tradeFreeze }}
+        </template>
         <template slot-scope="{ row, index }" slot="slotOperation">
           <!-- <router-link to="/otc/trade/buy-usdt" style="color: #28c878">{{ $t('finance.gm') }}</router-link> -->
-          <!-- <router-link :to="`/transfer?account=otc&currency=${row.currencyName}`" class="u-m-l-20">{{ $t('finance.hz') }}</router-link> -->
           <router-link :to="`/deposit`">充值</router-link>
           <router-link to="/withdraw" class="u-m-l-20">{{ $t('finance.tb') }}</router-link>
         </template>
@@ -50,6 +75,7 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
 import { getAccount, getAssetList } from '@/api/finance'
 import { getRate, priceUnit } from '@/api/user'
 export default {
@@ -63,6 +89,7 @@ export default {
       wallet: {},
       spot: {},
       otc: {
+        usdAmount: 0.00,
         latestAmount: 0.00000000
       },
       single: false,
@@ -70,25 +97,28 @@ export default {
       columns5: [
           {
               title: this.$t('finance.bz'),
-              key: 'currencyName',
-              
+              slot: 'currencyName',
           },
           {
               title: this.$t('finance.ky'),
-              key: 'balance',
-              sortable: true
+              slot: 'balance',
+              // sortable: true,
+              align: 'right'
           },
-          // {
-          //     title: '交易冻结',
-          //     key: 'tradeFreeze',
-          // },
           {
               title: '其它冻结',
-              key: 'freeze',
+              slot: 'freeze',
+              align: 'right'
           },
           {
               title: '提现冻结',
-              key: 'payOutFreeze',
+              slot: 'payOutFreeze',
+              align: 'right'
+          },
+          {
+              title: '交易冻结',
+              slot: 'tradeFreeze',
+              align: 'right'
           },
           // {
           //     title: 'BTC估值',
@@ -103,8 +133,9 @@ export default {
               title: this.$t('finance.cz'),
               slot: 'slotOperation',
               align: 'right'
-          }
+          },
       ],
+      
     }
   },
   async created() {
@@ -116,7 +147,15 @@ export default {
     this.getAssetList()
     this.getRate()
   },
+  computed: {
+    ...mapState(['hideBalance'])
+  },
   methods: {
+    ...mapMutations(['SETISHIDDENAMOUNT']),
+    /* 隐藏资产 */
+    hiddenAmount() {
+      this.hideBalance ? this.SETISHIDDENAMOUNT(false) : this.SETISHIDDENAMOUNT(true)
+    },
     /* 获取汇率 */
     getRate() {
       getRate().then(res => {
@@ -147,6 +186,16 @@ export default {
         return item.currencyName.indexOf(this.searchValue.toUpperCase()) != -1
       })
     },
+    /* 隐藏小额币种 */
+    hiddenMin(val) {
+      if (val) {
+        this.assetList = this.searchList.filter(item => {
+          return item.balance > 0
+        })
+      } else {
+        this.assetList = this.searchList
+      }
+    },
     /* 获取资产列表 */
     getAssetList() {
       this.tableLoading = true
@@ -164,6 +213,7 @@ export default {
           const otc = res.filter(item => {
             return item.account == 'otc'
           })
+          this.otc.usdAmount = otc[0].latestAmount
           this.otc.latestAmount = this.toFixeds(this.NP.divide(otc[0].latestAmount, this.btcPrice), 8)
         }
       })
@@ -192,6 +242,7 @@ export default {
     border-radius: 10px;
     .tit {
       font-size: 22px;
+      user-select: none;
     }
     .num {
       font-size: 33px;

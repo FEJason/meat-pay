@@ -16,6 +16,15 @@ export default {
   margin: 0 auto;
 }
 
+// 去除text Button背景
+.ivu-btn-text:hover {
+  color: #57a3f3;
+  background-color: transparent !important;
+}
+.ivu-btn-text:focus {
+  box-shadow: none !important;
+}
+
 // 表格标题
 .ivu-table-wrapper th {
   font-weight: normal;
