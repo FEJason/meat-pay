@@ -367,7 +367,6 @@ export default {
                       title: '提示',
                       desc: '广告上架成功'
                     });
-                    this.loadAd(1)
                     // 清空表单，关闭弹窗
                     this.releaseForm = { side: '1' }
                     this.releaseModal = false
@@ -377,7 +376,7 @@ export default {
                   })
                 },
                 onCancel: () => {
-                  
+                  this.releaseModal = false
                 }
             });
           }).finally(() => {

@@ -190,7 +190,7 @@ export default {
     hiddenMin(val) {
       if (val) {
         this.assetList = this.searchList.filter(item => {
-          return item.balance > 0
+          return item.balance > 0 || item.freeze > 0
         })
       } else {
         this.assetList = this.searchList

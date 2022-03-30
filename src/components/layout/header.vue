@@ -100,7 +100,7 @@
     </div>
     <div class="hidden-lg xs-header-wrap u-flex u-row-between">
       <h1 class="logo" style="color: #fff; margin-bottom: 10px; line-height: 60px; padding-left: 10px">
-        Meta Pay
+        <router-link to="/" style="color: #fff">Expay</router-link>
       </h1>
       <div class="u-flex">
         <div class="u-flex" v-if="isLogin">

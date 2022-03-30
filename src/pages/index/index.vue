@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="page-content">
-      <Table :columns="columns1" :data="listData" @on-row-click="onRowClick" size="large">
+      <Table class="hidden-xs" :columns="columns1" :data="listData" @on-row-click="onRowClick" size="large">
         <template slot-scope="{ row, index }" slot="currency">
           <div class="u-flex">
             <img :src="row.imageUrl" alt="icon" style="width: 26px; height: 26px;">
@@ -31,8 +31,30 @@
           </div>
         </template>
       </Table>
+
+      <div class="table-wrap-xs">
+        <div class="th u-flex u-row-between">
+          <span style="width: 10%">#</span>
+          <span class="u-flex-1">币种</span>
+          <span class="u-flex-1">最新价$</span>
+          <span style="width: 20%">24h涨跌幅</span>
+        </div>
+        <div class="u-flex u-row-between u-p-t-28 u-p-b-28"
+          v-for="(row, index) in listData" :key="row.cmcRank"
+          @click="onRowClick(row)">
+          <div style="width: 10%">{{row.cmcRank}}</div>
+          <div class="u-flex u-flex-1">
+            <img :src="row.imageUrl" alt="icon" style="width: 20px; height: 20px;">
+            <span class="u-p-l-10">{{ row.currency }}</span>
+          </div>
+          <div class="u-flex-1">{{ toFixeds(row.price) }}</div>
+          <div style="width: 20%" :class="parseFloat(row.percentChange24h) < 0 ? 'sell' : parseFloat(row.percentChange24h) > 0 ? 'buy' : ''">
+            {{ parseFloat(row.percentChange24h) > 0 ? '+' : '' }}{{ toFixeds(row.percentChange24h) }}%
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="adv-wrap u-flex u-row-between">
+    <div class="adv-wrap hidden-xs u-flex u-row-between">
       <div class="left">
         <div class="title">Expay的优势</div>
         <ul>
@@ -217,6 +239,35 @@ export default {
   }
   .right {
     flex: 1;
+  }
+}
+.table-wrap-xs {
+  padding: 10px;
+}
+/* 手机端 */
+@media (max-width: 767px) {
+  .header-wrap {
+    height: 200px;
+    .header-img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+    .header-text {
+      h2 {
+        font-size: 28px;
+        padding-top: 18px;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .page-content {
+    width: 100%;
+    margin-top: 0;
   }
 }
 </style>
