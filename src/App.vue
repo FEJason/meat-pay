@@ -52,6 +52,10 @@ export default {
 .ivu-table td, .ivu-table th {
   height: 60px !important;
 }
+.ivu-table-cell {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
 // 去除弹窗头部下边框
 .ivu-modal-header {
@@ -72,6 +76,20 @@ export default {
   display: block !important;
 }
 
+// 表单label
+.ivu-form .ivu-form-item-label {
+  font-size: 12px !important;
+}
+.ivu-form-label-top .ivu-form-item-label {
+  padding-bottom: 4px !important;
+}
+.ivu-form-item-error-tip {
+  font-size: 12px !important;
+  padding-top: 2px !important;
+}
+.ivu-form-item {
+  margin-bottom: 18px !important;
+}
 /*自定义滚动条样式*/
 // ::-webkit-scrollbar {
 //   width: 6px;

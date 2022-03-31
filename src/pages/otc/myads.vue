@@ -10,6 +10,10 @@
         <Button type="primary" icon="md-add" @click="releaseModal = true">发布新广告</Button>
       </div>
     </div>
+    <!-- <div class="u-text-center">
+      <Button :loading= shape="circle" size="large" type="text">加载中...</Button>
+    </div> -->
+
     <div class="con u-text-center u-p-t-80 u-p-b-80"
       v-if="merchantInfo && merchantInfo.status == 1">
       <img
@@ -18,8 +22,6 @@
         style="width: 96px; height: 96px"
       />
       <p class="u-font-20 u-m-t-32">您是尊贵的商户，去交易吧</p>
-      <!-- <p class="u-font-16 u-m-t-8">您是尊贵的商户</p> -->
-      <!-- <Button type="primary" class="u-m-t-40" size="large" @click="modalShow = true">现在申请</Button> -->
     </div>
     <div class="con u-text-center u-p-t-80 u-p-b-80"
       v-else>
@@ -111,7 +113,8 @@
       :footer-hide="true">
       <div slot="header" class="u-font-18">发布广告</div>
       <div class="detail u-p-l-20 u-p-r-20">
-          <Form ref="releaseForm" :model="releaseForm" :rules="rules" :label-width="110">
+          <Form ref="releaseForm" :model="releaseForm" :rules="rules"
+            label-position="top">
               <!-- 广告类型 -->
               <FormItem :label="$t('trade.gglx')" prop="side">
                   <Select v-model="releaseForm.side" size="large"
@@ -128,7 +131,7 @@
                     </Select>
                 </FormItem>
                 <!-- 法币 -->
-                <FormItem :label="$t('trade.fb')" prop="fiatId" class="u-flex-1">
+                <FormItem :label="$t('trade.fb')" prop="fiatId" class="u-flex-1 u-m-l-10">
                     <Select v-model="releaseForm.fiatId" size="large" :placeholder="$t('publice.qxz')">
                         <Option v-for="item in legalList" :value="item.id + ',' + item.fiatCurrency" :key="item.id">{{ item.fiatCurrency }}</Option>
                     </Select>
@@ -151,32 +154,34 @@
                   <Input v-model="releaseForm.maxOrderAmt" type="text" size="large"></Input>
               </FormItem>
               <!-- 支付方式 -->
-              <FormItem :label="$t('trade.zffs')" prop="paymentIds">
-                <!-- 类型购买传 payTypeId -->
-                <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')" 
-                   v-if="releaseForm.side == 1">
-                  <Option v-for="item in paymentList" :value="item.payTypeId" :key="item.payTypeId">
-                    {{ item.payTypeId == 4 ? $t('trade.zfb') : item.payTypeId == 3 ? $t('trade.wx') : $t('trade.yhk')}} - 
-                    {{ item.accountName }} {{ item.account }}
-                  </Option>
-                </Select>
-                <!-- 类型出售传 id  -->
-                <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')"
-                   v-if="releaseForm.side == 2">
-                  <Option v-for="item in paymentList" :value="item.id" :key="item.id">
-                    {{ item.payTypeId == 4 ? $t('trade.zfb') : item.payTypeId == 3 ? $t('trade.wx') : $t('trade.yhk')}} - 
-                    {{ item.accountName }} {{ item.account }}
-                  </Option>
-                </Select>
+              <FormItem :label="$t('trade.zffs')">
+                <Button long type="primary" ghost size="large"
+                    to="/set-payment"
+                    v-if="paymentList.length == 0">设置支付方式</Button>
+                <div v-else>
+                  <!-- 类型购买传 payTypeId -->
+                  <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')" 
+                    v-if="releaseForm.side == 1">
+                    <Option v-for="item in paymentList" :value="item.payTypeId" :key="item.payTypeId">
+                      {{ item.payTypeId == 4 ? $t('trade.zfb') : item.payTypeId == 3 ? $t('trade.wx') : $t('trade.yhk')}} - 
+                      {{ item.accountName }} {{ item.account }}
+                    </Option>
+                  </Select>
+                  <!-- 类型出售传 id  -->
+                  <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')"
+                    v-if="releaseForm.side == 2">
+                    <Option v-for="item in paymentList" :value="item.id" :key="item.id">
+                      {{ item.payTypeId == 4 ? $t('trade.zfb') : item.payTypeId == 3 ? $t('trade.wx') : $t('trade.yhk')}} - 
+                      {{ item.accountName }} {{ item.account }}
+                    </Option>
+                  </Select>
+                </div>
               </FormItem>
               <!-- 交易说明 -->
               <FormItem :label="$t('trade.jysm')" prop="directions">
                   <Input v-model="releaseForm.directions" type="textarea" size="large"></Input>
               </FormItem>
-              <FormItem class="u-text-right">
-                  <Button type="text" @click="releaseModal = false" class="u-m-r-10">{{ $t('trade.cancel') }}</Button>
-                  <Button type="primary" @click="submitRelease('releaseForm')" :loading="submitLoad">{{ $t('trade.fbgg') }}</Button>
-              </FormItem>
+              <Button class="u-m-t-20" long type="primary" size="large" @click="submitRelease('releaseForm')" :loading="submitLoad">{{ $t('trade.fbgg') }}</Button>
           </Form>
       </div>
     </Modal>
@@ -309,7 +314,13 @@ export default {
     /* 获取收款列表 */
     getPaymentList() {
       getPaymentList().then(res => {
-        this.paymentList = res
+        if (res.length) {
+          this.paymentList = res.filter(item => {
+            return item.status == 1
+          })
+        } else {
+          this.paymentList = []
+        }
       })
     },
     /* 获取币种列表 */
@@ -397,6 +408,9 @@ export default {
   h2 {
     font-size: 30px;
   }
+}
+.detail {
+  overflow-y: auto;
 }
 /* PC端 */
 @media (min-width: 768px) {

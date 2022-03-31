@@ -120,7 +120,7 @@
         </div>
 
         <!-- PC-买卖列表 -->
-        <div class="adv-list-wrap hidden-xs">
+        <div class="adv-list-wrap hidden-xs u-p-b-50">
           <!-- 手写表格 -->
           <div>
             <div class="table-title u-flex u-font-12">
@@ -611,165 +611,6 @@
       </div>
     </div>
 
-    <!-- 发布委托单弹窗 -->
-    <Modal v-model="releaseModal" :mask-closable="false" :footer-hide="true">
-      <div slot="header" class="u-font-18">{{ $t('trade.fbwt') }}</div>
-      <div class="detail u-p-l-20 u-p-r-20">
-        <Form
-          ref="releaseForm"
-          :model="releaseForm"
-          :rules="rules"
-          :label-width="95"
-        >
-          <!-- 广告类型 -->
-          <FormItem :label="$t('trade.gglx')" prop="side">
-            <Select
-              v-model="releaseForm.side"
-              size="large"
-              @on-change="sideChange"
-            >
-              <Option value="1">{{ $t('trade.buy') }}</Option>
-              <Option value="2">{{ $t('trade.sell') }}</Option>
-            </Select>
-          </FormItem>
-          <div class="u-flex">
-            <!-- 数字货币 -->
-            <FormItem
-              :label="$t('trade.szhb')"
-              prop="currencyId"
-              class="u-flex-1"
-            >
-              <Select
-                v-model="releaseForm.currencyId"
-                size="large"
-                :placeholder="$t('publice.qxz')"
-              >
-                <Option
-                  v-for="item in coins"
-                  :value="item.id + ',' + item.currency"
-                  :key="item.id"
-                  >{{ item.currency }}</Option
-                >
-              </Select>
-            </FormItem>
-            <!-- 法币 -->
-            <FormItem :label="$t('trade.fb')" prop="fiatId" class="u-flex-1">
-              <Select
-                v-model="releaseForm.fiatId"
-                size="large"
-                :placeholder="$t('publice.qxz')"
-              >
-                <Option
-                  v-for="item in legalList"
-                  :value="item.id + ',' + item.fiatCurrency"
-                  :key="item.id"
-                  >{{ item.fiatCurrency }}</Option
-                >
-              </Select>
-            </FormItem>
-          </div>
-          <!-- 单价 -->
-          <FormItem :label="$t('trade.price')" prop="posterPrice">
-            <Input v-model="releaseForm.posterPrice" size="large"></Input>
-          </FormItem>
-          <!-- 数量 -->
-          <FormItem :label="$t('trade.number')" prop="account">
-            <Input
-              v-model="releaseForm.account"
-              size="large"
-              type="text"
-            ></Input>
-          </FormItem>
-          <!-- 单笔最小限额 -->
-          <FormItem :label="$t('trade.dbzx')" prop="minOrderAmt">
-            <Input
-              v-model="releaseForm.minOrderAmt"
-              type="text"
-              size="large"
-            ></Input>
-          </FormItem>
-          <!-- 单笔最大限额 -->
-          <FormItem :label="$t('trade.dbzd')" prop="maxOrderAmt">
-            <Input
-              v-model="releaseForm.maxOrderAmt"
-              type="text"
-              size="large"
-            ></Input>
-          </FormItem>
-          <!-- 支付方式 -->
-          <FormItem :label="$t('trade.zffs')" prop="paymentIds">
-            <!-- 类型购买传 payTypeId -->
-            <Select
-              v-model="releaseForm.paymentIds"
-              size="large"
-              multiple
-              :placeholder="$t('publice.qxz')"
-              v-if="releaseForm.side == 1"
-            >
-              <Option
-                v-for="item in paymentList"
-                :value="item.payTypeId"
-                :key="item.payTypeId"
-              >
-                {{
-                  item.payTypeId == 4
-                    ? $t('trade.zfb')
-                    : item.payTypeId == 3
-                    ? $t('trade.wx')
-                    : $t('trade.yhk')
-                }}
-                - {{ item.accountName }} {{ item.account }}
-              </Option>
-            </Select>
-            <!-- 类型出售传 id  -->
-            <Select
-              v-model="releaseForm.paymentIds"
-              size="large"
-              multiple
-              :placeholder="$t('publice.qxz')"
-              v-if="releaseForm.side == 2"
-            >
-              <Option
-                v-for="item in paymentList"
-                :value="item.id"
-                :key="item.id"
-              >
-                {{
-                  item.payTypeId == 4
-                    ? $t('trade.zfb')
-                    : item.payTypeId == 3
-                    ? $t('trade.wx')
-                    : $t('trade.yhk')
-                }}
-                - {{ item.accountName }} {{ item.account }}
-              </Option>
-            </Select>
-          </FormItem>
-          <!-- 交易说明 -->
-          <FormItem :label="$t('trade.jysm')" prop="directions">
-            <Input
-              v-model="releaseForm.directions"
-              type="textarea"
-              size="large"
-            ></Input>
-          </FormItem>
-          <FormItem class="u-text-right">
-            <Button
-              type="text"
-              @click="releaseModal = false"
-              class="u-m-r-10"
-              >{{ $t('trade.cancel') }}</Button
-            >
-            <Button
-              type="primary"
-              @click="submitRelease('releaseForm')"
-              :loading="submitLoad"
-              >{{ $t('trade.fbgg') }}</Button
-            >
-          </FormItem>
-        </Form>
-      </div>
-    </Modal>
   </div>
 </template>
 
@@ -876,7 +717,6 @@ export default {
       tradeAmount: '', // 金额
       submitLoad: false,
       paymentList: [], // 收款列表
-      releaseModal: false, // 发布委托弹窗
       releaseForm: {
         side: '1'
       },
@@ -1096,16 +936,6 @@ export default {
         this.advInfo = res
       })
     },
-    /* 点击发布委托单 */
-    clickRelease() {
-      if (this.isLogin) {
-        this.releaseModal = true
-      } else {
-        this.$router.push({
-          path: '/login'
-        })
-      }
-    },
     /* 打开详情弹窗 */
     openTradeInfo(row, media) {
       if (this.isLogin) {
@@ -1149,63 +979,13 @@ export default {
     /* 获取收款列表 */
     getPaymentList() {
       getPaymentList().then(res => {
-        this.paymentList = res.filter(item => {
-          return item.status == 1
-        })
-        this.formInline.paymentId = [this.paymentList[0].id]
-      })
-    },
-    /* 发布广告 */
-    submitRelease(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          let currencyId = this.releaseForm.currencyId.split(',')[0]
-          let currencyName = this.releaseForm.currencyId.split(',')[1]
-          let fiatId = this.releaseForm.fiatId.split(',')[0]
-          let fiatCurrency = this.releaseForm.fiatId.split(',')[1]
-          let paymentIds = this.releaseForm.paymentIds.join(',')
-
-          this.submitLoad = true
-          release({
-            ...this.releaseForm,
-            currencyId,
-            currencyName,
-            fiatId,
-            fiatCurrency,
-            paymentIds
+        if (res.length) {
+          this.paymentList = res.filter(item => {
+            return item.status == 1
           })
-            .then(res => {
-              // 接口成功，弹窗是否上架，不上架去个人中心
-              this.$Modal.confirm({
-                title: '是否确认上架该广告？',
-                content: '确认上架，该广告将展示在交易大厅',
-                loading: true,
-                onOk: () => {
-                  setRelease({
-                    status: 1,
-                    id: res
-                  })
-                    .then(() => {
-                      this.$Notice.success({
-                        title: '提示',
-                        desc: '广告上架成功'
-                      })
-                      this.loadAd(1)
-                      // 清空表单，关闭弹窗
-                      this.releaseForm = { side: '1' }
-                      this.releaseModal = false
-                      this.$refs[name] && this.$refs[name].resetFields()
-                    })
-                    .finally(() => {
-                      this.$Modal.remove()
-                    })
-                },
-                onCancel: () => {}
-              })
-            })
-            .finally(() => {
-              this.submitLoad = false
-            })
+          this.formInline.paymentId = [this.paymentList[0].id]
+        } else {
+          this.paymentList = []
         }
       })
     },

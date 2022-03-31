@@ -4,41 +4,43 @@
       <Icon type="ios-arrow-back" color="#333" />
       返回
     </div> -->
+    <div class="page-con">
+      <div class="con">
+        <ul class="u-flex">
+          <li
+            :class="{ on: active == index }"
+            v-for="(item, index) in tabList"
+            :key="index"
+            @click="tabChange(index)"
+          >
+            {{ item }}
+          </li>
+        </ul>
+      </div>
 
-    <div class="con">
-      <ul class="u-flex">
-        <li
-          :class="{ on: active == index }"
-          v-for="(item, index) in tabList"
-          :key="index"
-          @click="tabChange(index)"
-        >
-          {{ item }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="table">
-      <div class="title u-flex u-row-between">
-        <div class="u-font-14">{{ tableTitle }}</div>
-        <div>
-          <!-- <router-link to="/">查看全部</router-link> -->
+      <div class="table">
+        <div class="title u-flex u-row-between">
+          <div class="u-font-14">{{ tableTitle }}</div>
+          <div>
+            <!-- <router-link to="/">查看全部</router-link> -->
+          </div>
+        </div>
+        <div class="table-wrap">
+          <Table :columns="columns" :data="tableData" :loading="tableLoading">
+            <template slot-scope="{ row, index }" slot="slotBillType">
+              {{ formatType[row.billType.toString()] }}
+            </template>
+            <template slot-scope="{ row, index }" slot="status">
+              <div>{{ formatStatus[row.status] }}</div>
+            </template>
+          </Table>
         </div>
       </div>
-      <div class="table-wrap">
-        <Table :columns="columns" :data="tableData" :loading="tableLoading">
-          <template slot-scope="{ row, index }" slot="slotBillType">
-            {{ formatType[row.billType.toString()] }}
-          </template>
-          <template slot-scope="{ row, index }" slot="status">
-            <div>{{ formatStatus[row.status] }}</div>
-          </template>
-        </Table>
+      <div class="u-text-center u-p-t-30">
+        <Page :total="totalPage" @on-change="onChange" />
       </div>
     </div>
-    <div class="u-text-center u-p-t-30">
-      <Page :total="totalPage" @on-change="onChange" />
-    </div>
+
   </div>
 </template>
 

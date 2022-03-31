@@ -35,7 +35,7 @@ Vue.config.productionTip = false
 
 
 Vue.use(ViewUI, {
-	size: 'default',
+	// size: 'default',
 });
 Vue.use(Clipboard)
 Vue.use(vueResource);

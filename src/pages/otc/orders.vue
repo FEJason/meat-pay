@@ -8,7 +8,12 @@
           :key="index"
           @click="tabBtn(index)">{{ item }}</li>
       </ul>
-      <Table :columns="columns" :data="data" :loading="loading" class="hidden-xs">
+      <Table
+        disabled-hover
+        :columns="columns"
+        :data="data"
+        :loading="loading"
+        class="hidden-xs">
         <template slot-scope="{ row, index }" slot="slotId">
           <div>
             <span class="u-p-r-6" v-if="row.side == 1" style="color: #19be6b">{{ $t('orders.buy') }}</span>
@@ -28,6 +33,10 @@
         <template slot-scope="{ row, index }" slot="slotNum">
           {{ row.settleAccount }} {{ row.currencyName }}
         </template>
+        <template slot-scope="{ row, index }" slot="adName">
+          <router-link :to="`/otc/orderInfo/${row.id}`" class="u-line-1">{{ row.adName }}</router-link>
+        </template>
+        
         <template slot-scope="{ row, index }" slot="slotTime">
           {{ row.createTime }}
         </template>
@@ -62,6 +71,12 @@
           <div>数量</div>
           <div>
             {{ row.settleAccount }} {{ row.currencyName }}
+          </div>
+        </li>
+        <li>
+          <div>交易对象</div>
+          <div>
+            <router-link :to="`/otc/orderInfo/${row.id}`" class="u-line-1">{{ row.adName }}</router-link>
           </div>
         </li>
         <li>
@@ -101,11 +116,12 @@ export default {
         {
           title: this.$t('orders.ddh'),
           slot: 'slotId',
-          width: '280px'
+          width: '240px'
         },
         {
           title: this.$t('orders.zt'),
-          slot: 'slotStatus'
+          slot: 'slotStatus',
+          width: '140px'
         },
         {
           title: this.$t('orders.zj'),
@@ -120,7 +136,12 @@ export default {
           slot: 'slotNum'
         },
         {
+          title: '交易对象',
+          slot: 'adName'
+        },
+        {
           title: this.$t('orders.cjsj'),
+          width: '166',
           slot: 'slotTime',
           align: 'right'
         },
@@ -138,13 +159,13 @@ export default {
       // 0：订单取消 1：待付款 2：确认付款 3：申诉 4：完成
       switch(val) {
         case 0:
-          return '订单取消'
+          return '已取消'
         case 1:
           return '待付款'
         case 2:
-          return '确认付款'
+          return '已付款'
         case 3:
-          return '申诉'
+          return '申诉中'
         case 4:
           return '已完成'
       }

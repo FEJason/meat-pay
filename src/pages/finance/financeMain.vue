@@ -66,16 +66,19 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   background-color: #E8EEF6;
+  overflow: hidden;
 }
 .menu-wrap {
   width: 180px;
-  min-height: 660px;
+  padding-bottom: 3000px;
+  margin-bottom: -3000px;
   background-color: #fff;
 }
 .con {
   margin-left: 20px;
   margin-right: 20px;
-  width: 100%;
+  flex: 1;
+  min-height: calc(100vh - 374px);
 }
 .pop-wrap {
   height: 100vh;

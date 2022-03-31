@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="item-wrap">
+    <div class="item-wrap u-m-b-20">
       <div class="u-flex u-row-between">
         <Input v-model="searchValue" prefix="ios-search" :placeholder="$t('finance.ss')" style="width: auto" @on-change="search"/>
         <div>
@@ -41,7 +41,7 @@
       </div>
       <div class="u-font-16 u-p-t-20 u-p-b-10">{{ $t('finance.jmhb') }}</div>
 
-      <Table :columns="columns5" :data="assetList" :loading="tableLoading">
+      <Table :columns="columns5" :data="assetList" :loading="tableLoading" disabled-hover>
         <template slot-scope="{ row, index }" slot="currencyName">
           <div class="u-flex">
             <img :src="row.imageUrl" alt="img" style="width: 28px; height: 28px;"/>

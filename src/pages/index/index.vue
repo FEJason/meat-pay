@@ -32,7 +32,7 @@
         </template>
       </Table>
 
-      <div class="table-wrap-xs">
+      <div class="table-wrap-xs hidden-lg">
         <div class="th u-flex u-row-between">
           <span style="width: 10%">#</span>
           <span class="u-flex-1">币种</span>
