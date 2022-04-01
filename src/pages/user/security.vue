@@ -1334,7 +1334,7 @@ export default {
       handCardImg: require('../../assets/images/HandCardImg.png'),
 
       uploadHeaders: { 'Authorization': 'Bearer ' + localStorage.token },
-      uploadUrl: this.host + '/admin/sys-file/upload',
+      uploadUrl: this.host + process.env.VUE_APP_UPLOAD,
 
       usernameS: '',
       user: {},

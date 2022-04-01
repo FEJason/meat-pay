@@ -74,7 +74,7 @@
           </div>
         </li>
         <li>
-          <div>交易对象</div>
+          <div>广告商</div>
           <div>
             <router-link :to="`/otc/orderInfo/${row.id}`" class="u-line-1">{{ row.adName }}</router-link>
           </div>
@@ -136,7 +136,7 @@ export default {
           slot: 'slotNum'
         },
         {
-          title: '交易对象',
+          title: '广告商',
           slot: 'adName'
         },
         {

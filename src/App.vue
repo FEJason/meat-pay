@@ -10,6 +10,17 @@ export default {
 @import '~@/assets/css/main.scss';
 @import '~@/assets/css/h5.scss';
 
+
+// 引入金额字体
+@font-face {
+	font-family: 'payfont';
+	font-display: swap;
+	src: url('./assets/fonts/DINPro-Medium.ttf') format('truetype')
+}
+.pay-font {
+	font-family: payfont,Arial,sans-serif !important;
+}
+
 // 全局样式
 .u-content {
   width: 1200px;
@@ -28,6 +39,9 @@ export default {
 // 表格标题
 .ivu-table-wrapper th {
   font-weight: normal;
+}
+.ivu-table-header thead tr th {
+  font-size: 12px !important;
 }
 
 // 去除表单必填时，显示红色 * 号
@@ -91,17 +105,17 @@ export default {
   margin-bottom: 18px !important;
 }
 /*自定义滚动条样式*/
-// ::-webkit-scrollbar {
-//   width: 6px;
-//   background-color: transparent
-// }
+::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent
+}
 
-// ::-webkit-scrollbar-track {
-//   background: transparent
-// }
+::-webkit-scrollbar-track {
+    background: 0 0
+}
 
-// ::-webkit-scrollbar-thumb {
-//   border-radius: 4px;
-//   background-color: #39557a
-// }
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #e5ebf5
+}
 </style>

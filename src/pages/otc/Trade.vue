@@ -139,15 +139,19 @@
                 :key="index"
               >
                 <div class="column width0">
-                  <div class="u-font-14 u-font-bold u-flex">
-                    <div class="avatar u-m-r-10">
+                  <div class="u-font-14 u-flex">
+                    <div class="avatar u-m-r-10 u-font-bold">
                       <em>{{row.adName.substring(0, 1).toUpperCase()}}</em>
                     </div>
-                    <div>{{ row.adName }}(99%)</div>
+                    <div>
+                      <div class="u-font-bold">{{ row.adName }}</div>
+                      <div class="u-font-12" style="color: #495666">成单量: {{ `${row.volume} | 99%`}}</div>
+                    </div>
+                    
                   </div>
                 </div>
-                <div class="column width1 u-font-18 u-font-bold" style="color: #00c096">
-                  {{ toFixeds(row.tradePrice, currencyScale) }}
+                <div class="column pay-font width1 u-font-18" style="color: #00c096">
+                  {{ toFixeds(row.posterPrice, currencyScale) }}
                   {{ row.fiatCurrency }}
                 </div>
                 <div class="column width2">
@@ -267,8 +271,8 @@
                   <!-- 单价 -->
                   <div class="u-p-r-26">
                     <div class="u-p-b-10">{{ $t('trade.price') }}</div>
-                    <div class="u-font-bold" :style="{color: buyOrSell == 'buy' ? '#19be6b' : '#ff5f67'}">
-                      {{ $yj.transMoney(advInfo.tradePrice) }}
+                    <div class="u-font-bold pay-font" :style="{color: buyOrSell == 'buy' ? '#19be6b' : '#ff5f67'}">
+                      {{ $yj.transMoney(advInfo.posterPrice) }}
                       {{ advInfo.fiatCurrency }}
                     </div>
                   </div>
@@ -446,8 +450,8 @@
               <div class="u-flex u-row-between">
                 <div>
                   <span>{{ $t('trade.price') }}</span>
-                  <span class="column width1 u-font-18" style="color: #00c096; font-weight: 700">
-                    {{ toFixeds(row.tradePrice, currencyScale) }}
+                  <span class="column pay-font width1 u-font-18" style="color: #00c096;">
+                    {{ toFixeds(row.posterPrice, currencyScale) }}
                     {{ row.fiatCurrency }}
                   </span>
                 </div>
@@ -481,8 +485,8 @@
               <!-- 单价 -->
               <div class="u-flex u-font-16">
                 <div class="u-p-r-10">{{ $t('trade.price') }}</div>
-                <div class="u-font-bold" :style="{color: buyOrSell == 'buy' ? '#19be6b' : '#ff5f67'}">
-                  {{ $yj.transMoney(advInfo.tradePrice) }}
+                <div class="u-font-bold pay-font" :style="{color: buyOrSell == 'buy' ? '#19be6b' : '#ff5f67'}">
+                  {{ $yj.transMoney(advInfo.posterPrice) }}
                   {{ advInfo.fiatCurrency }}
                 </div>
               </div>
@@ -693,7 +697,7 @@ export default {
         // 法币token 如CNY
         fiatCurrency: 'CNY',
         // 用户交易价格（加幅之后的价格）
-        tradePrice: 5.05,
+        posterPrice: 5.05,
         // 单笔最低购买金额
         minOrderAmt: 10,
         // 单笔最高金额
@@ -898,7 +902,7 @@ export default {
       // 计算数量 = 总价 / 单价
       let num = this.NP.divide(
         this.formInline.totalPrice,
-        this.advInfo.tradePrice
+        this.advInfo.posterPrice
       )
       if (num == 0) {
         this.$set(this.formInline, 'num', '')
@@ -919,7 +923,7 @@ export default {
       )
 
       // 计算总价 = 数量 * 单价
-      let num = this.NP.times(this.formInline.num, this.advInfo.tradePrice)
+      let num = this.NP.times(this.formInline.num, this.advInfo.posterPrice)
       if (num == 0) {
         this.$set(this.formInline, 'totalPrice', '')
       } else {
@@ -1087,7 +1091,7 @@ export default {
 <style lang="scss" scoped>
 // select
 ::v-deep .ivu-select-single .ivu-select-prefix {
-  padding-top: 4px;
+  padding-top: 2px;
 }
 ::v-deep .ivu-select-input {
   height: 30px;

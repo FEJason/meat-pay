@@ -13,7 +13,7 @@
                   资金账户
               </MenuItem>
               <MenuItem name="4" to="/finance/record">
-                  <Icon type="md-chatbubbles" />
+                  <Icon type="md-list-box" />
                   充币&提币记录
               </MenuItem>
               <!-- <MenuItem name="3" to="/finance/otc">

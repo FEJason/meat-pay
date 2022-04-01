@@ -161,6 +161,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .ivu-table-header thead tr th {
+  font-size: 16px !important;
+}
 ::v-deep .ivu-table-row {
   cursor: pointer;
 }

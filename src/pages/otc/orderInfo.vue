@@ -2,7 +2,7 @@
   <div class="wrap">
     <div class="content-wrap">
       <div class="content">
-        <div class="left">
+        <div class="left u-relative">
           <div class="tit u-p-20 u-flex u-row-between">
             <!-- 订单已取消 -->
             <div class="u-font-20 u-font-bold" v-if="orderInfo.status == 0">{{ $t('orderInfo.ddyqx') }}</div>
@@ -16,7 +16,7 @@
                 <div class="u-font-14">
                   <u-count-down
                     ref="uCount"
-                    font-size="30"
+                    font-size="28"
                     :timestamp="timestamp"
                     :show-days="false"
                     :show-hours="false"
@@ -47,17 +47,18 @@
           </div>
           <div class="info u-p-20">
             <div class="price-info u-font-18">
+              <!-- 总价 -->
               <div class="item u-p-r-30">
                 <div class="u-font-14">{{ $t('orderInfo.zj') }}</div>
-                <div style="color: #19be6b" class="u-font-bold">{{ orderInfo.sourceAmount }} {{ orderInfo.fiatCurrency}}</div>
+                <div style="color: #19be6b" class="pay-font">{{ orderInfo.sourceAmount }} {{ orderInfo.fiatCurrency}}</div>
               </div>
               <div class="item u-p-r-30">
                 <div class="u-font-14">{{ $t('orderInfo.sl') }}</div>
-                <div class="u-font-bold">{{ orderInfo.settleAccount }} {{ orderInfo.currencyName }}</div>
+                <div class="pay-font">{{ orderInfo.settleAccount }} {{ orderInfo.currencyName }}</div>
               </div>
               <div class="item">
                 <div class="u-font-14">{{ $t('orderInfo.dj') }}</div>
-                <div class="u-font-bold">{{ orderInfo.tradePrice }} {{ orderInfo.fiatCurrency }}</div>
+                <div class="pay-font">{{ orderInfo.tradePrice }} {{ orderInfo.fiatCurrency }}</div>
               </div>
             </div>
             
@@ -106,7 +107,7 @@
                 </div>
 
               </div>
-              <div class="u-text-right">
+              <div class="u-text-right" style="position: absolute; right: 20px; bottom: 20px;">
                 <Button type="text">{{ $t('orderInfo.lxkf') }}</Button>
                 <!-- 取消订单 -->
                 <Button type="text" v-if="orderInfo.status == 1 && isBuy" @click="cancelModel = true">{{ $t('orderInfo.qxd') }}</Button>
@@ -126,46 +127,64 @@
             </div>
           </div>
         </div>
+        <!-- 聊天室 -->
         <div class="right hidden-xs">
           <div class="r-top u-p-20">
-            <h4 class="u-font-18">{{isBuy ? orderInfo.kycName : orderInfo.adName }}</h4>
-            <p>
-              <span v-if="isBuy">对方已实名认证</span>
-              <span v-if="isSell">认证广告方</span>
-               
-              <Icon type="ios-checkmark-circle" size="16" color="#007AFF"/>
-            </p>
+            <div class="u-flex">
+              <!-- <div class="avatar u-m-r-10 u-font-bold">
+                <em>{{row.adName.substring(0, 1).toUpperCase()}}</em>
+              </div> -->
+              <div>
+                <h4 class="u-font-18">{{!orderInfo.adSide ? orderInfo.adName : orderInfo.kycName }}</h4>
+                <span>对方已实名认证</span>
+                <Icon type="ios-checkmark-circle" size="16" color="#007AFF"/>
+              </div>
+            </div>
             <div class="u-flex u-p-t-10">
               <div>
                 <p class="u-tips-color">30日成单数</p>
-                <p>289</p>
+                <p>00000</p>
               </div>
               <div class="u-m-l-60">
                 <p class="u-tips-color">30日成单率</p>
-                <p>100%</p>
+                <p>00%</p>
               </div>
             </div>
           </div>
           <div class="r-con u-relative">
             <div class="u-text-center">
               <p class="u-p-t-20">{{orderInfo.createTime}}</p>
-              <p class="u-p-t-10">下单成功。</p>
             </div>
-            <div class="chat-content" id="chat_content">
-              <div :class="item.uuid == userInfo.uuid ? 'chat-right' : 'chat-left'" v-for="(item, index) in messageList" :key="index">
-                <p v-if="item.message.indexOf('base64') != -1">
+            <div class="chat-content u-font-12" id="chat_content">
+              <div class="u-m-t-10" :class="item.uuid == userInfo.uuid ? 'chat-right' : 'chat-left'" v-for="(item, index) in messageList" :key="index">
+                <div class="system u-text-center" style="color: #9aa5b5"
+                  v-if="item.type == 'SYSTEM' && item.uuid == userInfo.uuid"
+                  >{{item.message}}</div>
+                <div class="text" v-if="item.type == 'TEXT'">
+                  <p>{{item.message}}</p>
+                </div>
+                <div class="img-wrap" v-if="item.type == 'IMAGE'">
                   <img :src="item.message" alt="img" style="width: 100px;" @click="previewImg(item.message)">
-                </p>
-                <p v-else>{{item.message}}</p>
+                </div>
               </div>
             </div>
             <div class="u-p-10 bot-wrap u-flex">
               <Input style="width: 100%;" v-model="message" placeholder="输入消息，回车发送" @on-enter="sendMessages"></Input>
               <div class="u-relative">
-                <input accept=".jpg,.jpeg,.png,.gif" type="file" style="position: absolute; width: 100%; opacity: 0;"
+                <!-- <input accept=".jpg,.jpeg,.png,.gif" type="file" style="position: absolute; width: 100%; opacity: 0;"
                   id="img_file"
-                  @input="imgChange">
-                <Icon class="u-p-l-10" type="md-image" size="26" color="#909399"/>
+                  @input="imgChange"> -->
+                <Upload
+                  ref="upload1"
+                  :before-upload="beforeUpload"
+                  :on-success="handHandleSuccess"
+                  :headers="uploadHeaders"
+                  :action="uploadUrl"
+                  :show-upload-list="false"
+                  style="position: absolute; width: 100%; height: 36px; opacity: 0; cursor: pointer;">
+                  Upload
+                </Upload>
+                <Button icon="md-image" :loading="messageImgLoading" class="img-btn"></Button>
               </div>
             </div>
           </div>
@@ -300,6 +319,9 @@ export default {
   },
   data() {
     return {
+      messageImgLoading: false,
+      uploadHeaders: { 'Authorization': 'Bearer ' + localStorage.token },
+      uploadUrl: this.host + process.env.VUE_APP_UPLOAD,
       imgUrl: '',
       imgFile: '',
       message: '',
@@ -395,6 +417,40 @@ export default {
     }
   },
   methods: {
+    /* 图片上传前 */
+    beforeUpload(data) {
+      if (data && data.size >= 1024000 * 2) {
+        this.$Message.error('上传图片大小不能超过2M')
+        return false
+      }
+      this.messageImgLoading = true
+    },
+    /* 图片上传成功 */
+    handHandleSuccess(res, file, fileList) {
+      this.messageImgLoading = false
+      console.log('res', res)
+      // this.$refs.upload1.fileList = [fileList[fileList.length - 1]]
+      if (res.code == 0) {
+        // this.chatImgUrl = res.data.url
+
+        let groupRequest = {
+            token: this.token,
+            roomId: this.orderInfo.id,
+            message: res.data.url,
+            type: 'IMAGE'
+        };
+        this.socket.emit('message', groupRequest, () => {
+          this.message = ''
+          this.scollToBottom()
+        });
+      } else {
+        this.$Message.error(res.msg)
+      }
+    },
+    /* 图片上传失败 */
+    onError() {
+      this.messageImgLoading = false
+    },
     /* 历史聊天记录 */
     getHistoryMessage() {
       getHistoryMessage({
@@ -402,6 +458,7 @@ export default {
         time: new Date().getTime()
       }).then(res => {
         this.messageList = res.reverse()
+        console.log(11, JSON.parse(JSON.stringify(this.messageList)))
         this.scollToBottom()
       })
     },
@@ -442,23 +499,15 @@ export default {
           roomId: this.orderInfo.id
 
       }
-      console.log(11)
       this.socket.emit('join_room', joinRequest, function(data) {
         console.log('加入成功')
       });
-      console.log(22)
 
       // 插入聊天消息
       this.socket.on('message', (data) => {
-        console.log(data)
-          this.messageList.push(data)
-          // var uuid = $('#uuid').val();
-          if (data.uuid == this.userInfo.uuid) {
-            // console.log('插入')
-              // output("<span class=username-msg>" + data.roomId + " 群消息: " + data.uuid + " 说: " + data.message + "</span>");
-          } else {
-              // output("<span class=connect-msg>" + data.roomId + " 群消息: " + data.uuid + " 说: " + data.message + "</span>");
-          }
+        this.messageImgLoading = false
+        this.messageList.push(data)
+        this.scollToBottom()
       });
 
       // socket.on('disconnect', function () {
@@ -467,7 +516,7 @@ export default {
       // });
     },
     sendMessages() {
-      console.log('回车')
+      console.log('回车', this.token)
       if (this.message === '') {
         return;
       }
@@ -476,19 +525,22 @@ export default {
       let groupRequest = {
           token: this.token,
           roomId: this.orderInfo.id,
-          message: this.message
+          message: this.message,
+          type: 'TEXT'
       };
+      this.messageImgLoading = true
       this.socket.emit('message', groupRequest, () => {
         this.message = ''
-        this.scollToBottom()
       });
     },
     /* 滚动到底部 */
     scollToBottom() {
-      this.$nextTick(() => {
-        let chat = document.getElementById('chat_content')
-        chat.scrollTop = chat.scrollHeight
-      })
+      setTimeout(() => {
+        this.$nextTick(() => {
+          let chat = document.getElementById('chat_content')
+          chat.scrollTop = chat.scrollHeight
+        })
+      }, 200)
     },
     /* 断开连接 */
     sendDisconnect() {
@@ -657,9 +709,11 @@ export default {
         .chat-content {
           height: 340px;
           overflow: auto;
-          padding: 10px;
+          padding: 0 10px 10px;
+          .system {
+            text-align: center;
+          }
           .chat-left {
-            margin-top: 10px;
             p {
               display: inline-block;
               padding: 10px;
@@ -670,9 +724,14 @@ export default {
             }
           }
           .chat-right {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
+            .text {
+              display: flex;
+              justify-content: flex-end;
+              margin-top: 10px;
+            }
+            .img-wrap {
+              text-align: right;
+            }
             p {
               display: inline-block;
               padding: 10px;
@@ -715,6 +774,13 @@ export default {
     p {
       line-height: 28px;
     }
+  }
+}
+.img-btn {
+  border: none;
+  font-size: 20px;
+  ::v-deep i {
+    color: #9aa5b5;
   }
 }
 .price-info {

@@ -176,6 +176,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .ivu-table-cell {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
 ::v-deep .ivu-table td, .ivu-table th {
     height: 40px !important;
 }

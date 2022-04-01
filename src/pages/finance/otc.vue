@@ -3,43 +3,43 @@
     <div class="top">
       <div class="top-con u-flex u-row-between u-col-top">
         <div class="top-con-left">
-          <div class="tit">
+          <div class="tit u-flex">
             <span>资产估值</span>
-            <span style="cursor: pointer;">
-              <Icon
-                :type="hideBalance ? 'ios-eye-off' : 'ios-eye'"
-                size="26" color="#9aa5b5" class="u-p-l-10" @click="hiddenAmount"/>
-            </span>
-            
+            <i class="icon-wrap u-m-l-12" :class="hideBalance ? 'hide' : 'show'" @click="hiddenAmount"></i>
           </div>
-          <div>
-            <span class="num">{{ hideBalance ? '****' : otc.latestAmount}} BTC</span>
-            <span class="sec u-p-l-10">≈ {{hideBalance ? '****' : toFixeds( NP.times(otc.usdAmount, CNY)) }} CNY</span>
+          <div class="u-flex u-col-bottom u-p-t-12">
+            <div class="pay-font">
+              <span class="num">
+                {{ hideBalance ? '****' : otc.latestAmount}}
+              </span>
+              <span class="u-font-16 u-font-bold">BTC</span>
+            </div>
+            <div class="sec u-p-l-10 pay-font">≈ ￥{{hideBalance ? '****' : toFixeds( NP.times(otc.usdAmount, CNY)) }}</div>
           </div>
-          <!-- <div class="profit">
-            <span class="profit-left">{{ $t('finance.jrsy') }}</span>
-            <span class="profit-right u-p-l-10">+0.888888 CNY</span>
-          </div> -->
-        </div>
-        <div class="top-con-right">
-          <Button size="large" to="/deposit">充值</Button>
-          <Button size="large" class="u-m-l-16" to="/withdraw">{{ $t('finance.tb') }}</Button>
-          <router-link to="/otc/orders" class="u-p-l-16">
-            {{ $t('finance.fbjyjl') }}
-            <Icon type="ios-play" />
-          </router-link>
+          <div class="u-p-t-12">
+            <Button type="primary" to="/deposit">充值</Button>
+            <Button class="u-m-l-10" to="/withdraw">提币</Button>
+            <router-link to="/finance/record" class="u-p-l-16">
+              充值提币记录
+              <Icon type="ios-play" />
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="item-wrap u-m-b-20">
-      <div class="u-flex u-row-between">
-        <Input v-model="searchValue" prefix="ios-search" :placeholder="$t('finance.ss')" style="width: auto" @on-change="search"/>
-        <div>
+    <div class="item-wrap u-m-t-20 u-m-b-20">
+      <div class="u-flex">
+        <Input
+          class="search-wrap"
+          style="width: auto;"
+          v-model="searchValue" prefix="ios-search"
+          :placeholder="$t('finance.ss')" @on-change="search"/>
+        <div class="u-m-l-30">
           <Checkbox v-model="single" @on-change="hiddenMin" style="user-select: none;">隐藏0资产</Checkbox>
         </div>
       </div>
-      <div class="u-font-16 u-p-t-20 u-p-b-10">{{ $t('finance.jmhb') }}</div>
+      <div class="u-p-t-20 u-p-b-10">{{ $t('finance.jmhb') }}</div>
 
       <Table :columns="columns5" :data="assetList" :loading="tableLoading" disabled-hover>
         <template slot-scope="{ row, index }" slot="currencyName">
@@ -52,16 +52,24 @@
           </div>
         </template>
         <template slot-scope="{ row, index }" slot="balance">
-          {{ hideBalance ? '****' : row.balance }}
+          <div class="pay-font">
+            {{ hideBalance ? '****' : row.balance }}
+          </div>
         </template>
         <template slot-scope="{ row, index }" slot="freeze">
-          {{ hideBalance ? '****' : row.freeze }}
+          <div class="pay-font">
+            {{ hideBalance ? '****' : row.freeze }}
+          </div>
         </template>
         <template slot-scope="{ row, index }" slot="payOutFreeze">
-          {{ hideBalance ? '****' : row.payOutFreeze }}
+          <div class="pay-font">
+            {{ hideBalance ? '****' : row.payOutFreeze }}
+          </div>
         </template>
         <template slot-scope="{ row, index }" slot="tradeFreeze">
-          {{ hideBalance ? '****' : row.tradeFreeze }}
+          <div class="pay-font">
+            {{ hideBalance ? '****' : row.tradeFreeze }}
+          </div>
         </template>
         <template slot-scope="{ row, index }" slot="slotOperation">
           <!-- <router-link to="/otc/trade/buy-usdt" style="color: #28c878">{{ $t('finance.gm') }}</router-link> -->
@@ -223,9 +231,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .ivu-table td, .ivu-table th {
+  height: 89px !important;
+}
 // 去除表格边框
 .ivu-table-wrapper {
   border: none;
+}
+::v-deep .search-wrap .ivu-input {
+  border-radius: 50px;
 }
 ::v-deep .ivu-table:after {
   width: 0;
@@ -234,6 +248,27 @@ export default {
   margin-top: 20px;
   width: 100%;
 }
+
+.icon-wrap {
+  cursor: pointer;
+  display: inline-block;
+  background-color: rgba(154,165,181,.1);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  margin-left: 16px;
+  background-repeat: no-repeat;
+  &:hover {
+    background-color: rgba(27,56,98,.1);
+  }
+}
+.icon-wrap.show {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEzLjU1IDExLjk1YTEuNTUgMS41NSAwIDExLTMuMSAwIDEuNTUgMS41NSAwIDAxMy4xIDB6IiBmaWxsPSIjOUFBNUI1Ii8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMiA4YzIuMjEgMCA0LjIxIDEuMzE0IDYgMy45NDMtMS43OSAyLjYyOC0zLjc5IDMuOTQzLTYgMy45NDNzLTQuMjEtMS4zMTUtNi0zLjk0M0M3Ljc5IDkuMzE0IDkuNzkgOCAxMiA4em0wIDEuMDI5Yy0xLjY0IDAtMy4xODQuOTA0LTQuNjUyIDIuODA1bC0uMDgzLjEwOS4wMTcuMDIyYzEuNDY2IDEuOTMzIDMuMDEgMi44NjYgNC42NDkgMi44OTJIMTJjMS42NCAwIDMuMTg0LS45MDUgNC42NTItMi44MDVsLjA4My0uMTEtLjAxNy0uMDJjLTEuNDY2LTEuOTM0LTMuMDEtMi44NjctNC42NDktMi44OTNIMTJ6IiBmaWxsPSIjOUFBNUI1IiBzdHJva2U9IiM5QUE1QjUiIHN0cm9rZS13aWR0aD0iLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=);
+}
+.icon-wrap.hide {
+  background-position: 50%;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMC45MzQgNC4wNzlhLjU4OC41ODggMCAwMC0uODAzLjIxNWwtLjM2OC42MzdBNS40MzQgNS40MzQgMCAwMDkgNC44NzdjLTIuMjEgMC00LjIxIDEuMzE0LTYgMy45NDMuODg4IDEuMzA0IDEuODI4IDIuMjg1IDIuODIgMi45NDJsLS4zMzUuNThhLjU4OC41ODggMCAxMDEuMDE5LjU4N2w0LjY0Ni04LjA0NmEuNTg4LjU4OCAwIDAwLS4yMTYtLjgwNHptLTQuNiA2Ljc5TDkuMTk5IDUuOTFhNC40MzkgNC40MzkgMCAwMC0uMTI5LS4wMDRIOWMtMS42NCAwLTMuMTg0LjkwNS00LjY1MiAyLjgwNWwtLjA4My4xMS4wMTcuMDJjLjY2OC44ODEgMS4zNTEgMS41NTQgMi4wNTMgMi4wMjh6IiBmaWxsPSIjOUFBNUI1Ii8+PHBhdGggZD0iTTguOTMgMTEuNzM0YTQuMzggNC4zOCAwIDAxLS4zNjYtLjAyMWwtLjU1NC45NmMuMzI1LjA2LjY1NS4wOS45OS4wOSAyLjIxIDAgNC4yMS0xLjMxNCA2LTMuOTQzLS45NDItMS4zODMtMS45NDItMi40MDItMy0zLjA1N2wtLjUxNS44OWMuNzY1LjQ3OSAxLjUwOCAxLjE5IDIuMjMzIDIuMTQ1bC4wMTcuMDIyLS4wODMuMTA5Yy0xLjQ2OCAxLjktMy4wMTIgMi44MDUtNC42NTIgMi44MDVoLS4wN3oiIGZpbGw9IiM5QUE1QjUiLz48cGF0aCBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMC45MzQgNC4wNzlhLjU4OC41ODggMCAwMC0uODAzLjIxNWwtLjM2OC42MzdBNS40MzQgNS40MzQgMCAwMDkgNC44NzdjLTIuMjEgMC00LjIxIDEuMzE0LTYgMy45NDMuODg4IDEuMzA0IDEuODI4IDIuMjg1IDIuODIgMi45NDJsLS4zMzUuNThhLjU4OC41ODggMCAxMDEuMDE5LjU4N2w0LjY0Ni04LjA0NmEuNTg4LjU4OCAwIDAwLS4yMTYtLjgwNHptLTQuNiA2Ljc5TDkuMTk5IDUuOTFhNC40MzkgNC40MzkgMCAwMC0uMTI5LS4wMDRIOWMtMS42NCAwLTMuMTg0LjkwNS00LjY1MiAyLjgwNWwtLjA4My4xMS4wMTcuMDJjLjY2OC44ODEgMS4zNTEgMS41NTQgMi4wNTMgMi4wMjh6IiBzdHJva2U9IiM5QUE1QjUiIHN0cm9rZS13aWR0aD0iLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNOC45MyAxMS43MzRhNC4zOCA0LjM4IDAgMDEtLjM2Ni0uMDIxbC0uNTU0Ljk2Yy4zMjUuMDYuNjU1LjA5Ljk5LjA5IDIuMjEgMCA0LjIxLTEuMzE0IDYtMy45NDMtLjk0Mi0xLjM4My0xLjk0Mi0yLjQwMi0zLTMuMDU3bC0uNTE1Ljg5Yy43NjUuNDc5IDEuNTA4IDEuMTkgMi4yMzMgMi4xNDVsLjAxNy4wMjItLjA4My4xMDljLTEuNDY4IDEuOS0zLjAxMiAyLjgwNS00LjY1MiAyLjgwNWgtLjA3eiIgc3Ryb2tlPSIjOUFBNUI1IiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+);
+}
 .top {
   border-radius: 10px;
   .top-con {
@@ -241,7 +276,8 @@ export default {
     background-color: #fff;
     border-radius: 10px;
     .tit {
-      font-size: 22px;
+      font-size: 28px;
+      font-weight: bold;
       user-select: none;
     }
     .num {
@@ -251,6 +287,7 @@ export default {
     .sec {
       font-size: 16px;
       color: #7183B8;
+      padding-bottom: 7px;
     }
     .profit {
       font-size: 16px;
@@ -264,7 +301,6 @@ export default {
   }
 }
 .item-wrap {
-  margin-top: 6px;
   padding: 30px;
   background-color: #fff;
   border-radius: 10px;
