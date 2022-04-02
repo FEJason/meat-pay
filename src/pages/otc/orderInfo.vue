@@ -50,7 +50,7 @@
               <!-- 总价 -->
               <div class="item u-p-r-30">
                 <div class="u-font-14">{{ $t('orderInfo.zj') }}</div>
-                <div style="color: #19be6b" class="pay-font">{{ orderInfo.sourceAmount }} {{ orderInfo.fiatCurrency}}</div>
+                <div style="color: #19be6b" class="pay-font">{{ toFixeds(orderInfo.sourceAmount) }} {{ orderInfo.fiatCurrency}}</div>
               </div>
               <div class="item u-p-r-30">
                 <div class="u-font-14">{{ $t('orderInfo.sl') }}</div>
@@ -58,7 +58,7 @@
               </div>
               <div class="item">
                 <div class="u-font-14">{{ $t('orderInfo.dj') }}</div>
-                <div class="pay-font">{{ orderInfo.tradePrice }} {{ orderInfo.fiatCurrency }}</div>
+                <div class="pay-font">{{ toFixeds(orderInfo.posterPrice) }} {{ orderInfo.fiatCurrency }}</div>
               </div>
             </div>
             
@@ -131,12 +131,16 @@
         <div class="right hidden-xs">
           <div class="r-top u-p-20">
             <div class="u-flex">
-              <!-- <div class="avatar u-m-r-10 u-font-bold">
-                <em>{{row.adName.substring(0, 1).toUpperCase()}}</em>
-              </div> -->
+              <div class="avatar u-m-r-10 u-font-bold">
+                <em class="u-font-16">{{
+                  orderInfo.adSide == null ? 
+                  orderInfo.adName && orderInfo.adName.substring(0, 1).toUpperCase() : 
+                  orderInfo.kycName && orderInfo.kycName.substring(0, 1).toUpperCase()
+                }}</em>
+              </div>
               <div>
-                <h4 class="u-font-18">{{!orderInfo.adSide ? orderInfo.adName : orderInfo.kycName }}</h4>
-                <span>对方已实名认证</span>
+                <h4 class="u-font-18">{{orderInfo.adSide == null ? orderInfo.adName : orderInfo.kycName }}</h4>
+                <span>对方信息已认证</span>
                 <Icon type="ios-checkmark-circle" size="16" color="#007AFF"/>
               </div>
             </div>
@@ -152,10 +156,8 @@
             </div>
           </div>
           <div class="r-con u-relative">
-            <div class="u-text-center">
-              <p class="u-p-t-20">{{orderInfo.createTime}}</p>
-            </div>
             <div class="chat-content u-font-12" id="chat_content">
+              <p class="u-p-t-20 u-font-12 u-text-center" style="color: #9aa5b5">{{orderInfo.createTime}}</p>
               <div class="u-m-t-10" :class="item.uuid == userInfo.uuid ? 'chat-right' : 'chat-left'" v-for="(item, index) in messageList" :key="index">
                 <div class="system u-text-center" style="color: #9aa5b5"
                   v-if="item.type == 'SYSTEM' && item.uuid == userInfo.uuid"
@@ -169,11 +171,9 @@
               </div>
             </div>
             <div class="u-p-10 bot-wrap u-flex">
-              <Input style="width: 100%;" v-model="message" placeholder="输入消息，回车发送" @on-enter="sendMessages"></Input>
+              <Input style="width: 100%;" :disabled="messageImgLoading"
+                v-model="message" placeholder="输入消息，回车发送" @on-enter.stop="sendMessages"></Input>
               <div class="u-relative">
-                <!-- <input accept=".jpg,.jpeg,.png,.gif" type="file" style="position: absolute; width: 100%; opacity: 0;"
-                  id="img_file"
-                  @input="imgChange"> -->
                 <Upload
                   ref="upload1"
                   :before-upload="beforeUpload"
@@ -182,7 +182,7 @@
                   :action="uploadUrl"
                   :show-upload-list="false"
                   style="position: absolute; width: 100%; height: 36px; opacity: 0; cursor: pointer;">
-                  Upload
+                  <Button></Button>
                 </Upload>
                 <Button icon="md-image" :loading="messageImgLoading" class="img-btn"></Button>
               </div>
@@ -365,13 +365,15 @@ export default {
       // 订单详情
       orderInfo: {
         // 单价
-        tradePrice: '',
+        posterPrice: '',
         // 数量
         settleAccount: '',
         // 总价
         sourceAmount: '',
         // 订单过期时间
-        expirationTime: ''
+        expirationTime: '',
+        adName: '',
+        kycName: ''
       },
       // 倒计时 毫秒
       timestamp: 0,
@@ -508,6 +510,9 @@ export default {
         this.messageImgLoading = false
         this.messageList.push(data)
         this.scollToBottom()
+        if (data.type == 'SYSTEM') {
+          this.getOrderInfo()
+        }
       });
 
       // socket.on('disconnect', function () {
@@ -655,6 +660,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 聊天室头像
+.avatar {
+  width: 38px;
+  height: 38px;
+  text-align: center;
+  line-height: 38px;
+  border-radius: 64px;
+  background-color: #007aff;
+  em {
+    font-style: normal;
+    color: #fff;
+  }
+}
 .cancel-model {
   .init {
     padding: 12px 16px;
@@ -707,7 +725,7 @@ export default {
           flex: 1;
         }
         .chat-content {
-          height: 340px;
+          height: 388px;
           overflow: auto;
           padding: 0 10px 10px;
           .system {
@@ -718,7 +736,8 @@ export default {
               display: inline-block;
               padding: 10px;
               border-radius: 8px;
-              background-color: #d1e7ff;
+              color: #495666;
+              background-color: #f1f3ff;
               max-width: 100%;
               word-break: break-word;
             }
@@ -736,7 +755,8 @@ export default {
               display: inline-block;
               padding: 10px;
               border-radius: 8px;
-              background-color: #eee;
+              color: #495666;
+              background-color: #d1e7ff;
               max-width: 100%;
               word-break: break-word;
             }
@@ -747,6 +767,9 @@ export default {
           bottom: 0;
           left: 0;
           width: 100%;
+          ::v-deep textarea {
+            resize: none;
+          }
         }
       }
     }

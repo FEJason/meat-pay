@@ -270,7 +270,8 @@ export default {
       border-bottom: 2px solid transparent;
     }
     .on {
-      border-bottom: 2px solid #333;
+      color: #2483ff;
+      border-bottom: 2px solid #2483ff;
     }
   }
 }

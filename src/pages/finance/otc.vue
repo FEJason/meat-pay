@@ -71,6 +71,15 @@
             {{ hideBalance ? '****' : row.tradeFreeze }}
           </div>
         </template>
+        <template slot-scope="{ row, index }" slot="rateUsd">
+          <div class="pay-font">
+            {{ hideBalance ? '****' :  NP.divide(row.rateUsd, btcPrice) }}
+          </div>
+          <div class="u-tips" style="color: #7183B8">
+            ≈ ￥{{ NP.times(row.rateUsd, CNY) }}
+          </div>
+        </template>
+        
         <template slot-scope="{ row, index }" slot="slotOperation">
           <!-- <router-link to="/otc/trade/buy-usdt" style="color: #28c878">{{ $t('finance.gm') }}</router-link> -->
           <router-link :to="`/deposit`">充值</router-link>
@@ -114,29 +123,16 @@ export default {
               align: 'right'
           },
           {
-              title: '其它冻结',
+              title: '冻结',
               slot: 'freeze',
               align: 'right'
           },
           {
-              title: '提现冻结',
-              slot: 'payOutFreeze',
-              align: 'right'
+              title: 'BTC估值',
+              slot: 'rateUsd',
+              align: 'right',
+              sortable: true
           },
-          {
-              title: '交易冻结',
-              slot: 'tradeFreeze',
-              align: 'right'
-          },
-          // {
-          //     title: 'BTC估值',
-          //     key: 'address',
-          //     sortable: true
-          // },
-          // {
-          //     title: '锁仓',
-          //     key: 'address'
-          // },
           {
               title: this.$t('finance.cz'),
               slot: 'slotOperation',

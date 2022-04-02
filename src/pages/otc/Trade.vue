@@ -120,7 +120,7 @@
         </div>
 
         <!-- PC-买卖列表 -->
-        <div class="adv-list-wrap hidden-xs u-p-b-50">
+        <div class="adv-list-wrap hidden-xs u-p-b-20">
           <!-- 手写表格 -->
           <div>
             <div class="table-title u-flex u-font-12">
@@ -134,79 +134,236 @@
             </div>
             <div class="table-list u-font-14 u-m-b-20">
               <div
-                class="item u-flex"
                 v-for="(row, index) in advertiment.ask.rows"
                 :key="index"
               >
-                <div class="column width0">
-                  <div class="u-font-14 u-flex">
-                    <div class="avatar u-m-r-10 u-font-bold">
-                      <em>{{row.adName.substring(0, 1).toUpperCase()}}</em>
+                <div class="item u-flex" v-if="!row.modalShow">
+                  <div class="column width0">
+                    <div class="u-font-14 u-flex">
+                      <div class="avatar u-m-r-10 u-font-bold">
+                        <em>{{row.adName.substring(0, 1).toUpperCase()}}</em>
+                      </div>
+                      <div>
+                        <div class="u-font-bold">{{ row.adName }}</div>
+                        <div class="u-font-12" style="color: #495666">成单量: {{ `${row.volume} | 99%`}}</div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="column width1 pay-font width1 u-font-18" style="color: #00c096">
+                    {{ toFixeds(row.posterPrice, currencyScale) }}
+                    {{ row.fiatCurrency }}
+                  </div>
+                  <div class="column width2">
+                    <div>
+                      <span class="u-p-r-12" style="color: #9aa5b5">{{
+                        $t('trade.number')
+                      }}</span>
+                      <span style="color: #1c242c"
+                        >{{ toFixeds(row.balance, coinActiveScale) }}
+                        {{ row.currencyName }}</span
+                      >
                     </div>
                     <div>
-                      <div class="u-font-bold">{{ row.adName }}</div>
-                      <div class="u-font-12" style="color: #495666">成单量: {{ `${row.volume} | 99%`}}</div>
+                      <span class="u-p-r-12" style="color: #9aa5b5">{{
+                        $t('trade.xe')
+                      }}</span>
+                      <span style="color: #1c242c"
+                        >{{ toFixeds(row.minOrderAmt) }} -
+                        {{ toFixeds(row.maxOrderAmt) }}
+                        {{ row.fiatCurrency }}</span
+                      >
                     </div>
-                    
                   </div>
-                </div>
-                <div class="column pay-font width1 u-font-18" style="color: #00c096">
-                  {{ toFixeds(row.posterPrice, currencyScale) }}
-                  {{ row.fiatCurrency }}
-                </div>
-                <div class="column width2">
-                  <div>
-                    <span class="u-p-r-12" style="color: #9aa5b5">{{
-                      $t('trade.number')
-                    }}</span>
-                    <span style="color: #1c242c"
-                      >{{ toFixeds(row.balance, coinActiveScale) }}
-                      {{ row.currencyName }}</span
+                  <div class="column width3 u-font-12">
+                    <div class="u-flex u-flex-wrap" v-if="buyOrSell == 'buy'">
+                      <span
+                        v-for="(item, index) in row.paymentList"
+                        :key="index"
+                        :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
+                        class="pay-btn"
+                        >{{ item.payTypeName }}</span
+                      >
+                    </div>
+                    <div class="u-flex u-flex-wrap" v-if="buyOrSell == 'sell'">
+                      <span
+                        v-for="(item, index) in row.payTypeList"
+                        :key="index"
+                        :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
+                        class="pay-btn"
+                        >{{ item.payTypeName }}</span
+                      >
+                    </div>
+                  </div>
+                  <div class="column width4 u-text-right">
+                    <Button
+                      type="primary"
+                      v-if="buyOrSell == 'buy'"
+                      @click="openTradeInfo(row)"
+                      >{{ $t('trade.buy') }}
+                      {{ coinActive.toUpperCase() }}</Button
                     >
-                  </div>
-                  <div>
-                    <span class="u-p-r-12" style="color: #9aa5b5">{{
-                      $t('trade.xe')
-                    }}</span>
-                    <span style="color: #1c242c"
-                      >{{ toFixeds(row.minOrderAmt) }} -
-                      {{ toFixeds(row.maxOrderAmt) }}
-                      {{ row.fiatCurrency }}</span
-                    >
-                  </div>
-                </div>
-                <div class="column width3 u-font-12">
-                  <div class="u-flex u-flex-wrap" v-if="buyOrSell == 'buy'">
-                    <span
-                      v-for="(item, index) in row.paymentList"
-                      :key="index"
-                      :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
-                      class="pay-btn"
-                      >{{ item.payTypeName }}</span
-                    >
-                  </div>
-                  <div class="u-flex u-flex-wrap" v-if="buyOrSell == 'sell'">
-                    <span
-                      v-for="(item, index) in row.payTypeList"
-                      :key="index"
-                      :style="{color: item.payTypeId == 4 ? '#1bb1f3' : item.payTypeId == 3 ? '#42c71b' : '#f1bc15'}"
-                      class="pay-btn"
-                      >{{ item.payTypeName }}</span
+                    <Button type="primary" v-else @click="openTradeInfo(row)"
+                      >{{ $t('trade.sell') }}
+                      {{ coinActive.toUpperCase() }}</Button
                     >
                   </div>
                 </div>
-                <div class="column width4 u-text-right">
-                  <Button
-                    type="primary"
-                    v-if="buyOrSell == 'buy'"
-                    @click="openTradeInfo(row)"
-                    >{{ $t('trade.buy') }}
-                    {{ coinActive.toUpperCase() }}</Button
-                  >
-                  <Button type="primary" v-else @click="openTradeInfo(row)"
-                    >{{ $t('trade.sell') }}
-                    {{ coinActive.toUpperCase() }}</Button
-                  >
+                <div v-else>
+                  <div class="modal-wrap u-flex u-col-top u-row-between">
+                    <div class="modal-left u-p-r-16 u-flex-1">
+                      <div class="u-font-bold u-p-b-16 u-font-16">
+                        {{ advInfo.adName }} (8888 | 88%)
+                      </div>
+                      <div class="u-p-b-10">
+                        Mtea {{ $t('trade.rzyh') }} 8888-USDT
+                      </div>
+                      <div class="auth u-flex">
+                        <div>
+                          <Icon type="ios-checkmark-circle" size="16" />{{
+                            $t('trade.email')
+                          }}
+                        </div>
+                        <div>
+                          <Icon type="ios-checkmark-circle" size="16" />{{
+                            $t('trade.phone')
+                          }}
+                        </div>
+                        <div>
+                          <Icon type="ios-checkmark-circle" size="16" />{{
+                            $t('trade.sm')
+                          }}
+                        </div>
+                        <div>
+                          <Icon type="ios-checkmark-circle" size="16" />{{
+                            $t('trade.gj')
+                          }}
+                        </div>
+                      </div>
+                      <!-- 广告说明 -->
+                      <div>{{ advInfo.directions }}</div>
+                    </div>
+                    <div class="modal-right u-flex-1">
+                      <div class="top u-flex">
+                        <!-- 数量 -->
+                        <div class="u-p-r-26">
+                          <div class="u-p-b-10">{{ $t('trade.number') }}</div>
+                          <div>{{ advInfo.account }} {{ advInfo.currencyName }}</div>
+                        </div>
+                        <!-- 限额 -->
+                        <div class="u-p-r-26">
+                          <div class="u-p-b-10">{{ $t('trade.xe') }}</div>
+                          <div>
+                            {{ $yj.transMoney(advInfo.minOrderAmt) }}-{{ $yj.transMoney(advInfo.maxOrderAmt) }}
+                            {{ advInfo.fiatCurrency }}
+                          </div>
+                        </div>
+                        <!-- 单价 -->
+                        <div class="u-p-r-26">
+                          <div class="u-p-b-10">{{ $t('trade.price') }}</div>
+                          <div class="u-font-bold pay-font" :style="{color: buyOrSell == 'buy' ? '#19be6b' : '#ff5f67'}">
+                            {{ $yj.transMoney(advInfo.posterPrice) }}
+                            {{ advInfo.fiatCurrency }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="bot">
+                        <Form
+                          ref="formInline"
+                          :model="formInline"
+                          :rules="ruleInline"
+                        >
+                          <div class="u-flex u-col-top">
+                            <FormItem
+                              prop="totalPrice"
+                              class="u-flex-1"
+                              style="margin-right: 0"
+                            >
+                              <div>{{ $t('trade.zj') }}</div>
+                              <div class="u-relative">
+                                <Input
+                                  type="text"
+                                  v-model="formInline.totalPrice"
+                                  @input.native="totalPriceInput"
+                                >
+                                  <!-- <div slot="append">{{ advInfo.fiatCurrency }}</div> -->
+                                </Input>
+                                <div class="abs-right">
+                                  <!-- <span class="all">全部</span> -->
+                                  <span class="u-p-l-6">{{ advInfo.fiatCurrency }}</span>
+                                </div>
+                              </div>
+                            </FormItem>
+                            <div
+                              class="u-text-center"
+                              style="width: 80px; padding-top: 36px"
+                            >
+                              <Icon type="md-swap" size="26" color="#b7b7b7" />
+                            </div>
+                            <FormItem
+                              prop="num"
+                              class="u-flex-1"
+                              style="margin-right: 0"
+                            >
+                              <div>{{ $t('trade.number') }}</div>
+                              <div class="u-relative">
+                                <Input
+                                  type="text"
+                                  v-model="formInline.num"
+                                  @input.native="numInput"
+                                >
+                                </Input>
+                                <div class="abs-right">
+                                  <!-- <span class="all">全部</span> -->
+                                  <span class="u-p-l-6">{{ advInfo.currencyName }}</span>
+                                </div>
+                              </div>
+                            </FormItem>
+                          </div>
+                          <div class="u-m-b-20" v-if="buyOrSell == 'sell'">
+                            <div class="u-p-b-8">支付方式</div>
+                            <Button long type="primary" ghost
+                              to="/set-payment"
+                              v-if="paymentList.length == 0">设置支付方式</Button>
+                            
+                            <FormItem
+                              prop="paymentId"
+                              v-else
+                            >
+                              <Select
+                                width="100%"
+                                v-model="formInline.paymentId"
+                                multiple
+                                :placeholder="$t('publice.qxz')"
+                              >
+                                <Option
+                                  v-for="item in paymentList"
+                                  :value="item.id"
+                                  :key="item.id"
+                                >
+                                  {{
+                                    item.payTypeId == 4
+                                      ? $t('trade.zfb')
+                                      : item.payTypeId == 3
+                                      ? $t('trade.wx')
+                                      : $t('trade.yhk')
+                                  }}
+                                  - {{ item.accountName }} {{ item.account }}
+                                </Option>
+                              </Select>
+                            </FormItem>
+                          </div>
+                        </Form>
+                        <div class="u-p-b-10 u-font-12">*{{ $t('trade.mffk') }}</div>
+                        <div class="u-font-12">
+                          *{{ $t('trade.wbhnd')
+                          }}<span style="color: #007aff"
+                            >T+1{{ $t('trade.tbxz') }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -601,16 +758,14 @@
         </div>
 
         <!-- 分页 -->
-        <div class="page_change">
-          <div class="u-text-center">
-            <Page
-              v-if="advertiment.ask.total > 0"
-              :pageSize="advertiment.ask.size"
-              :total="advertiment.ask.total"
-              :current="advertiment.ask.pages"
-              @on-change="changePage"
-            ></Page>
-          </div>
+        <div class="u-text-center u-p-b-40">
+          <Page
+            v-if="pages.total > 0"
+            :pageSize="pages.size"
+            :total="pages.total"
+            :current="pages.current"
+            @on-change="changePage"
+          ></Page>
         </div>
       </div>
     </div>
@@ -783,6 +938,11 @@ export default {
       refreshText: '刷新设置',
       refreshTime: null,
       refreshLoading: false,
+      pages: {
+        current: 1,
+        size: 10,
+        total: 0
+      }
     }
   },
   watch: {
@@ -817,6 +977,10 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
+    changePage(val) {
+      this.pages.current = val
+      this.loadAd()
+    },
     /* 获取支付方式 */
     queryPayWay() {
       queryPayWay().then(res => {
@@ -962,6 +1126,7 @@ export default {
           this.popShow = true
         } else {
           this.modalShow = true
+          // this.$set( row, 'modalShow', true)
         }
         this.marketNo = row.marketNo
         this.tradeId = row.id
@@ -1064,6 +1229,8 @@ export default {
       this.tableLoading = true
       this.refreshLoading = true
       getAdList({
+        current: pageNo || this.pages.current,
+        size: this.pages.size,
         side: this.buyOrSell == 'buy' ? 2 : 1, // 1买 2卖
         currencyId: currencyId[0].id, // 币种ID
         currencyName: this.coinActive.toUpperCase(), // 币种名称
@@ -1074,8 +1241,8 @@ export default {
         tradeAmount: this.tradeAmount // 金额
       })
         .then(res => {
-          console.log(res)
           this.advertiment.ask.rows = res.records || []
+          this.pages.total = res.total
         })
         .finally(() => {
           this.tableLoading = false
@@ -1157,7 +1324,7 @@ export default {
     padding: 0 20px;
     border-radius: 4px;
     .item {
-      min-height: 80px;
+      min-height: 94px;
       border-bottom: 1px solid #ddd;
     }
     .item:last-child {
