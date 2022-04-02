@@ -43,7 +43,10 @@
     color: #007AFF;
   }
 }
-
+.trade-content {
+  background-color: #F2F6FD;
+  min-height: calc(100vh - 456px);
+}
 
 /* 手机端 */
 @media (max-width: 767px) {

@@ -73,7 +73,7 @@ const routes = [
           },
           {
             path: 'ad',
-            component: () => import('../components/otc/MyAd'),
+            component: () => import('../pages/otc/myAd'),
             meta: { title: '我的广告' }
           },
         ]
@@ -246,112 +246,6 @@ const routes = [
         name: 'application',
         component: () => import('../pages/tool/application'),
         meta: { title: '上币申请' }
-      },
-      {
-        path: '/uc',
-        component: () => import('../pages/uc/MemberCenter'),
-        children: [
-          {
-            path: '',
-            component: () => import('../components/uc/Safe')
-          },
-          {
-            path: 'safe',
-            component: () => import('../components/uc/Safe')
-          },
-          {
-            path: 'account',
-            component: () => import('../components/uc/Account')
-          },
-          {
-            path: 'money',
-            component: () => import('../components/uc/MoneyIndex')
-          },
-          {
-            path: 'swapAssets',
-            component: () => import('../components/uc/SwapAssets')
-          },
-          {
-            path: 'record',
-            component: () => import('../components/uc/Record')
-          },
-          {
-            path: 'recharge',
-            component: () => import('../components/uc/Recharge')
-          },
-          {
-            path: 'withdraw',
-            component: () => import('../components/uc/Withdraw')
-          },
-          {
-            path: 'withdraw/address',
-            component: () => import('../components/uc/WithdrawAddress')
-          },
-          {
-            path: 'withdraw/code',
-            component: () => import('../components/uc/WithdrawCode')
-          },
-          // 个人中心 - OTC管理 - 我的广告
-          {
-            path: 'ad',
-            component: () => import('../components/otc/MyAd')
-          },
-          // 个人中心 - OTC管理 - 我的订单
-          {
-            path: 'order',
-            // component: () => import('../components/uc/myorder')
-            component: () => import('../pages/otc/orders'),
-            meta: { title: '我的订单' }
-          },
-          {
-            path: 'entrust/current',
-            component: () => import('../components/uc/EntrustCurrent')
-          },
-          {
-            path: 'entrust/history',
-            component: () => import('../components/uc/EntrustHistory')
-          },
-          {
-            path: 'trade',
-            component: () => import('../components/uc/MinTrade')
-          },
-          {
-            path: 'invitingmining',
-            component: () => import('../components/uc/InvitingMin')
-          },
-          {
-            path: 'paydividends',
-            component: () => import('../components/uc/PayDividends')
-          },
-          {
-            path: 'promotion/mycards',
-            component: () => import('../components/uc/PromotionMyCards')
-          },
-          {
-            path: 'promotion/mypromotion',
-            component: () => import('../components/uc/MyPromotion')
-          },
-          {
-            path: 'innovation/myorders',
-            component: () => import('../components/uc/InnovationOrders')
-          },
-          {
-            path: 'innovation/myminings',
-            component: () => import('../components/uc/InnovationMinings')
-          },
-          {
-            path: 'innovation/mylocked',
-            component: () => import('../components/uc/InnovationLocked')
-          },
-          {
-            path: 'quickExchange',
-            component: () => import('../components/uc/QuickExchange')
-          },
-          {
-            path: 'apiManage',
-            component: () => import('../components/uc/apiManage')
-          }
-        ]
       },
     ]
   },

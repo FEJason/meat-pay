@@ -57,6 +57,9 @@ export default {
 .ivu-table:after {
   width: 0 !important;
 }
+.ivu-table:before {
+  background-color: #fff !important;
+}
 
 // 修改表格title样式
 .ivu-table th {
@@ -65,10 +68,6 @@ export default {
 }
 .ivu-table td, .ivu-table th {
   height: 60px !important;
-}
-.ivu-table-cell {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
 // 去除弹窗头部下边框

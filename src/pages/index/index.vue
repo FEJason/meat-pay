@@ -167,9 +167,6 @@ export default {
 ::v-deep .ivu-table-row {
   cursor: pointer;
 }
-::v-deep .ivu-table:before {
-  background-color: #fff;
-}
 .buy {
     color: #00b275 !important;
     font-weight: bold;

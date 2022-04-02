@@ -267,7 +267,7 @@
       draggable scrollable
       :footer-hide="true">
         <div class="title u-font-20" slot="header">申诉</div>
-        <Form ref="formPlead" :model="formPlead" :rules="rules" :label-width="100">
+        <Form ref="formPlead" :model="formPlead" :rules="rules" label-position="top">
           <FormItem label="申述理由" prop="type">
             <Select v-model="formPlead.type" placeholder="请选择">
               <Option :value="item.value" v-for="item in pleadList" :key="item.value">{{ item.name }}</Option>
@@ -282,20 +282,47 @@
           <FormItem label="申述说明" prop="directions">
             <Input v-model="formPlead.directions" type="textarea"></Input>
           </FormItem>
-          <FormItem label="申诉截图（暂不可用）">
-            <Upload
-              ref="upload"
+          <FormItem label="申诉截图（最多上传3张，上传图片大小不能超过2M）">
+            <!-- <Upload
+              ref="upload5"
+              :before-upload="beforeUpload5"
+              :on-success="handHandleSuccess5"
+              :headers="uploadHeaders"
+              :action="uploadUrl"
               :show-upload-list="false"
               :format="['jpg','jpeg','png']"
-              :max-size="2048"
+              style="display: inline-block;width:58px;">
+              <div style="width: 58px;height:58px;line-height: 58px;">
+                <Icon type="ios-camera" size="20"></Icon>
+              </div>
+            </Upload> -->
+            <div class="demo-upload-list u-m-t-10" v-for="item in uploadList" :key="item.uid">
+              <template v-if="item.status === 'finished'">
+                  <img :src="item.response.data.url">
+                  <div class="demo-upload-list-cover">
+                      <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon>
+                      <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                  </div>
+              </template>
+              <template v-else>
+                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info text-inside></Progress>
+              </template>
+            </div>
+            <Upload
+              ref="upload5"
+              :show-upload-list="false"
+              :format="['jpg','jpeg','png']"
+              :before-upload="beforeUpload5"
+              :on-success="handHandleSuccess5"
+              :headers="uploadHeaders"
+              :action="uploadUrl"
               multiple
               type="drag"
-              action="//jsonplaceholder.typicode.com/posts/"
               style="display: inline-block;width:58px;">
               <div style="width: 58px;height:58px;line-height: 58px;">
                   <Icon type="ios-camera" size="20"></Icon>
               </div>
-            </Upload>
+          </Upload>
           </FormItem>
 
           <div class="u-p-t-20 u-flex u-row-right">
@@ -303,6 +330,10 @@
             <Button type="primary" @click="confirmPlead('formPlead')" :loading="pleadLoading">{{ $t('orderInfo.qr') }}</Button>
           </div>
         </Form>
+    </Modal>
+
+    <Modal v-model="viewIimgVisible" footer-hide>
+      <img :src="viewIimgUrl" v-if="viewIimgVisible" style="width: 100%">
     </Modal>
 
   </div>
@@ -333,7 +364,12 @@ export default {
         { name: '其他', value: '4'},
       ],
       pleadLoading: false,
-      formPlead: {},
+      viewIimgVisible: false,
+      viewIimgUrl: '', // 查看图片
+      uploadList: [],
+      formPlead: {
+        image : ''
+      },
       rules: {
         type: [
           { required: true, message: '请选择', trigger: 'change' }
@@ -419,6 +455,40 @@ export default {
     }
   },
   methods: {
+    /* 查看图片 */
+    handleView(item) {
+      this.viewIimgUrl = item.response.data.url
+      this.viewIimgVisible = true
+    },
+    /* 删除图片 */
+    handleRemove (file) {
+      console.log(file)
+      const fileList = this.$refs.upload5.fileList;
+      this.$refs.upload5.fileList.splice(fileList.indexOf(file), 1);
+    },
+    /* 申述图片上传前 */
+    beforeUpload5(data) {
+      if (data && data.size >= 1024000 * 2) {
+        this.$Message.error('上传图片大小不能超过2M')
+        return false
+      }
+      if (this.uploadList.length >= 3) {
+        this.$Notice.warning({
+          title: '最多上传3张图片'
+        });
+        return false
+      }
+    },
+    /* 申诉图片上传成功 */
+    handHandleSuccess5(res, file, fileList) {
+      if (res.code == 0) {
+        this.formPlead.image = res.data.url
+        this.uploadList = this.$refs.upload5.fileList;
+        console.log('uploadList', this.uploadList)
+      } else {
+        this.$Message.error(res.msg)
+      }
+    },
     /* 图片上传前 */
     beforeUpload(data) {
       if (data && data.size >= 1024000 * 2) {
@@ -553,7 +623,8 @@ export default {
     },
     /* 申述 */
     confirmPlead(name) {
-      console.log(this.formPlead)
+      console.log(JSON.parse(JSON.stringify(this.formPlead)))
+      return 
       this.$refs[name].validate((valid) => {
         if (valid) {
           plead({
@@ -660,6 +731,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 上传申诉图
+.demo-upload-list{
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 1px 1px rgba(0,0,0,.2);
+    margin-right: 4px;
+}
+.demo-upload-list img{
+    width: 100%;
+    height: 100%;
+}
+.demo-upload-list-cover{
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,.6);
+}
+.demo-upload-list:hover .demo-upload-list-cover{
+    display: block;
+}
+.demo-upload-list-cover i{
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0 2px;
+}
 // 聊天室头像
 .avatar {
   width: 38px;

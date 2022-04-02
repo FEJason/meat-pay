@@ -134,8 +134,9 @@
             </div>
             <div class="table-list u-font-14 u-m-b-20">
               <div
-                v-for="(row, index) in advertiment.ask.rows"
-                :key="index"
+                class="item-wrap"
+                v-for="row in advertiment.ask.rows"
+                :key="row.adId"
               >
                 <div class="item u-flex" v-if="!row.modalShow">
                   <div class="column width0">
@@ -1325,10 +1326,22 @@ export default {
     border-radius: 4px;
     .item {
       min-height: 94px;
-      border-bottom: 1px solid #ddd;
     }
-    .item:last-child {
-      border-bottom: none;
+    .item-wrap {
+      position: relative;
+      &:after {
+        content: '';
+        position: absolute;
+        left: -20px;
+        right: -20px;
+        height: 1px;
+        background-color: #e6ecf2;
+      }
+    }
+    .item-wrap:last-child {
+      &:after {
+        height: 0;
+      }
     }
   }
   // 修改表格列宽度
