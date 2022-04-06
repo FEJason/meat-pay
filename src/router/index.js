@@ -101,12 +101,6 @@ const routes = [
             component: () => import('../pages/finance/account'),
             meta: { title: '资产总览' }
           },
-          // 币币账户
-          {
-            path: 'spot',
-            component: () => import('../pages/finance/spot'),
-            meta: { title: '币币账户' }
-          },
           // 法币账户
           {
             path: 'otc',
@@ -120,12 +114,6 @@ const routes = [
             meta: { title: '财务记录' }
           },
         ]
-      },
-      // 资产划转
-      {
-        path: '/transfer',
-        component: () => import('../pages/finance/transfer'),
-        meta: { title: '资产划转' }
       },
       // 充币
       {
