@@ -65,7 +65,7 @@
             {{ hideBalance ? '****' :  toFixeds($yj.accDiv(row.rateUsd, btcPrice), 8) }}
           </div>
           <div class="u-tips" style="color: #7183B8">
-            ≈ ￥{{ toFixeds($yj.accMul(row.rateUsd, CNY)) }}
+            ≈ ￥{{ hideBalance ? '****' :  toFixeds($yj.accMul(row.rateUsd, CNY)) }}
           </div>
         </template>
         
@@ -111,7 +111,7 @@
                   {{ hideBalance ? '****' :  toFixeds($yj.accDiv(row.rateUsd, btcPrice), 8) }}
                   </span>
                   <span class="u-tips u-p-l-10" style="color: #7183B8">
-                    ≈ ￥{{ toFixeds($yj.accMul(row.rateUsd, CNY)) }}
+                    ≈ ￥{{ hideBalance ? '****' :  toFixeds($yj.accMul(row.rateUsd, CNY)) }}
                   </span>
                 </div>
               </div>
