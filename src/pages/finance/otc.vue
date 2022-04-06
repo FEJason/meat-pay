@@ -12,7 +12,7 @@
           </span>
           <span class="u-font-16 u-font-bold">BTC</span>
         </div>
-        <div class="sec pay-font">≈ ￥{{hideBalance ? '****' : toFixeds( NP.times(otc.usdAmount, CNY)) }}</div>
+        <div class="sec pay-font">≈ ￥{{hideBalance ? '****' : toFixeds( $yj.accMul(otc.usdAmount, CNY)) }}</div>
       </div>
       <div class="u-p-t-12">
         <Button type="primary" to="/deposit">充值</Button>
@@ -62,10 +62,10 @@
         </template>
         <template slot-scope="{ row, index }" slot="rateUsd">
           <div class="pay-font">
-            {{ hideBalance ? '****' :  toFixeds(NP.divide(row.rateUsd, btcPrice), 8) }}
+            {{ hideBalance ? '****' :  toFixeds($yj.accDiv(row.rateUsd, btcPrice), 8) }}
           </div>
           <div class="u-tips" style="color: #7183B8">
-            ≈ ￥{{ toFixeds(NP.times(row.rateUsd, CNY)) }}
+            ≈ ￥{{ toFixeds($yj.accMul(row.rateUsd, CNY)) }}
           </div>
         </template>
         
@@ -108,10 +108,10 @@
                 <div>BTC估值</div>
                 <div class="u-text-right">
                   <span class="pay-font">
-                  {{ hideBalance ? '****' :  toFixeds(NP.divide(row.rateUsd, btcPrice), 8) }}
+                  {{ hideBalance ? '****' :  toFixeds($yj.accDiv(row.rateUsd, btcPrice), 8) }}
                   </span>
                   <span class="u-tips u-p-l-10" style="color: #7183B8">
-                    ≈ ￥{{ toFixeds(NP.times(row.rateUsd, CNY)) }}
+                    ≈ ￥{{ toFixeds($yj.accMul(row.rateUsd, CNY)) }}
                   </span>
                 </div>
               </div>
@@ -253,7 +253,7 @@ export default {
             return item.account == 'otc'
           })
           this.otc.usdAmount = otc[0].latestAmount
-          this.otc.latestAmount = this.toFixeds(this.NP.divide(otc[0].latestAmount, this.btcPrice), 8)
+          this.otc.latestAmount = this.toFixeds(this.$yj.accDiv(otc[0].latestAmount, this.btcPrice), 8)
         }
       })
     }
@@ -347,6 +347,7 @@ export default {
 @media (min-width: 768px) {
   .top-con-lg {
     display: flex;
+    align-items: flex-end;
     .sec {
       padding-left: 10px;
     }

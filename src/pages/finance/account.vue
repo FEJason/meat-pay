@@ -13,7 +13,7 @@
           </div>
           <div>
             <span class="num">{{ toFixeds(wallet.latestAmount, 6) || '--'}} USDT</span>
-            <span class="sec u-p-l-10">≈ {{ toFixeds( NP.times(wallet.latestAmount, CNY) ) }} CNY</span>
+            <span class="sec u-p-l-10">≈ {{ toFixeds( $yj.accMul(wallet.latestAmount, CNY) ) }} CNY</span>
           </div>
           <div class="profit">
             <span class="profit-left">{{ $t('finance.jrsy') }}</span>
@@ -32,7 +32,7 @@
         <div class="tit u-p-b-8">{{ $t('finance.bbzh') }}</div>
         <div>
           <span class="num">{{ toFixeds(spot.latestAmount, 6) || '--' }} USDT</span>
-          <span class="sec u-p-l-10">≈ {{ toFixeds( NP.times(spot.latestAmount, CNY) ) }} CNY</span>
+          <span class="sec u-p-l-10">≈ {{ toFixeds( $yj.accMul(spot.latestAmount, CNY) ) }} CNY</span>
         </div>
       </div>
       <div class="item-right">
@@ -46,7 +46,7 @@
         <div class="tit u-p-b-8">{{ $t('finance.fbzh') }}</div>
         <div>
           <span class="num">{{ toFixeds(otc.latestAmount, 6) || '--'}} USDT</span>
-          <span class="sec u-p-l-10">≈ {{ toFixeds( NP.times(otc.latestAmount, CNY) ) }} CNY</span>
+          <span class="sec u-p-l-10">≈ {{ toFixeds( $yj.accMul(otc.latestAmount, CNY) ) }} CNY</span>
         </div>
       </div>
       <div class="item-right">

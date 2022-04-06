@@ -295,7 +295,7 @@ export default {
     onInput() {
       if (this.withdrawNum == '') return
       this.withdrawNum = this.withdrawNum.replace(/^\D*(\d*(?:\.\d{0,8})?).*$/g, '$1')
-      this.actual = this.NP.minus(this.withdrawNum, this.chainActive.payOutFee)
+      this.actual = this.$yj.accSub(this.withdrawNum, this.chainActive.payOutFee)
     },
     /* 获取财务记录 */
     getRecord() {

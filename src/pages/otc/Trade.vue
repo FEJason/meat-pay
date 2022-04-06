@@ -1065,7 +1065,7 @@ export default {
       )
 
       // 计算数量 = 总价 / 单价
-      let num = this.NP.divide(
+      let num = this.$yj.accDiv(
         this.formInline.totalPrice,
         this.advInfo.posterPrice
       )
@@ -1088,7 +1088,7 @@ export default {
       )
 
       // 计算总价 = 数量 * 单价
-      let num = this.NP.times(this.formInline.num, this.advInfo.posterPrice)
+      let num = this.$yj.accMul(this.formInline.num, this.advInfo.posterPrice)
       if (num == 0) {
         this.$set(this.formInline, 'totalPrice', '')
       } else {
