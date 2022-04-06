@@ -1,11 +1,11 @@
 <template>
   <div class="page-wrap">
-    <div class="title u-flex u-font-18" @click="$router.go(-1)">
+    <div class="title hidden-xs u-flex u-font-18" @click="$router.go(-1)">
       <Icon type="ios-arrow-back" color="#333" />
       {{ $t('withdraw.fh') }}
     </div>
 
-    <div class="con u-flex u-col-top">
+    <div class="con">
       <div class="left">
         <div class="tab u-flex u-p-b-16">
           <em>1</em>
@@ -151,7 +151,7 @@
           <router-link to="/finance/record">{{ $t('deposit.ckqb') }}</router-link>
         </div>
       </div>
-      <Table :columns="columns" :data="tableData">
+      <Table class="hidden-xs" :columns="columns" :data="tableData">
         <template slot-scope="{ row, index }" slot="billType">
           提币
         </template>
@@ -159,6 +159,40 @@
           <div>{{ formatStatus[row.status] }}</div>
         </template>
       </Table>
+
+      <!-- 移动端列表 -->
+      <ul class="xs-list hidden-lg" v-for="row in tableData" :key="row.businessId">
+        <li>
+          <div>时间</div>
+          <div>
+            {{ row.createTime }}
+          </div>
+        </li>
+        <li>
+          <div>币种</div>
+          <div>
+            {{ row.currencyName }}
+          </div>
+        </li>
+        <li>
+          <div>类型</div>
+          <div>
+            充币
+          </div>
+        </li>
+        <li>
+          <div>数量</div>
+          <div>
+            {{ row.amount }}
+          </div>
+        </li>
+        <li>
+          <div>状态</div>
+          <div>
+            {{ formatStatus[row.status] }}
+          </div>
+        </li>
+      </ul>
     </div>
 
     <!-- 安全验证 -->
@@ -377,8 +411,6 @@ fieldset[disabled] .ivu-input {
 }
 
 .page-wrap {
-  width: 1000px;
-  margin: 0 auto;
   padding-bottom: 100px;
   .title {
     height: 68px;
@@ -494,6 +526,43 @@ fieldset[disabled] .ivu-input {
           color: #9aa5b5;
         }
       }
+    }
+  }
+}
+
+/* PC端 */
+@media (min-width: 768px) {
+  .page-wrap {
+    width: 1000px;
+    margin: 0 auto;
+  }
+  .con {
+    display: flex;
+    align-items: flex-start;
+  }
+}
+/* 手机端 */
+@media (max-width: 767px) {
+  .page-wrap {
+    width: 100%;
+    .con {
+      padding: 20px 12px;
+      .left {
+        width: 100%;
+        padding-right: 0;
+        margin-bottom: 30px;
+      }
+    }
+  }
+  .xs-list {
+    font-size: 14px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    li {
+      height: 26px;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

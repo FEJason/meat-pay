@@ -365,6 +365,7 @@ export default {
       }
       this.addShow = false
     },
+    /* 查询支持收款方式 */
     getPayType() {
       getPayType().then(res => {
         this.payTypeList = res

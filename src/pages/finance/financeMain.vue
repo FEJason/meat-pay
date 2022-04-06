@@ -65,7 +65,7 @@ export default {
 
 <style lang="scss" scoped>
 .page-wrap {
-  background-color: #E8EEF6;
+  background-color: #F2F6FD;
   overflow: hidden;
 }
 .menu-wrap {

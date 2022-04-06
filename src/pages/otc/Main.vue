@@ -17,7 +17,7 @@
               <DropdownItem name="/security">{{ $t('trade.main.rzxx') }}</DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <router-link to="/otc/ad" class="u-font-16 u-p-l-40" style="color: #515a6e">历史广告</router-link>
+          <router-link to="/" class="u-font-16 u-p-l-40" style="color: #515a6e">历史广告</router-link>
           <router-link to="/otc/orders" class="u-font-16 u-p-l-40" style="color: #515a6e">{{ $t('trade.main.order') }}</router-link>
         </div>
       </div>

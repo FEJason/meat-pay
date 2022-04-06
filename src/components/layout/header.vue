@@ -129,7 +129,7 @@
               <p class="u-font-20">{{userInfo.username}}</p>
               <p>UID: {{userInfo.uuid}}</p>
             </div>
-            <van-cell title="钱包" to="/finance/spot" size="large"/>
+            <van-cell title="钱包" to="/finance/otc" size="large"/>
             <van-cell title="订单" to="/otc/orders" size="large"/>
             <van-cell title="充值" to="/deposit" size="large"/>
             <van-cell :title="$t('header.security')" to="/security" size="large"/>

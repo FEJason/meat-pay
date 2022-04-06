@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="page-content">
-      <Table class="hidden-xs" :columns="columns1" :data="listData" @on-row-click="onRowClick" size="large">
+      <Table class="hidden-xs" disabled-hover :columns="columns1" :data="listData" @on-row-click="onRowClick" size="large">
         <template slot-scope="{ row, index }" slot="currency">
           <div class="u-flex">
             <img :src="row.imageUrl" alt="icon" style="width: 26px; height: 26px;">

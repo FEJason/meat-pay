@@ -1,30 +1,26 @@
 <template>
   <div class="page-wrap">
-    <div class="top">
-      <div class="top-con u-flex u-row-between u-col-top">
-        <div class="top-con-left">
-          <div class="tit u-flex">
-            <span>资产估值</span>
-            <i class="icon-wrap u-m-l-12" :class="hideBalance ? 'hide' : 'show'" @click="hiddenAmount"></i>
-          </div>
-          <div class="u-flex u-col-bottom u-p-t-12">
-            <div class="pay-font">
-              <span class="num">
-                {{ hideBalance ? '****' : otc.latestAmount}}
-              </span>
-              <span class="u-font-16 u-font-bold">BTC</span>
-            </div>
-            <div class="sec u-p-l-10 pay-font">≈ ￥{{hideBalance ? '****' : toFixeds( NP.times(otc.usdAmount, CNY)) }}</div>
-          </div>
-          <div class="u-p-t-12">
-            <Button type="primary" to="/deposit">充值</Button>
-            <Button class="u-m-l-10" to="/withdraw">提币</Button>
-            <router-link to="/finance/record" class="u-p-l-16">
-              充值提币记录
-              <Icon type="ios-play" />
-            </router-link>
-          </div>
+    <div class="top-wrap">
+      <div class="tit u-flex">
+        <span>资产估值</span>
+        <i class="icon-wrap u-m-l-12" :class="hideBalance ? 'hide' : 'show'" @click="hiddenAmount"></i>
+      </div>
+      <div class="top-con-lg u-p-t-12">
+        <div class="pay-font">
+          <span class="num">
+            {{ hideBalance ? '****' : otc.latestAmount}}
+          </span>
+          <span class="u-font-16 u-font-bold">BTC</span>
         </div>
+        <div class="sec pay-font">≈ ￥{{hideBalance ? '****' : toFixeds( NP.times(otc.usdAmount, CNY)) }}</div>
+      </div>
+      <div class="u-p-t-12">
+        <Button type="primary" to="/deposit">充值</Button>
+        <Button class="u-m-l-10" to="/withdraw">提币</Button>
+        <router-link to="/finance/record" class="u-p-l-16">
+          充值提币记录
+          <Icon type="ios-play" />
+        </router-link>
       </div>
     </div>
 
@@ -35,13 +31,16 @@
           style="width: auto;"
           v-model="searchValue" prefix="ios-search"
           :placeholder="$t('finance.ss')" @on-change="search"/>
-        <div class="u-m-l-30">
+        <div class="hidden-xs u-m-l-30">
           <Checkbox v-model="single" @on-change="hiddenMin" style="user-select: none;">隐藏0资产</Checkbox>
         </div>
       </div>
       <div class="u-p-t-20 u-p-b-10">{{ $t('finance.jmhb') }}</div>
 
-      <Table :columns="columns5" :data="assetList" :loading="tableLoading" disabled-hover>
+      <Table
+        class="hidden-xs"
+        :columns="columns5" :data="assetList"
+        :loading="tableLoading" disabled-hover>
         <template slot-scope="{ row, index }" slot="currencyName">
           <div class="u-flex">
             <img :src="row.imageUrl" alt="img" style="width: 28px; height: 28px;"/>
@@ -61,22 +60,12 @@
             {{ hideBalance ? '****' : row.freeze }}
           </div>
         </template>
-        <template slot-scope="{ row, index }" slot="payOutFreeze">
-          <div class="pay-font">
-            {{ hideBalance ? '****' : row.payOutFreeze }}
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="tradeFreeze">
-          <div class="pay-font">
-            {{ hideBalance ? '****' : row.tradeFreeze }}
-          </div>
-        </template>
         <template slot-scope="{ row, index }" slot="rateUsd">
           <div class="pay-font">
-            {{ hideBalance ? '****' :  NP.divide(row.rateUsd, btcPrice) }}
+            {{ hideBalance ? '****' :  toFixeds(NP.divide(row.rateUsd, btcPrice), 8) }}
           </div>
           <div class="u-tips" style="color: #7183B8">
-            ≈ ￥{{ NP.times(row.rateUsd, CNY) }}
+            ≈ ￥{{ toFixeds(NP.times(row.rateUsd, CNY)) }}
           </div>
         </template>
         
@@ -86,6 +75,51 @@
           <router-link to="/withdraw" class="u-m-l-20">{{ $t('finance.tb') }}</router-link>
         </template>
       </Table>
+
+      <!-- 移动端列表 -->
+      <div class="list-xs hidden-lg">
+        <van-collapse v-model="collActive">
+          <van-collapse-item
+            v-for="row in assetList" :key="row.currencyId" :name="row.currencyId">
+            <template #title>
+              <div class="u-flex">
+                <img :src="row.imageUrl" alt="img" style="width: 28px; height: 28px;"/>
+                <div class="u-p-l-16">
+                  <p class="u-font-16">{{ row.currencyName }}</p>
+                  <p class="u-tips-color">{{ row.fullName }}</p>
+                </div>
+              </div>
+            </template>
+            
+            <template #value>
+              {{ hideBalance ? '****' : row.balance }}
+            </template>
+
+            <div class="u-font-12">
+              <div class="u-flex u-row-between">
+                <div>可用	</div>
+                <div>{{ hideBalance ? '****' : row.balance }}</div>
+              </div>
+              <div class="u-flex u-row-between">
+                <div>冻结</div>
+                <div>{{ hideBalance ? '****' : row.freeze }}</div>
+              </div>
+              <div class="u-flex u-row-between">
+                <div>BTC估值</div>
+                <div class="u-text-right">
+                  <span class="pay-font">
+                  {{ hideBalance ? '****' :  toFixeds(NP.divide(row.rateUsd, btcPrice), 8) }}
+                  </span>
+                  <span class="u-tips u-p-l-10" style="color: #7183B8">
+                    ≈ ￥{{ toFixeds(NP.times(row.rateUsd, CNY)) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </van-collapse-item>
+        </van-collapse>
+      </div>
     </div>
 
   </div>
@@ -98,6 +132,7 @@ import { getRate, priceUnit } from '@/api/user'
 export default {
   data() {
     return {
+      collActive: [],
       btcPrice: 0,
       CNY: 0,
       searchValue: '',
@@ -265,40 +300,77 @@ export default {
   background-position: 50%;
   background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMC45MzQgNC4wNzlhLjU4OC41ODggMCAwMC0uODAzLjIxNWwtLjM2OC42MzdBNS40MzQgNS40MzQgMCAwMDkgNC44NzdjLTIuMjEgMC00LjIxIDEuMzE0LTYgMy45NDMuODg4IDEuMzA0IDEuODI4IDIuMjg1IDIuODIgMi45NDJsLS4zMzUuNThhLjU4OC41ODggMCAxMDEuMDE5LjU4N2w0LjY0Ni04LjA0NmEuNTg4LjU4OCAwIDAwLS4yMTYtLjgwNHptLTQuNiA2Ljc5TDkuMTk5IDUuOTFhNC40MzkgNC40MzkgMCAwMC0uMTI5LS4wMDRIOWMtMS42NCAwLTMuMTg0LjkwNS00LjY1MiAyLjgwNWwtLjA4My4xMS4wMTcuMDJjLjY2OC44ODEgMS4zNTEgMS41NTQgMi4wNTMgMi4wMjh6IiBmaWxsPSIjOUFBNUI1Ii8+PHBhdGggZD0iTTguOTMgMTEuNzM0YTQuMzggNC4zOCAwIDAxLS4zNjYtLjAyMWwtLjU1NC45NmMuMzI1LjA2LjY1NS4wOS45OS4wOSAyLjIxIDAgNC4yMS0xLjMxNCA2LTMuOTQzLS45NDItMS4zODMtMS45NDItMi40MDItMy0zLjA1N2wtLjUxNS44OWMuNzY1LjQ3OSAxLjUwOCAxLjE5IDIuMjMzIDIuMTQ1bC4wMTcuMDIyLS4wODMuMTA5Yy0xLjQ2OCAxLjktMy4wMTIgMi44MDUtNC42NTIgMi44MDVoLS4wN3oiIGZpbGw9IiM5QUE1QjUiLz48cGF0aCBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMC45MzQgNC4wNzlhLjU4OC41ODggMCAwMC0uODAzLjIxNWwtLjM2OC42MzdBNS40MzQgNS40MzQgMCAwMDkgNC44NzdjLTIuMjEgMC00LjIxIDEuMzE0LTYgMy45NDMuODg4IDEuMzA0IDEuODI4IDIuMjg1IDIuODIgMi45NDJsLS4zMzUuNThhLjU4OC41ODggMCAxMDEuMDE5LjU4N2w0LjY0Ni04LjA0NmEuNTg4LjU4OCAwIDAwLS4yMTYtLjgwNHptLTQuNiA2Ljc5TDkuMTk5IDUuOTFhNC40MzkgNC40MzkgMCAwMC0uMTI5LS4wMDRIOWMtMS42NCAwLTMuMTg0LjkwNS00LjY1MiAyLjgwNWwtLjA4My4xMS4wMTcuMDJjLjY2OC44ODEgMS4zNTEgMS41NTQgMi4wNTMgMi4wMjh6IiBzdHJva2U9IiM5QUE1QjUiIHN0cm9rZS13aWR0aD0iLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNOC45MyAxMS43MzRhNC4zOCA0LjM4IDAgMDEtLjM2Ni0uMDIxbC0uNTU0Ljk2Yy4zMjUuMDYuNjU1LjA5Ljk5LjA5IDIuMjEgMCA0LjIxLTEuMzE0IDYtMy45NDMtLjk0Mi0xLjM4My0xLjk0Mi0yLjQwMi0zLTMuMDU3bC0uNTE1Ljg5Yy43NjUuNDc5IDEuNTA4IDEuMTkgMi4yMzMgMi4xNDVsLjAxNy4wMjItLjA4My4xMDljLTEuNDY4IDEuOS0zLjAxMiAyLjgwNS00LjY1MiAyLjgwNWgtLjA3eiIgc3Ryb2tlPSIjOUFBNUI1IiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+);
 }
-.top {
+.top-wrap{
+  padding: 30px;
   border-radius: 10px;
-  .top-con {
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    .tit {
-      font-size: 28px;
-      font-weight: bold;
-      user-select: none;
+  background-color: #fff;
+  border-radius: 10px;
+  .tit {
+    font-size: 28px;
+    font-weight: bold;
+    user-select: none;
+  }
+  .num {
+    font-size: 33px;
+    color: #333;
+  }
+  .sec {
+    font-size: 16px;
+    color: #7183B8;
+    padding-bottom: 7px;
+  }
+  .profit {
+    font-size: 16px;
+    .profit-left {
+      color: #999999;
     }
-    .num {
-      font-size: 33px;
-      color: #333;
-    }
-    .sec {
-      font-size: 16px;
-      color: #7183B8;
-      padding-bottom: 7px;
-    }
-    .profit {
-      font-size: 16px;
-      .profit-left {
-        color: #999999;
-      }
-      .profit-right {
-        color: #00C096;
-      }
+    .profit-right {
+      color: #00C096;
     }
   }
 }
+
+
 .item-wrap {
   padding: 30px;
   background-color: #fff;
   border-radius: 10px;
+}
+
+.list-xs {
+  ::v-deep .van-cell {
+    align-items: center;
+  }
+}
+
+/* PC端 */
+@media (min-width: 768px) {
+  .top-con-lg {
+    display: flex;
+    .sec {
+      padding-left: 10px;
+    }
+  }
+}
+/* 手机端 */
+@media (max-width: 767px) {
+  .page-wrap {
+    margin-top: 1px;
+  }
+  .item-wrap {
+    margin: 0 !important;
+    padding: 20px 10px 10px;
+    border-radius: 0;
+  }
+  .top-wrap {
+    border-radius: 0;
+  }
+  .search-wrap {
+    width: 100% !important;
+    ::v-deep .ivu-input{
+      width: 100%;
+    }
+  }
+  
 }
 </style>

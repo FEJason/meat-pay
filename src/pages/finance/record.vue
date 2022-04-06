@@ -6,7 +6,7 @@
     </div> -->
     <div class="page-con">
       <div class="con">
-        <ul class="u-flex">
+        <ul class="tab-wrap u-flex">
           <li
             :class="{ on: active == index }"
             v-for="(item, index) in tabList"
@@ -19,13 +19,10 @@
       </div>
 
       <div class="table">
-        <div class="title u-flex u-row-between">
+        <div class="title hidden-xs">
           <div class="u-font-14">{{ tableTitle }}</div>
-          <div>
-            <!-- <router-link to="/">查看全部</router-link> -->
-          </div>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap hidden-xs">
           <Table :columns="columns" :data="tableData" :loading="tableLoading">
             <template slot-scope="{ row, index }" slot="slotBillType">
               {{ formatType[row.billType.toString()] }}
@@ -35,6 +32,37 @@
             </template>
           </Table>
         </div>
+        <!-- 移动端列表 -->
+        <ul class="xs-list hidden-lg" v-for="row in tableData" :key="row.currencyId">
+          <li>
+            <div>时间</div>
+            <div>
+              {{ row.createTime }}
+            </div>
+          </li>
+          <li>
+            <div>币种</div>
+            <div>{{ row.currencyName }}</div>
+          </li>
+          <li>
+            <div>类型</div>
+            <div>
+              {{ formatType[row.billType.toString()] }}
+            </div>
+          </li>
+          <li>
+            <div>数量</div>
+            <div>
+              {{ row.amount }}
+            </div>
+          </li>
+          <li>
+            <div>状态</div>
+            <div>
+              {{ formatStatus[row.status] }}
+            </div>
+          </li>
+        </ul>
       </div>
       <div class="u-text-center u-p-t-30">
         <Page :total="totalPage" @on-change="onChange" />
@@ -208,7 +236,7 @@ fieldset[disabled] .ivu-input {
 }
 
 .con {
-  ul {
+  .tab-wrap {
     li {
       margin-right: 30px;
       font-size: 16px;
@@ -218,6 +246,29 @@ fieldset[disabled] .ivu-input {
     }
     .on {
       border-bottom: 2px solid #333;
+    }
+  }
+}
+
+/* 手机端 */
+@media (max-width: 767px) {
+  .page-con {
+    padding: 0 12px;
+  }
+  .page-wrap {
+    .table {
+      background-color: transparent !important;
+    }
+  }
+  .xs-list {
+    font-size: 14px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    li {
+      height: 26px;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

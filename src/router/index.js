@@ -72,9 +72,9 @@ const routes = [
             meta: { title: '我的订单' }
           },
           {
-            path: 'ad',
-            component: () => import('../pages/otc/myAd'),
-            meta: { title: '我的广告' }
+            path: 'history-ad',
+            component: () => import('../pages/otc/historyAd'),
+            meta: { title: '历史广告' }
           },
         ]
       },

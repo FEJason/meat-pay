@@ -290,11 +290,16 @@ export default {
 .page-wrap {
   padding-top: 20px;
   background-color: #F2F6FD;
+}
+
+/* PC端 */
+@media (min-width: 768px) {
   .page-con {
     width: 1200px;
     margin: 0 auto;
   }
 }
+
 /* 手机端 */
 @media (max-width: 767px) {
   .page-wrap {

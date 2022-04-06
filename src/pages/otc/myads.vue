@@ -3,7 +3,7 @@
     <div class="header">
       <h2>我的广告</h2>
       <div class="btn-wrap" v-if="merchantInfo && merchantInfo.status == 1">
-        <router-link to="/otc/ad" class="u-font-14 u-m-r-24">
+        <router-link to="/otc/history-ad" class="u-font-14 u-m-r-24">
           <Icon type="md-albums" color="#007AFF" size="16" />
           历史广告
         </router-link>
@@ -159,14 +159,21 @@
                     to="/set-payment"
                     v-if="paymentList.length == 0">设置支付方式</Button>
                 <div v-else>
+                  <Select v-model="releaseForm.paymentIds" size="large" multiple filterable :placeholder="$t('publice.qxz')" 
+                    v-if="releaseForm.side == 1">
+                    <Option v-for="item in payTypeList" :label="item.name" :value="item.id" :key="item.id" class="u-flex">
+                      <img :src="VUE_APP_WS + item.image" alt="img" style="width: 21px;"/>
+                      <span class="u-p-l-6">{{item.name}}</span>
+                    </Option>
+                  </Select>
                   <!-- 类型购买传 payTypeId -->
-                  <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')" 
+                  <!-- <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')" 
                     v-if="releaseForm.side == 1">
                     <Option v-for="item in paymentList" :value="item.payTypeId" :key="item.payTypeId">
                       {{ item.payTypeId == 4 ? $t('trade.zfb') : item.payTypeId == 3 ? $t('trade.wx') : $t('trade.yhk')}} - 
                       {{ item.accountName }} {{ item.account }}
                     </Option>
-                  </Select>
+                  </Select> -->
                   <!-- 类型出售传 id  -->
                   <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')"
                     v-if="releaseForm.side == 2">
@@ -191,11 +198,12 @@
 <script>
 import { mapMutations } from 'vuex'
 import { getCurrencyList, getLegalList, release, setRelease } from '@/api/trade'
-import { getPaymentList } from '@/api/user'
+import { getPaymentList, getPayType } from '@/api/user'
 import { getAdvertisers, merchantApply } from '@/api/myads'
 export default {
   data() {
     return {
+      VUE_APP_WS: process.env.VUE_APP_WS,
       formApply: {},
       applyLoading: false,
       // 商户信息
@@ -218,6 +226,7 @@ export default {
       ],
       modalShow: false,
       releaseModal: false,
+      payTypeList: [],
       releaseForm: {
         side: '1'
       },
@@ -277,9 +286,16 @@ export default {
     await this.getLegalList()
     this.getPaymentList() // 获取收款方式列表
     this.getAdvertisers() // 获取商户信息
+    this.getPayType()
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV']),
+    /* 查询支持收款方式 */
+    getPayType() {
+      getPayType().then(res => {
+        this.payTypeList = res
+      })
+    },
     /* 商户申请 */
     handleSubmit(name) {
       console.log(JSON.parse(JSON.stringify(this.formApply)))
@@ -345,7 +361,7 @@ export default {
     sideChange() {
       this.releaseForm.paymentIds = []
     },
-    /* 发布广告 */
+    /* 发布广告提交 */
     submitRelease(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {

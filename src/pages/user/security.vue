@@ -3,7 +3,7 @@
     <div class="page-con u-p-t-20 u-p-b-20">
       <div class="header u-font-14 u-flex u-row-between u-col-bottom">
         <div class="left u-flex">
-          <div class="icon-wrap">
+          <div class="icon-wrap u-p-t-6">
             <Icon type="md-person" size="38" />
           </div>
           <div class="u-p-l-10">
@@ -17,15 +17,15 @@
             </p>
           </div>
         </div>
-        <div class="right u-font-12">{{ $t('security.zhdl') }} xxxxxx</div>
+        <!-- <div class="right u-font-12">{{ $t('security.zhdl') }} xxxxxx</div> -->
       </div>
       <!-- 邀请链接 -->
       <div
-        class="certification u-m-t-20 u-p-20 u-flex u-row-between u-col-bottom"
+        class="certification u-m-t-20 u-p-20"
       >
         <div>
           <h2>邀请</h2>
-          <div class="u-p-t-10 u-flex">
+          <div class="u-p-t-10 link-wrap">
             <div>
               <p class="u-font-12">邀请链接</p>
               <div class="u-flex">
@@ -35,7 +35,7 @@
                   v-clipboard:success="copySuccess"/>
               </div>
             </div>
-            <div class="u-m-l-40">
+            <div class="right">
               <p class="u-font-12">我的邀请码</p>
               <div class="u-flex">
                 <p>{{ userInfo.inviteCode }}</p>
@@ -241,25 +241,27 @@
                 </p>
               </div>
             </div>
-            <!-- 已绑定 -->
-            <div v-if="securityInfo.emailSetting[0]">
-              <span>{{ securityInfo.email }}</span>
-              <span class="u-link u-m-l-20" @click="editEemailShowa = true"
-                >{{ $t('security.ghyx') }}</span
-              >
-              <span
-                class="u-link u-m-l-20"
-                @click="onOff(3)"
-                v-if="securityInfo.emailSetting[1]"
-                >{{ $t('security.gbyz') }}</span
-              >
-              <span class="u-link u-p-l-20" @click="onOff(8)" v-else
-                >{{ $t('security.kqyz') }}</span
-              >
-            </div>
-            <!-- 未绑定 -->
-            <div v-else>
-              <span class="u-link" @click="emailShow = true">{{ $t('security.bding') }}</span>
+            <div class="u-text-right">
+              <!-- 已绑定 -->
+              <div v-if="securityInfo.emailSetting[0]">
+                <span>{{ securityInfo.email }}</span>
+                <span class="u-link u-m-l-20" @click="editEemailShowa = true"
+                  >{{ $t('security.ghyx') }}</span
+                >
+                <span
+                  class="u-link u-m-l-20"
+                  @click="onOff(3)"
+                  v-if="securityInfo.emailSetting[1]"
+                  >{{ $t('security.gbyz') }}</span
+                >
+                <span class="u-link u-p-l-20" @click="onOff(8)" v-else
+                  >{{ $t('security.kqyz') }}</span
+                >
+              </div>
+              <!-- 未绑定 -->
+              <div v-else>
+                <span class="u-link" @click="emailShow = true">{{ $t('security.bding') }}</span>
+              </div>
             </div>
 
             <!-- 更换邮箱 - 第1步 -->
@@ -449,25 +451,27 @@
                 </p>
               </div>
             </div>
-            <!-- 已绑定 -->
-            <div v-if="securityInfo.mobileSetting[0]">
-              <span>{{ securityInfo.mobile }}</span>
-              <span class="u-link u-m-l-20" @click="mobileShowa = true"
-                >{{ $t('security.ghsj') }}</span
-              >
-              <span
-                class="u-link u-m-l-20"
-                @click="onOff(1)"
-                v-if="securityInfo.mobileSetting[1]"
-                >{{ $t('security.gbyz') }}</span
-              >
-              <span class="u-link u-p-l-20" @click="onOff(7)" v-else
-                >{{ $t('security.kqyz') }}</span
-              >
-            </div>
-            <!-- 未绑定 -->
-            <div v-else>
-              <span class="u-link" @click="bindFn">{{ $t('security.bding') }}</span>
+            <div class="u-text-right">
+              <!-- 已绑定 -->
+              <div v-if="securityInfo.mobileSetting[0]">
+                <span>{{ securityInfo.mobile }}</span>
+                <span class="u-link u-m-l-20" @click="mobileShowa = true"
+                  >{{ $t('security.ghsj') }}</span
+                >
+                <span
+                  class="u-link u-m-l-20"
+                  @click="onOff(1)"
+                  v-if="securityInfo.mobileSetting[1]"
+                  >{{ $t('security.gbyz') }}</span
+                >
+                <span class="u-link u-p-l-20" @click="onOff(7)" v-else
+                  >{{ $t('security.kqyz') }}</span
+                >
+              </div>
+              <!-- 未绑定 -->
+              <div v-else>
+                <span class="u-link" @click="bindFn">{{ $t('security.bding') }}</span>
+              </div>
             </div>
 
             <!-- 绑定手机 -->
@@ -711,24 +715,27 @@
                 </p>
               </div>
             </div>
-            <!-- 已绑定 -->
-            <div v-if="securityInfo.googleSetting[0]">
-              <span class="u-link u-m-l-20" @click="googleFn(1)"
-                >{{ $t('security.ghgg') }}</span
-              >
-              <span
-                class="u-link u-m-l-20"
-                @click="onOff(9)"
-                v-if="!securityInfo.googleSetting[1]"
-                >{{ $t('security.kqyz') }}</span
-              >
-              <span class="u-link u-m-l-20" @click="onOff(5)" v-else
-                >{{ $t('security.gbyz') }}</span
-              >
-            </div>
-            <!-- 未绑定 -->
-            <div v-else>
-              <span class="u-link" @click="googleFn(0)">{{ $t('security.bdgg') }}</span>
+
+            <div class="u-text-right">
+              <!-- 已绑定 -->
+              <div v-if="securityInfo.googleSetting[0]">
+                <span class="u-link u-m-l-20" @click="googleFn(1)"
+                  >{{ $t('security.ghgg') }}</span
+                >
+                <span
+                  class="u-link u-m-l-20"
+                  @click="onOff(9)"
+                  v-if="!securityInfo.googleSetting[1]"
+                  >{{ $t('security.kqyz') }}</span
+                >
+                <span class="u-link u-m-l-20" @click="onOff(5)" v-else
+                  >{{ $t('security.gbyz') }}</span
+                >
+              </div>
+              <!-- 未绑定 -->
+              <div v-else>
+                <span class="u-link" @click="googleFn(0)">{{ $t('security.bdgg') }}</span>
+              </div>
             </div>
 
             <!-- 谷歌验证 -->
@@ -799,7 +806,7 @@
                 <p class="u-font-12">{{ $t('security.yybh') }}</p>
               </div>
             </div>
-            <div>
+            <div class="u-text-right">
               <!-- 修改 -->
               <span
                 class="u-link"
@@ -942,7 +949,7 @@
                 <p class="u-font-12">{{$t('security.yybhzc')}}</p>
               </div>
             </div>
-            <div>
+            <div class="u-text-right">
               <span
                 class="u-link"
                 @click="capitalPsShow = true"
@@ -2171,8 +2178,6 @@ export default {
   min-height: 100vh;
 }
 .page-con {
-  width: 1200px;
-  margin: 0 auto;
   .header {
     background-color: #fff;
     border-radius: 7px;
@@ -2224,9 +2229,6 @@ export default {
       margin-top: -7px;
       background-color: #fff;
       li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         padding: 20px;
       }
       li:last-child {
@@ -2249,5 +2251,43 @@ export default {
   height: 140px;
   border-radius: 8px;
   margin: 10px 0;
+}
+/* PC端 */
+@media (min-width: 768px) {
+  .page-con {
+    width: 1200px;
+    margin: 0 auto;
+  }
+  .link-wrap {
+    display: flex;
+    .right {
+      margin-left: 40px;
+    }
+  }
+  .list-wrap {
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+/* 手机端 */
+@media (max-width: 767px) {
+  .hidden-xs {
+    display: none !important;
+  }
+  .link-wrap {
+    .right {
+      margin-top: 20px;
+    }
+  }
+  .list-wrap {
+    li {
+      div:nth-child(1) {
+        margin-top: 20px;
+      }
+    }
+  }
 }
 </style>

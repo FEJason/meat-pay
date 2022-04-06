@@ -279,7 +279,7 @@ export default {
 @media (max-width: 767px) {
   .orders-wrap {
     width: 100%;
-    padding: 0 24px;
+    padding: 0 12px;
   }
   .xs-list {
     font-size: 14px;
