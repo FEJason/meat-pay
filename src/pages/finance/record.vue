@@ -33,7 +33,7 @@
           </Table>
         </div>
         <!-- 移动端列表 -->
-        <ul class="xs-list hidden-lg" v-for="row in tableData" :key="row.currencyId">
+        <ul class="xs-list hidden-lg" v-for="row in tableData" :key="row.timeStamp">
           <li>
             <div>时间</div>
             <div>

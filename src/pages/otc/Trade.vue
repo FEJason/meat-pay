@@ -416,7 +416,7 @@
                   <!-- 数量 -->
                   <div class="u-p-r-26">
                     <div class="u-p-b-10">{{ $t('trade.number') }}</div>
-                    <div>{{ advInfo.account }} {{ advInfo.currencyName }}</div>
+                    <div>{{ advInfo.balance }} {{ advInfo.currencyName }}</div>
                   </div>
                   <!-- 限额 -->
                   <div class="u-p-r-26">
@@ -660,7 +660,7 @@
               <!-- 数量 -->
               <div class="u-flex u-font-16 u-m-b-30">
                 <div class="u-p-r-10">{{ $t('trade.number') }}</div>
-                <div>{{ advInfo.account }} {{ advInfo.currencyName }}</div>
+                <div>{{ advInfo.balance }} {{ advInfo.currencyName }}</div>
               </div>
               <Form
                 ref="formInline2"
@@ -963,15 +963,14 @@ export default {
       this.buyOrSell = this.$route.params.c.split('-')[0]
       this.coinActive = this.$route.params.c.split('-')[1]
     }
-    // this.SET_ATCIVENAV(this.buyOrSell == 'buy' ? 'nav-buy' : 'nav-sell')
 
-    try {
-      await this.getCurrencyList()
-      await this.getLegalList()
-      this.loadAd(1) // 获取广告
+    await this.getCurrencyList()
+    await this.getLegalList()
+    this.loadAd(1) // 获取广告
+
+    if (this.isLogin) {
       this.queryPayWay() // 获取支付方式
-    } catch {}
-   
+    }
   },
   computed: {
     ...mapState(['isLogin', 'certificationInfo'])
@@ -1192,7 +1191,7 @@ export default {
             return item.currency == this.coinActive.toUpperCase()
           })
           this.coinActiveScale = arr[0].withdrawScale
-          resolve()
+          resolve(res)
         })
       })
     },

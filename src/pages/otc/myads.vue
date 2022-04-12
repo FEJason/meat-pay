@@ -131,7 +131,7 @@
                     </Select>
                 </FormItem>
                 <!-- 法币 -->
-                <FormItem :label="$t('trade.fb')" prop="fiatId" class="u-flex-1 u-m-l-10">
+                <FormItem :label="$t('trade.fb')" prop="fiatId" class="u-flex-1 pc-fiat">
                     <Select v-model="releaseForm.fiatId" size="large" :placeholder="$t('publice.qxz')">
                         <Option v-for="item in legalList" :value="item.id + ',' + item.fiatCurrency" :key="item.id">{{ item.fiatCurrency }}</Option>
                     </Select>
@@ -437,6 +437,9 @@ export default {
   }
   .p-flex {
     display: flex;
+  }
+  .pc-fiat {
+    margin-left: 10px;
   }
 }
 /* 手机端 */

@@ -99,11 +99,13 @@
                   <Button type="primary" @click="receivedModal = true"
                     v-if="isSell"
                     >我已收到转账，下一步</Button>
-                  <!-- 未收到资产，申述 -->
+                  <!-- 买家未收到资产，申述 -->
                   <div v-if="isBuy">
                     <span class="u-p-r-10">{{ $t('orderInfo.ddmj') }}</span>
                     <Button type="primary" @click="showPlead = true">{{ $t('orderInfo.ss') }}</Button>
                   </div>
+                  <!-- 卖家申诉 -->
+                  <Button class="u-m-l-10" @click="showPlead = true" v-if="isSell">{{ $t('orderInfo.ss') }}</Button>
                 </div>
 
               </div>
@@ -269,8 +271,11 @@
         <div class="title u-font-20" slot="header">申诉</div>
         <Form ref="formPlead" :model="formPlead" :rules="rules" label-position="top">
           <FormItem label="申述理由" prop="type">
-            <Select v-model="formPlead.type" placeholder="请选择">
-              <Option :value="item.value" v-for="item in pleadList" :key="item.value">{{ item.name }}</Option>
+            <Select v-model="formPlead.type" placeholder="请选择" v-if="isBuy">
+              <Option :value="item.value" v-for="item in buyPleadList" :key="item.value">{{ item.name }}</Option>
+            </Select>
+            <Select v-model="formPlead.type" placeholder="请选择" v-if="isSell">
+              <Option :value="item.value" v-for="item in sellPleadList" :key="item.value">{{ item.name }}</Option>
             </Select>
           </FormItem>
           <FormItem label="联系电话" prop="contactPhone">
@@ -282,7 +287,7 @@
           <FormItem label="申述说明" prop="directions">
             <Input v-model="formPlead.directions" type="textarea"></Input>
           </FormItem>
-          <FormItem label="申诉截图（最多上传3张，上传图片大小不能超过2M）">
+          <FormItem label="申诉截图（最多上传3张图，上传图片大小不能超过2M）">
             <!-- <Upload
               ref="upload5"
               :before-upload="beforeUpload5"
@@ -316,7 +321,6 @@
               :on-success="handHandleSuccess5"
               :headers="uploadHeaders"
               :action="uploadUrl"
-              multiple
               type="drag"
               style="display: inline-block;width:58px;">
               <div style="width: 58px;height:58px;line-height: 58px;">
@@ -357,11 +361,17 @@ export default {
       imgFile: '',
       message: '',
       messageList: [],
-      pleadList: [
-        { name: '卖家不放币', value: '1'},
-        { name: '买家长时间不付款', value: '2'},
-        { name: '买家付款错误', value: '3'},
-        { name: '其他', value: '4'},
+      buyPleadList: [
+        { name: '已付款，卖家未放行', value: '已付款，卖家未放行'},
+        { name: '向卖家多转了钱', value: '向卖家多转了钱'},
+        { name: '卖家涉嫌诈骗', value: '卖家涉嫌诈骗'},
+        { name: '其他', value: '其他'},
+      ],
+      sellPleadList: [
+        { name: '没有收到付款', value: '没有收到付款'},
+        { name: '没有付款，但金额不符', value: '没有付款，但金额不符'},
+        { name: '买家涉嫌诈骗', value: '买家涉嫌诈骗'},
+        { name: '其他', value: '其他'},
       ],
       pleadLoading: false,
       viewIimgVisible: false,
@@ -624,7 +634,7 @@ export default {
     /* 申述 */
     confirmPlead(name) {
       console.log(JSON.parse(JSON.stringify(this.formPlead)))
-      return 
+      // return 
       this.$refs[name].validate((valid) => {
         if (valid) {
           plead({
@@ -809,19 +819,11 @@ export default {
   .content-wrap {
     padding: 50px 0;
     .content {
-      width: 1200px;
-      margin: 0 auto;
-      border-radius: 4px;
-      display: flex;
-      justify-content: space-between;
-      height: 580px;
       .left{
         background-color: #FFF;
         border-radius: 8px;
       }
       .right {
-        width: 340px;
-        margin-left: 20px;
         display: flex;
         flex-direction: column;
         background-color: #FFF;
@@ -924,9 +926,18 @@ export default {
 }
 @media (min-width: 768px) {
   .content {
+    width: 1200px;
+    margin: 0 auto;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
     min-height: 465px;
     .left{
       flex: 1;
+    }
+    .right {
+      width: 340px;
+      margin-left: 20px;
     }
   }
 }
@@ -939,6 +950,9 @@ export default {
       padding-top: 10px;
       .content {
         width: 100%;
+        .right {
+          margin-top: 20px;
+        }
       }
     }
   }
