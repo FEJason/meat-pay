@@ -1367,15 +1367,7 @@ export default {
   border-radius: 4px;
   margin: 4px 8px 4px 0;
 }
-// 币种tab
-.tab-wrap {
-  width: 1200px;
-  margin: 0 auto;
-  .p-flex {
-    display: flex;
-    align-items: center;
-  }
-}
+
 .screen-wrap {
   width: 1200px;
   height: 98px;
@@ -1528,7 +1520,7 @@ export default {
 }
 
 .xs-list-wrap {
-  padding: 30px 24px 0;
+  padding: 0 24px 0;
   .card {
     background-color: #fff;
     border: 1px solid #ecf1f8;
@@ -1573,17 +1565,24 @@ export default {
     color: #fff;
   }
 }
+/* PC端 */
+@media (min-width: 768px) {
+  // 币种tab
+  .tab-wrap {
+    width: 1200px;
+    margin: 0 auto;
+    .p-flex {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
 
 /* 手机端 */
 @media (max-width: 767px) {
-  .content {
-    .p-flex {
-      display: block;
-    }
-  }
   .tab-wrap {
     width: 100%;
-    padding: 0 24px;
+    padding: 1px 24px 0;
   }
   .table-wrap {
     border-radius: 40px 40px 0 0;

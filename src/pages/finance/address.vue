@@ -39,7 +39,7 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="提币地址" prop="address" style="width: 400px">
+        <FormItem label="提币地址" prop="address" style="width: 400px" class="address-input">
           <Input v-model="formValidate.address" size="large" placeholder="提币地址"></Input>
         </FormItem>
         <FormItem label="备注" prop="alias" style="width: 260px">
@@ -60,7 +60,7 @@
 
     <div class="table">
       <div class="title u-font-14">地址列表</div>
-      <Table :columns="columns" :data="addressList">
+      <Table :columns="columns" :data="addressList" class="hidden-xs">
         <template slot-scope="{ row, index }" slot="slotAddress">
           <span class="u-font-12">{{ row.address }}</span>
         </template>
@@ -68,6 +68,29 @@
           <Button size="small" type="primary" ghost @click="remove(row)">删除</Button>
         </template>
       </Table>
+
+      <ul class="xs-list hidden-lg" v-for="row in addressList" :key="row.id">
+        <li>
+          <div>币种</div>
+          <div>{{ row.currencyName }}</div>
+        </li>
+        <li>
+          <div>提币地址</div>
+          <div>{{ row.address }}</div>
+        </li>
+        <li>
+          <div>备注</div>
+          <div>
+            <span style="color: #19be6b">{{ row.alias }}</span>
+          </div>
+        </li>
+        <li>
+          <div>操作</div>
+          <div>
+            <Button size="small" type="primary" ghost @click="remove(row)">删除</Button>
+          </div>
+        </li>
+      </ul>
     </div>
 
     <safeModal
@@ -272,4 +295,28 @@ fieldset[disabled] .ivu-input {
     }
   }
 }
+/* 手机端 */
+@media (max-width: 767px) {
+  .page-wrap {
+    width: 100%;
+  }
+  ::v-deep .ivu-form-inline .ivu-form-item {
+    display: block;
+  }
+  .address-input {
+    width: 100% !important;
+  }
+  .xs-list {
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    li {
+      min-height: 26px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
 </style>

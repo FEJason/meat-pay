@@ -40,7 +40,9 @@ export default {
     getMessageInfo() {
       getMessageInfo(this.id).then(res => {
         this.info = res
-        this.editMessageRead()
+        if (res.isRead == 0) {
+          this.editMessageRead()
+        }
       })
     },
     /* 已读 */
@@ -90,8 +92,13 @@ export default {
     h2 {
       position: relative;
       padding-top: 20px;
-      font-size: 20;
       font-weight: bold !important;
+    }
+    ::v-deep ul, ::v-deep ol, ::v-deep li {
+      list-style: initial !important;
+    }
+    ::v-deep li {
+      margin-left: 2em;
     }
   }
 }

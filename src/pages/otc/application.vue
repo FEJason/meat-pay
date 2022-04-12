@@ -164,14 +164,21 @@
 
         <div v-if="stepsCurrent == 1">
           <div class="u-m-t-70">
+            <!-- <video :src="videoProve" width="320" height="240" controls v-if="videoProve"></video> -->
+            <div class="u-font-20 u-text-center" v-if="videoProve">视频已上传成功</div>
             <Upload
               type="drag"
               accept="video/*"
-              action="//jsonplaceholder.typicode.com/posts/">
+              :before-upload="beforeUpload"
+              :on-success="handHandleSuccess"
+              :headers="uploadHeaders"
+              :action="uploadUrl"
+              :show-upload-list="false"
+              v-else>
               <div style="padding: 20px 0">
                   <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                   <p class="u-p-b-10">点击或者拖拽文件到此上传</p>
-                  <Button type="primary">点击上传</Button>
+                  <Button type="primary" :loading="uploadLoading">点击上传</Button>
               </div>
             </Upload>
             
@@ -210,11 +217,15 @@ import { merchantApply } from '@/api/myads'
 export default {
   data() {
     return {
+      uploadLoading: false,
+      uploadHeaders: { 'Authorization': 'Bearer ' + localStorage.token },
+      uploadUrl: this.host + process.env.VUE_APP_UPLOAD,
       bindLoading: false,
       idLoading: false,
       depLoading: false,
       stepsCurrent: 0,
       formApply: {},
+      videoProve: '',
       rules: {
         storeName: [
           { required: true, message: '请输入', trigger: "blur" }
@@ -253,6 +264,23 @@ export default {
   },
   methods: {
     ...mapActions(['getSecurity', 'getCertification']),
+    /* 上传前 */
+    beforeUpload(data) {
+      if (data && data.size >= 1024000 * 200) {
+        this.$Message.error('上传视频大小不能超过200M')
+        return false
+      }
+      this.uploadLoading = true
+    },
+    /* 上传成功 */
+    handHandleSuccess(res, file, fileList) {
+      this.uploadLoading = false
+      if (res.code == 0) {
+        this.videoProve = res.data.url
+      } else {
+        this.$Message.error(res.message)
+      }
+    },
     /* 刷新 */
     refresh(val) {
       switch(val) {
@@ -284,8 +312,6 @@ export default {
     },
     /* 第一步 */
     handleNext(name) {
-      // console.log(JSON.parse(JSON.stringify(this.formApply)))
-      // return
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.stepsCurrent = 1
@@ -294,13 +320,17 @@ export default {
     },
     /* 第二步 */
     handleSubmit() {
+      if (!this.videoProve) {
+        this.$Message.error('请先上传视频认证！')
+        return false
+      }
       this.applyLoading = true
       merchantApply({
         ...this.formApply,
         // 视频认证 路径 必填
-        "videoProve": "/and/123123",
+        videoProve: this.videoProve,
         // 资产截图 路径 必填
-        "assetsProve": "abc",
+        assetsProve: "",
       }).then(() => {
         this.stepsCurrent = 2
       }).finally(() => {
