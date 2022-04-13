@@ -91,8 +91,8 @@
             <template slot="title" class="lang-title">
               <span style="color: hsla(0,0%,100%,.8)">{{ languageValue }}</span>
             </template>
-            <MenuItem name="en" class="lang-item">English</MenuItem>
-            <MenuItem name="zh" class="lang-item">繁體中文</MenuItem>
+            <!-- <MenuItem name="en" class="lang-item">English</MenuItem> -->
+            <!-- <MenuItem name="zh" class="lang-item">繁體中文</MenuItem> -->
             <MenuItem name="zh-CN" class="lang-item">简体中文</MenuItem>
           </Submenu>
         </Menu>

@@ -9,7 +9,7 @@ export default new Vuex.Store({
         isLogin: localStorage.token || false,
         // 当前选中的导航
         activeNav: '',
-        // 语言你
+        // 语言
         lang: localStorage.LANGUAGE || 'zh-CN',
         // 头部背景色 - 首页透明、固定定位
         headerStyle: '',

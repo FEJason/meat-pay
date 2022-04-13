@@ -84,7 +84,7 @@ router.afterEach((to, from) => {
 });
 
 const i18n = new VueI18n({
-	locale: 'zh',
+	locale: 'zh-CN',
 	messages: {
 		'zh-CN': require('./assets/lang/cn.js'), // 简体
 		'en': require('./assets/lang/en.js'), // 英文
