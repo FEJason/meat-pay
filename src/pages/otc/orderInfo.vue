@@ -178,6 +178,8 @@
               <div class="u-relative">
                 <Upload
                   ref="upload1"
+                  accept="image/*"
+                  :format="['jpg','jpeg','png']"
                   :before-upload="beforeUpload"
                   :on-success="handHandleSuccess"
                   :headers="uploadHeaders"
@@ -316,6 +318,7 @@
             <Upload
               ref="upload5"
               :show-upload-list="false"
+              accept="image/*"
               :format="['jpg','jpeg','png']"
               :before-upload="beforeUpload5"
               :on-success="handHandleSuccess5"
@@ -500,11 +503,20 @@ export default {
       }
     },
     /* 图片上传前 */
-    beforeUpload(data) {
-      if (data && data.size >= 1024000 * 2) {
-        this.$Message.error('上传图片大小不能超过2M')
+    beforeUpload(file) {
+      const isJPG_OR_PNG =
+        file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG_OR_PNG) {
+        this.$Message.error('发送图片只能是 JPG/PNG 格式!')
         return false
       }
+      if (!isLt2M) {
+        this.$Message.error('发送图片大小不能超过 2MB!')
+        return false
+      }
+
       this.messageImgLoading = true
     },
     /* 图片上传成功 */
@@ -877,6 +889,7 @@ export default {
           bottom: 0;
           left: 0;
           width: 100%;
+          background-color: #fff;
           ::v-deep textarea {
             resize: none;
           }
