@@ -475,7 +475,6 @@ export default {
     },
     /* 删除图片 */
     handleRemove (file) {
-      console.log(file)
       const fileList = this.$refs.upload5.fileList;
       this.$refs.upload5.fileList.splice(fileList.indexOf(file), 1);
     },
@@ -522,11 +521,7 @@ export default {
     /* 图片上传成功 */
     handHandleSuccess(res, file, fileList) {
       this.messageImgLoading = false
-      console.log('res', res)
-      // this.$refs.upload1.fileList = [fileList[fileList.length - 1]]
       if (res.code == 0) {
-        // this.chatImgUrl = res.data.url
-
         let groupRequest = {
             token: this.token,
             roomId: this.orderInfo.id,
@@ -584,7 +579,7 @@ export default {
       let url = `${process.env.VUE_APP_OTC_WS}/otc?Authorization=` + this.token;
       this.socket = io.connect(url);
       this.socket.on('connect', function () {
-        console.log('连接成功')
+        console.log('socket连接成功')
       });
 
       // 加入聊天
@@ -594,7 +589,7 @@ export default {
 
       }
       this.socket.emit('join_room', joinRequest, function(data) {
-        console.log('加入成功')
+        console.log('加入聊天成功')
       });
 
       // 插入聊天消息
@@ -613,7 +608,6 @@ export default {
       // });
     },
     sendMessages() {
-      console.log('回车', this.token)
       if (this.message === '') {
         return;
       }
@@ -645,8 +639,6 @@ export default {
     },
     /* 申述 */
     confirmPlead(name) {
-      console.log(JSON.parse(JSON.stringify(this.formPlead)))
-      // return 
       this.$refs[name].validate((valid) => {
         if (valid) {
           plead({
