@@ -85,8 +85,8 @@ export default {
   data() {
     return {
       active: this.$route.query.active || 0,
-      tableTitle: '充币记录',
-      tabList: ['充币记录', '提币记录'],
+      tableTitle: this.$t('finance.congbjl'),
+      tabList: [this.$t('finance.congbjl'), this.$t('finance.tbjl')],
       formatStatus: {
         0: '待审核',
         1: '进行中',
@@ -102,26 +102,26 @@ export default {
       tableData: [],
       columns: [
         {
-          title: '时间',
+          title: this.$t('finance.sj'),
           key: 'createTime'
         },
         {
-          title: '币种',
+          title: this.$t('finance.bz'),
           key: 'currencyName'
         },
         {
-          title: '类型',
+          title: this.$t('finance.leix'),
           align: 'right',
           slot: 'slotBillType',
           key: 'billType'
         },
         {
-          title: '数量',
+          title: this.$t('finance.shul'),
           align: 'right',
           key: 'amount'
         },
         {
-          title: '状态',
+          title: this.$t('finance.zhuangt'),
           align: 'right',
           slot: 'status'
         },

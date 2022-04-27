@@ -1,6 +1,6 @@
 // 使用百度在线翻译简体 - 翻译结果 key 首字母为大写
 // let obj = {}
-// 将对象 key 首字母改成小写，内容首字母改成大写
+// 将对象 key 改成小写，内容首字母改成大写
 // let obj2 = {}
 // for(let key in obj) {
 //     obj2[key.toLowerCase()] = obj[key].charAt(0).toUpperCase() + obj[key].slice(1)
@@ -9,31 +9,25 @@
 
 module.exports = {
     publice: {
-        ts: 'Tips',
-        cg: 'Success',
-        qxz: 'Select',
-        zwsj: 'No data'
+        "ts": "Prompt",
+        "cg": "Success!",
+        "qxz": "Please select",
+        "zwsj": "No data yet",
+        "qx": "Cancel",
+        "qd": "OK"
     },
     header: {
-        "index": "Home",
         "buymoney": "Buy",
-        "exchange": "Exchange",
-        "assets": "Assets",
-        "account": "Asset overview",
-        "spot": "Currency account",
-        "otc": "Legal currency account",
-        "deposit": "Recharge",
-        "withdraw": "Withdraw money",
+        "sellmoney": "Sell",
+        "wdgg": "My ad",
+        "qb": "Wallet",
         "order": "Order",
-        "transac": "Order in currency",
-        "orders": "Order in legal currency",
-        "security": "Account & Security",
-        "setpayment": "Collection settings",
+        "congz": "Recharge",
+        "security": "Account &security",
+        "setPayment": "Collection settings",
         "logout": "Log out",
         "login": "Login",
-        "reg": "Registration",
-        "appdownlaod": "App download",
-        "downloadapp": "Scan and download app"
+        "reg": "Register"
     },
     footer: {
         "bah": "Copyright @2012-2022 www.meta Com all rights reserved ",
@@ -53,36 +47,40 @@ module.exports = {
         "fbjygz": "Transaction rules in legal currency"
     },
     home: {
-        "zfb": "Increase list",
-        "ckgd": "View more",
-        "jrjaq": "Financial security",
-        "qfw": "Comprehensive financial risk control system and anti-theft system, hot and cold wallet and multi signature system to ensure capital security",
-        "jscz": "Rapid charging",
-        "cztx": "Recharge and withdrawal can be completed in 3 minutes at the fastest, and 24h manual online audit can protect customers from missing the best investment opportunity",
-        "qqfw": "Global service",
-        "qqyw": "Global business service network coverage to help you invest in global encrypted assets and trade with global users",
-        "yxzc": "Strictly select assets",
-        "ygxz": "Strictly select high-quality encryption projects to filter 80% of high-risk projects for you",
-        "sssd": "Open secure transactions anytime, anywhere",
-        "smxz": "Code scanning and downloading",
-        "jyd": "Transaction pair",
-        "jg": "Price",
-        "zdf": "Price range",
-        "zgj": "24H maximum price",
-        "zdj": "24H lowest price",
-        "cjl": "24H trading volume"
+        "qqzaq": "The safest C2C trading platform in the world",
+        "mmszhb": "In expay, you can buy and sell digital currency safely and portable with 0 handling charge",
+        "ljgm": "Buy now",
+        "yi": "Billion",
+        "bz": "Currency",
+        "zxj": "Latest price",
+        "zdf": "Rise and fall range",
+        "ltsz": "Current market value",
+        "dys": "Advantages",
+        "aqkk": "Safe and reliable",
+        "qwzy": "The strictest risk control in the whole network, with T + 1 and T + 2 withdrawal restrictions. Face recognition + big data to identify money laundering and fraud. ",
+        "qqfg": "Global coverage",
+        "wlnszhc": "No matter where you are, eBay can provide you with support, support more than 50 payment methods and more than 10 legal currencies, and serve users all over the world.",
+        "xd0sxf": "Order 0 handling fee",
+        "yhkyz": "Users can place an order to buy or sell digital currency on the express platform and enjoy 0 service charge discount."
     },
 
     trade: {
         main: {
-            zxjy: 'Optional transaction',
-            help: 'Help center',
-            set: 'Set',
-            skfs: 'Collection method management',
-            rzxx: 'Authentication information',
-            wdgg: 'My ad',
-            order: 'Order'
+            "lsgg": "Historical advertising",
+            "zxjy": "Optional transaction",
+            "help": "Help center",
+            "set": "Set",
+            "skfs": "Collection method management",
+            "rzxx": "Authentication information",
+            "wdgg": "My ad",
+            "order": "Order"
         },
+        "sxsz": "Refresh",
+        "zbcl": "Not processing temporarily",
+        "zdsx5": "Automatic refresh in 5 seconds",
+        "zdsx10": "Automatic refresh in 10 seconds",
+        "zdsx20": "Automatic refresh in 20 seconds",
+        "cdl": "Order quantity",
         "buy": "Buy",
         "sell": "Sell",
         "cwsj": "Become a merchant",
@@ -96,14 +94,14 @@ module.exports = {
         "zffs": "Payment method",
         "jy": "Transaction",
         "number": "Quantity",
-        "xe": "Limit",
+        "limit": "Xe",
         "rzyh": "Certified user | paid guaranteed assets:",
         "email": "Email",
         "phone": "Mobile phone",
         "sm": "Real name",
         "gj": "Advanced",
         "zj": "Total price",
-        "mffk": "The buyers payment time limit is 15 minutes | settlement to the legal currency account",
+        "mffk": "The buyer payment time limit is 15 minutes",
         "wbhnd": "In order to protect the safety of your assets, the purchase of assets will be implemented",
         "tbxz": "Withdrawal limit",
         "cancel": "Cancel",
@@ -118,8 +116,7 @@ module.exports = {
         "wx": "Wechat",
         "yhk": "Bank card",
         "jysm": "Transaction description",
-        "fbgg": "Publish advertisement"
-
+        "fbgg": "Advertising"
     },
     orderInfo: {
         "ddyqx": "Order cancelled",
@@ -138,7 +135,7 @@ module.exports = {
         "qwbsy": "Please use me",
         "zxzz": "The payment method is self transfer to the following account number.",
         "ddmj": "Wait for the seller to confirm the collection. If you haven received the asset for a long time, you can contact the seller or appeal to the customer service",
-        "lxkf": "Contact customer service",
+        "lxkf": "Service",
         "qxd": "Cancel order",
         "bkck": "Order cancelled, payment method cannot be viewed",
         "ryyw": "If you have any questions, please contact customer service",
@@ -156,31 +153,45 @@ module.exports = {
         "wbxjy": "I don want to trade",
         "bmzgg": "ZGG not satisfied",
         "mjyew": "The seller needs to charge extra fees",
-        "mjskfsy": "There is a problem with the seller collection method and payment cannot be made successfully",
+        "mjskfsy": "There is a problem with the seller collection method",
         "qt": "Other",
         "qxzqx": "Please select cancellation reason!",
         "ddqxcg": "Order cancelled successfully!"
     },
     finance: {
-        "zcgl": "Asset management",
-        "zczl": "Asset overview",
-        "bbzh": "Currency",
-        "fbzh": "Legal",
-        "jcfw": "Check the website, enable secondary verification, and do not transfer money or disclose passwords to staff claiming to be meta life.",
-        "jrsy": "Todays revenue",
-        "hz": "Transfer",
+        "qb": "Wallet",
+        "zjzh": "Fund account",
+        "cbtbjl": "Record",
+        "zcgz": "Asset valuation",
+        "congz": "Recharge",
         "tb": "Withdrawal",
-        "gm": "Purchase",
-        "cs": "Sale",
-        "cwjl": "Financial records",
-        "ss": "Search",
-        "ycxe": "Hide small currency",
-        "jmhb": "Cryptocurrency",
+        "cztbjl": "Recharge and withdrawal record",
+        "yc0zc": "Hide 0 asset",
         "bz": "Currency",
         "ky": "Available",
         "dj": "Frozen",
+        "btcgz": 'BTC valuation',
         "cz": "Operation",
-        "fbjyjl": "Transaction record in legal currency"
+        "ss": "Search",
+
+        "congbjl": "Charging record",
+        "tbjl": "Currency withdrawal record",
+        "sj": "Time",
+        "leix": "Type",
+        "shul": "Quantity",
+        "zhuangt": "Status"
+    },
+    myads: {
+        "wdgg": "My ad",
+        "lisigg": "Historical advertising",
+        "fabuxgg": "Publish new advertisement",
+        "sqsh": "Applying merchant",
+        "nxyxsq": "You need to apply for a merchant first",
+        "xzsq": "Apply now",
+        "nszgdsh": "You are a noble merchant, go and trade",
+        "shenqz": "In application Please wait patiently. There will be staff review within 24 hours",
+        "shenqwtg": "Application failed, please re apply",
+        "gaishyb": "The merchant has been disabled"
     },
     deposit: {
         "fh": "Return",

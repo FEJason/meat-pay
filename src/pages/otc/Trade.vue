@@ -110,10 +110,10 @@
             <Dropdown trigger="click" @on-click="clickRefresh">
               <Button icon="md-refresh" class="u-m-l-10" :loading="refreshLoading">{{ refreshText }}</Button>
               <DropdownMenu slot="list">
-                <DropdownItem name="0">暂不处理</DropdownItem>
-                <DropdownItem name="5">5秒自动刷新</DropdownItem>
-                <DropdownItem name="10">10秒自动刷新</DropdownItem>
-                <DropdownItem name="20">20秒自动刷新</DropdownItem>
+                <DropdownItem name="0" v-text="$t('trade.zbcl')">暂不处理</DropdownItem>
+                <DropdownItem name="5" v-text="$t('trade.zdsx5')">5秒自动刷新</DropdownItem>
+                <DropdownItem name="10" v-text="$t('trade.zdsx10')">10秒自动刷新</DropdownItem>
+                <DropdownItem name="20" v-text="$t('trade.zdsx20')">20秒自动刷新</DropdownItem>
               </DropdownMenu>
           </Dropdown>
           </div>
@@ -146,7 +146,7 @@
                       </div>
                       <div>
                         <div class="u-font-bold">{{ row.adName }}</div>
-                        <div class="u-font-12" style="color: #495666">成单量: {{ `${row.volume} | 99%`}}</div>
+                        <div class="u-font-12" style="color: #495666">{{$t('trade.cdl')}}: {{ `${row.volume} | 99%`}}</div>
                       </div>
                       
                     </div>
@@ -936,7 +936,7 @@ export default {
         //   totalElement: 0,
         // },
       },
-      refreshText: '刷新设置',
+      refreshText: this.$t('trade.sxsz'),
       refreshTime: null,
       refreshLoading: false,
       pages: {
@@ -989,21 +989,19 @@ export default {
     },
     /* 选择刷新时间 */
     clickRefresh(name) {
-      console.log(name)
-
       switch(name) {
         case '0':
           this.refreshTime && clearTimeout(this.refreshTime)
-          this.refreshText = '暂不处理'
+          this.refreshText = this.$t('trade.zbcl')
           return;
         case '5':
-          this.refreshText = '5秒自动刷新'
+          this.refreshText = this.$t('trade.zdsx5')
           break;
         case '10':
-          this.refreshText = '10秒自动刷新'
+          this.refreshText = this.$t('trade.zdsx10')
           break;
         case '20':
-          this.refreshText = '20秒自动刷新'
+          this.refreshText = this.$t('trade.zdsx20')
           break;
       }
       this.refresh(Number(name))

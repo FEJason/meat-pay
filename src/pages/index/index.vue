@@ -5,10 +5,10 @@
         <img src="@/assets/img/home/home-header-01.png" alt="img">
       </div>
       <div class="header-text">
-        <h2>全球最安全的C2C交易平台</h2>
-        <p>在EXPAY您可以安全便携，0 手续费买卖数字货币</p>
+        <h2 v-text="$t('home.qqzaq')">全球最安全的C2C交易平台</h2>
+        <p v-text="$t('home.mmszhb')">在EXPAY您可以安全便携，0 手续费买卖数字货币</p>
         <Button style="min-width: 160px;" size="large"
-          to="/otc/trade/buy-usdt">立即购买</Button>
+          to="/otc/trade/buy-usdt" v-text="$t('home.ljgm')">立即购买</Button>
       </div>
     </div>
     <div class="page-content">
@@ -23,7 +23,7 @@
           <div>{{ toFixeds(row.price) }}</div>
         </template>
         <template slot-scope="{ row, index }" slot="marketCap">
-          <div>{{ toFixeds(row.marketCap / 100000000) }}亿 </div>
+          <div>{{ toFixeds(row.marketCap / 100000000) }}{{$t('home.yi')}} </div>
         </template>
         <template slot-scope="{ row, index }" slot="percentChange24h">
           <div :class="parseFloat(row.percentChange24h) < 0 ? 'sell' : parseFloat(row.percentChange24h) > 0 ? 'buy' : ''">
@@ -35,12 +35,12 @@
       <div class="table-wrap-xs hidden-lg">
         <div class="th u-flex u-row-between">
           <span style="width: 10%">#</span>
-          <span class="u-flex-1">币种</span>
-          <span class="u-flex-1">最新价$</span>
-          <span style="width: 20%">24h涨跌幅</span>
+          <span class="u-flex-1" v-text="$t('home.bz')">币种</span>
+          <span class="u-flex-1" v-text="$t('home.zxj')">最新价$</span>
+          <span style="width: 20%">24h{{$t('home.zdf')}}</span>
         </div>
         <div class="u-flex u-row-between u-p-t-28 u-p-b-28"
-          v-for="(row, index) in listData" :key="row.cmcRank"
+          v-for="row in listData" :key="row.cmcRank"
           @click="onRowClick(row)">
           <div style="width: 10%">{{row.cmcRank}}</div>
           <div class="u-flex u-flex-1">
@@ -56,15 +56,15 @@
     </div>
     <div class="adv-wrap hidden-xs u-flex u-row-between">
       <div class="left">
-        <div class="title">Expay的优势</div>
+        <div class="title">Expay{{$t('home.dys')}}</div>
         <ul>
           <li class="u-flex">
             <div class="l">
               <img src="@assets/img/home/adv-01.png" alt="icon" style="width: 44px; height: 44px;">
             </div>
             <div class="r u-p-l-20">
-              <h2>安全可靠</h2>
-              <p>全网最严风控，T+1与T+2提现限制。人脸识别+大数据甄别洗钱及欺诈行为。</p>
+              <h2 v-text="$t('home.aqkk')">安全可靠</h2>
+              <p v-text="$t('home.qwzy')">全网最严风控，T+1与T+2提现限制。人脸识别+大数据甄别洗钱及欺诈行为。</p>
             </div>
           </li>
           <li class="u-flex">
@@ -72,8 +72,8 @@
               <img src="@assets/img/home/adv-02.png" alt="icon" style="width: 44px; height: 44px;">
             </div>
             <div class="r u-p-l-20">
-              <h2>全球覆盖</h2>
-              <p>无论您身在何处，Expay都能为您提供支持，支持50多种支付方式及10多种法币，服务全球用户。</p>
+              <h2 v-text="$t('home.qqfg')">全球覆盖</h2>
+              <p v-text="$t('home.wlnszhc')">无论您身在何处，Expay都能为您提供支持，支持50多种支付方式及10多种法币，服务全球用户。</p>
             </div>
           </li>
           <li class="u-flex">
@@ -81,8 +81,8 @@
               <img src="@/assets/img/home/adv-03.png" alt="icon" style="width: 44px; height: 44px;">
             </div>
             <div class="r u-p-l-20">
-              <h2>下单0手续费</h2>
-              <p>用户可以在Expay平台上下单购买或出售数字货币，享受0手续费优惠。</p>
+              <h2 v-text="$t('home.xd0sxf')">下单0手续费</h2>
+              <p v-text="$t('home.yhkyz')">用户可以在Expay平台上下单购买或出售数字货币，享受0手续费优惠。</p>
             </div>
           </li>
         </ul>
@@ -111,27 +111,27 @@ export default {
         },
         {
           // 币种
-          title: '币种',
+          title: this.$t('home.bz'),
           width: 200,
           slot: 'currency',
         },
         {
-          // 成交均价
-          title: '最新价$',
+          // 最新价
+          title: `${this.$t('home.zxj')}$`,
           slot: 'price',
           width: 200,
           align: 'right'
         },
         {
           // 流通市值
-          title: '流通市值$',
+          title: `${this.$t('home.ltsz')}$`,
           slot: 'marketCap',
           width: 300,
           align: 'right'
         },
         {
           // 24h涨跌幅
-          title: '24h涨跌幅',
+          title: `24h${this.$t('home.zdf')}`,
           slot: 'percentChange24h',
           align: 'center'
         },

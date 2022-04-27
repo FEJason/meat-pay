@@ -3,35 +3,27 @@
     <!-- PC端导航 -->
     <div class="menu-wrap hidden-xs">
       <Menu :active-name="activeName" width="180px">
-          <MenuGroup title="钱包">
-              <!-- <MenuItem name="1" to="/finance/account">
-                  <Icon type="md-document" />
-                  {{ $t('finance.zczl') }}
-              </MenuItem> -->
+          <MenuGroup :title="$t('finance.qb')">
               <MenuItem name="2" to="/finance/otc">
                   <Icon type="md-chatbubbles" />
-                  资金账户
+                  {{ $t('finance.zjzh') }}
               </MenuItem>
               <MenuItem name="4" to="/finance/record">
                   <Icon type="md-list-box" />
-                  充币&提币记录
+                  {{ $t('finance.cbtbjl') }}
               </MenuItem>
-              <!-- <MenuItem name="3" to="/finance/otc">
-                  <Icon type="md-chatbubbles" />
-                  {{ $t('finance.fbzh') }}
-              </MenuItem> -->
           </MenuGroup>
       </Menu>
     </div>
     <div class="con">
       <!-- 移动端导航 -->
       <div class="hidden-lg">
-        <van-cell is-link @click="showPop = true">资金账户</van-cell>
+        <van-cell is-link @click="showPop = true">{{ $t('finance.zjzh') }}</van-cell>
         <van-popup v-model="showPop" position="left">
           <div class="pop-wrap">
             <van-sidebar v-model="activeKey" @change="onChange">
-              <van-sidebar-item title="资金账户" to="/finance/otc" />
-              <van-sidebar-item title="充币&提币记录" to="/finance/record"/>
+              <van-sidebar-item :title="$t('finance.zjzh')" to="/finance/otc" />
+              <van-sidebar-item :title="$t('finance.cbtbjl')" to="/finance/record"/>
             </van-sidebar>
           </div>
         </van-popup>

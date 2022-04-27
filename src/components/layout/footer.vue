@@ -33,22 +33,11 @@
       </div>
       <div class="right">
         <ul class="u-flex u-col-top">
-          <!-- <li class="u-m-r-40">
-            <p class="title">{{ $t('footer.tool') }}</p>
-            <p><router-link to="/download">{{ $t('footer.khdxz') }}</router-link></p>
-            <p><router-link to="/validate">{{ $t('footer.gfyz') }}</router-link></p>
-            <p><router-link to="/invitation">{{ $t('footer.yqjl') }}</router-link></p>
-          </li> -->
           <li class="u-m-r-40">
             <p class="title">{{ $t('footer.service') }}</p>
             <p><router-link to="/fees">{{ $t('footer.rate') }}</router-link></p>
-            <!-- <p><router-link to="/help">{{ $t('footer.help') }}</router-link></p> -->
             <p><router-link to="/">{{ $t('footer.guide') }}</router-link></p>
           </li>
-          <!-- <li class="u-m-r-40">
-            <p class="title">{{ $t('footer.support') }}</p>
-            <p><router-link to="/application-center">{{ $t('footer.sbsq') }}</router-link></p>
-          </li> -->
           <li>
             <p class="title">{{ $t('footer.tksm') }}</p>
             <p><router-link :to="`/agreement?lang=${lang}`">{{ $t('footer.yhxy') }}</router-link></p>

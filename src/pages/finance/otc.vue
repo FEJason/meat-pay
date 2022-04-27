@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="top-wrap">
       <div class="tit u-flex">
-        <span>资产估值</span>
+        <span v-text="$t('finance.zcgz')">资产估值</span>
         <i class="icon-wrap u-m-l-12" :class="hideBalance ? 'hide' : 'show'" @click="hiddenAmount"></i>
       </div>
       <div class="top-con-lg u-p-t-12">
@@ -15,10 +15,10 @@
         <div class="sec pay-font">≈ ￥{{hideBalance ? '****' : toFixeds( $yj.accMul(otc.usdAmount, CNY)) }}</div>
       </div>
       <div class="u-p-t-12">
-        <Button type="primary" to="/deposit">充值</Button>
-        <Button class="u-m-l-10" to="/withdraw">提币</Button>
+        <Button type="primary" to="/deposit" v-text="$t('finance.congz')">充值</Button>
+        <Button class="u-m-l-10" to="/withdraw" v-text="$t('finance.tb')">提币</Button>
         <router-link to="/finance/record" class="u-p-l-16">
-          充值提币记录
+          {{ $t('finance.cztbjl') }}
           <Icon type="ios-play" />
         </router-link>
       </div>
@@ -32,7 +32,8 @@
           v-model="searchValue" prefix="ios-search"
           :placeholder="$t('finance.ss')" @on-change="search"/>
         <div class="hidden-xs u-m-l-30">
-          <Checkbox v-model="single" @on-change="hiddenMin" style="user-select: none;">隐藏0资产</Checkbox>
+          <Checkbox v-model="single" @on-change="hiddenMin" style="user-select: none;"
+            v-text="$t('finance.yc0zc')">隐藏0资产</Checkbox>
         </div>
       </div>
       <div class="u-p-t-20 u-p-b-10">{{ $t('finance.jmhb') }}</div>
@@ -71,8 +72,8 @@
         
         <template slot-scope="{ row, index }" slot="slotOperation">
           <!-- <router-link to="/otc/trade/buy-usdt" style="color: #28c878">{{ $t('finance.gm') }}</router-link> -->
-          <router-link :to="`/deposit`">充值</router-link>
-          <router-link to="/withdraw" class="u-m-l-20">{{ $t('finance.tb') }}</router-link>
+          <router-link :to="`/deposit`"  v-text="$t('finance.congz')">充值</router-link>
+          <router-link to="/withdraw" class="u-m-l-20"  v-text="$t('finance.tb')">提币</router-link>
         </template>
       </Table>
 
@@ -97,15 +98,15 @@
 
             <div class="u-font-12">
               <div class="u-flex u-row-between">
-                <div>可用	</div>
+                <div v-text="$t('finance.ky')">可用</div>
                 <div>{{ hideBalance ? '****' : row.balance }}</div>
               </div>
               <div class="u-flex u-row-between">
-                <div>冻结</div>
+                <div v-text="$t('finance.dj')">冻结</div>
                 <div>{{ hideBalance ? '****' : row.freeze }}</div>
               </div>
               <div class="u-flex u-row-between">
-                <div>BTC估值</div>
+                <div v-text="$t('finance.btcgz')">BTC估值</div>
                 <div class="u-text-right">
                   <span class="pay-font">
                   {{ hideBalance ? '****' :  toFixeds($yj.accDiv(row.rateUsd, btcPrice), 8) }}
@@ -142,7 +143,7 @@ export default {
       spot: {},
       otc: {
         usdAmount: 0.00,
-        latestAmount: 0.00000000
+        latestAmount: '0.00000000'
       },
       single: false,
       assetList: [],
@@ -158,12 +159,12 @@ export default {
               align: 'right'
           },
           {
-              title: '冻结',
+              title: this.$t('finance.dj'),
               slot: 'freeze',
               align: 'right'
           },
           {
-              title: 'BTC估值',
+              title: this.$t('finance.btcgz'),
               slot: 'rateUsd',
               align: 'right',
               sortable: true
@@ -253,7 +254,7 @@ export default {
             return item.account == 'otc'
           })
           this.otc.usdAmount = otc[0].latestAmount
-          this.otc.latestAmount = this.toFixeds(this.$yj.accDiv(otc[0].latestAmount, this.btcPrice), 8)
+          this.otc.latestAmount = this.toFixeds(this.$yj.accDiv(otc[0].latestAmount, this.btcPrice), 8) || '0.00000000'
         }
       })
     }

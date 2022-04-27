@@ -16,21 +16,25 @@
         </div>
         <!-- 导航 -->
         <div class="header-nav">
-          <router-link to="/otc/trade/buy-usdt" class="link u-m-l-24 u-m-r-24">{{ $t("header.buymoney") }}</router-link>
-          <router-link to="/otc/trade/sell-usdt" class="link u-m-r-24">卖币</router-link>
-          <router-link to="/myads" class="link u-m-r-24">我的广告</router-link>
+          <router-link to="/otc/trade/buy-usdt" class="link u-m-l-24 u-m-r-24"
+            v-text="$t('header.buymoney')">买币</router-link>
+          <router-link to="/otc/trade/sell-usdt" class="link u-m-r-24"
+            v-text="$t('header.sellmoney')">卖币</router-link>
+          <router-link to="/myads" class="link u-m-r-24"
+            v-text="$t('header.wdgg')">我的广告</router-link>
         </div>
       </div>
       <div class="header-right u-flex">
         <!-- 已登录 -->
         <div class="u-flex" v-if="isLogin">
-          <!-- 资产 -->
-          <router-link to="/finance/otc" class="link u-m-r-24">钱包</router-link>
+          <router-link to="/finance/otc" class="link u-m-r-24"
+            v-text="$t('header.qb')">钱包</router-link>
           
-          <!-- 订单 -->
-          <router-link to="/otc/orders" class="link u-m-r-24">{{ $t("header.order") }}</router-link>
+          <router-link to="/otc/orders" class="link u-m-r-24"
+            v-text="$t('header.order')">订单</router-link>
           
-          <Button to="/deposit" type="primary">充值</Button>
+          <Button to="/deposit" type="primary"
+            v-text="$t('header.congz')">充值</Button>
 
           <!-- 个人中心 -->
           <Dropdown class="u-p-l-24 u-p-r-24">
@@ -39,13 +43,16 @@
             </div>
             <DropdownMenu slot="list">
               <DropdownItem>
-                <router-link to="/security" class="dropdown-item-link">{{ $t("header.security") }}</router-link>
+                <router-link to="/security" class="dropdown-item-link"
+                  v-text="$t('header.security')">账号&安全</router-link>
               </DropdownItem>
               <DropdownItem>
-                <router-link to="/set-payment" class="dropdown-item-link">{{ $t("header.setPayment") }}</router-link>
+                <router-link to="/set-payment" class="dropdown-item-link"
+                  v-text="$t('header.setPayment')">收款设置</router-link>
               </DropdownItem>
               <DropdownItem>
-                <div @click="logout" class="dropdown-item-link">{{ $t("header.logout") }}</div>
+                <div @click="logout" class="dropdown-item-link"
+                  v-text="$t('header.logout')">退出登录</div>
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -59,8 +66,15 @@
         </div>
         <!-- 未登录 -->
         <div class="u-font-14" v-else>
-          <router-link to="/login" style="color: hsla(0,0%,100%,.8);">{{$t("header.login")}}</router-link>
-          <router-link to="/register" style="color: hsla(0,0%,100%,.8);" class="reg u-m-l-20 u-m-r-20">{{$t("header.reg")}}</router-link>
+          <router-link
+            to="/login"
+            style="color: hsla(0,0%,100%,.8);"
+            v-text="$t('header.login')">登录</router-link>
+          <router-link
+            to="/register"
+            style="color: hsla(0,0%,100%,.8);"
+            class="reg u-m-l-20 u-m-r-20"
+            v-text="$t('header.reg')">注册</router-link>
         </div>
 
         <!-- App下载 -->
@@ -91,13 +105,14 @@
             <template slot="title" class="lang-title">
               <span style="color: hsla(0,0%,100%,.8)">{{ languageValue }}</span>
             </template>
-            <!-- <MenuItem name="en" class="lang-item">English</MenuItem> -->
-            <!-- <MenuItem name="zh" class="lang-item">繁體中文</MenuItem> -->
+            <MenuItem name="en" class="lang-item">English</MenuItem>
+            <MenuItem name="zh" class="lang-item">繁體中文</MenuItem>
             <MenuItem name="zh-CN" class="lang-item">简体中文</MenuItem>
           </Submenu>
         </Menu>
       </div>
     </div>
+    <!-- 手机端 -->
     <div class="hidden-lg xs-header-wrap u-flex u-row-between">
       <h1 class="logo" style="color: #fff; margin-bottom: 10px; line-height: 60px; padding-left: 10px">
         <router-link to="/" style="color: #fff">Expay</router-link>
@@ -108,7 +123,6 @@
         </div>
         <div class="u-font-14" v-else>
           <router-link to="/login" style="color: hsla(0,0%,100%,.8);">{{$t("header.login")}}</router-link>
-          <!-- <router-link to="/register" style="color: hsla(0,0%,100%,.8);" class="reg u-m-l-20 u-m-r-20">{{$t("header.reg")}}</router-link> -->
           <Button to="/register" type="primary" class="u-m-l-20">{{$t("header.reg")}}</Button>
         </div>
         <Icon type="md-menu" size="30" color="#fff" class="u-p-l-20 u-p-r-10" @click="navShow = true"/>
@@ -116,9 +130,9 @@
       <van-popup v-model="navShow" position="right" closeable>
         <div class="nav-wrap">
           <div @click="navShow = false">
-            <van-cell title="买币" to="/otc/trade/buy-usdt" size="large"/>
-            <van-cell title="卖币" to="/otc/trade/sell-usdt" size="large"/>
-            <van-cell title="我的广告" to="/myads" size="large"/>
+            <van-cell :title="$t('header.buymoney')" to="/otc/trade/buy-usdt" size="large"/>
+            <van-cell :title="$t('header.sellmoney')" to="/otc/trade/sell-usdt" size="large"/>
+            <van-cell :title="$t('header.wdgg')" to="/myads" size="large"/>
           </div>
         </div>
       </van-popup>
@@ -129,9 +143,9 @@
               <p class="u-font-20">{{userInfo.username}}</p>
               <p>UID: {{userInfo.uuid}}</p>
             </div>
-            <van-cell title="钱包" to="/finance/otc" size="large"/>
-            <van-cell title="订单" to="/otc/orders" size="large"/>
-            <van-cell title="充值" to="/deposit" size="large"/>
+            <van-cell :title="$t('header.qb')" to="/finance/otc" size="large"/>
+            <van-cell :title="$t('header.order')" to="/otc/orders" size="large"/>
+            <van-cell :title="$t('header.congz')" to="/deposit" size="large"/>
             <van-cell :title="$t('header.security')" to="/security" size="large"/>
             <van-cell :title="$t('header.setPayment')" to="/set-payment" size="large"/>
             <van-cell :title="$t('header.logout')" size="large" @click="logout"/>
@@ -143,7 +157,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { logout } from '@/api/user'
 export default {
   data() {
@@ -197,22 +211,13 @@ export default {
     },
     /* 切换语言 */
     changelanguage: function (name) {
-      // console.log("change language: " + name);
       this.$store.commit("setlang", name);
       this.$i18n.locale = name;
       location.reload()
-      // this.$router.push('/home')
-      // setTimeout(() => {
-      //   location.reload()
-      // }, 100)
     },
     /* 退出登录 */
     logout() {
       logout().then(() => {
-        this.$Notice.success({
-          title: '提示',
-          desc: "退出成功！"
-        })
         this.SET_ISLOGIN(false)
         localStorage.clear()
         location.href = "/";

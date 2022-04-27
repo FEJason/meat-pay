@@ -1,13 +1,14 @@
 <template>
   <div>
     <div class="header">
-      <h2>我的广告</h2>
+      <h2 v-text="$t('myads.wdgg')">我的广告</h2>
       <div class="btn-wrap" v-if="merchantInfo && merchantInfo.status == 1">
         <router-link to="/otc/history-ad" class="u-font-14 u-m-r-24">
           <Icon type="md-albums" color="#007AFF" size="16" />
-          历史广告
+          {{ $t('myads.lisigg') }}
         </router-link>
-        <Button type="primary" icon="md-add" @click="releaseModal = true">发布新广告</Button>
+        <Button type="primary" icon="md-add" @click="releaseModal = true"
+          v-text="$t('myads.fabuxgg')">发布新广告</Button>
       </div>
     </div>
     <!-- <div class="u-text-center">
@@ -21,7 +22,8 @@
         alt="icon"
         style="width: 96px; height: 96px"
       />
-      <p class="u-font-20 u-m-t-32">您是尊贵的商户，去交易吧</p>
+      <p class="u-font-20 u-m-t-32"
+        v-text="$t('myads.nszgdsh')">您是尊贵的商户，去交易吧</p>
     </div>
     <div class="con u-text-center u-p-t-80 u-p-b-80"
       v-else>
@@ -30,81 +32,27 @@
         alt="icon"
         style="width: 96px; height: 96px"
       />
-      <p class="u-font-20 u-m-t-32">申请商户</p>
-      <p class="u-font-16 u-m-t-8">您需要先申请商户</p>
+      <p class="u-font-20 u-m-t-32" v-text="$t('myads.sqsh')">申请商户</p>
+      <p class="u-font-16 u-m-t-8" v-text="$t('myads.nxyxsq')">您需要先申请商户</p>
       <Button type="primary" class="u-m-t-40"
-        size="large" to="/application" v-if="!merchantInfo">现在申请</Button>
+        size="large" to="/application" v-if="!merchantInfo"
+        v-text="$t('myads.xzsq')">现在申请</Button>
       <Button
         type="primary" class="u-m-t-40"
         :disabled="true"
-        size="large" v-if="merchantInfo && merchantInfo.status == 0">申请中...请您耐心等待，24小时内会有工作人员审核</Button>
+        size="large" v-if="merchantInfo && merchantInfo.status == 0"
+        v-text="$t('myads.shenqz')">申请中...请您耐心等待，24小时内会有工作人员审核</Button>
       <Button
         type="primary" class="u-m-t-40"
         size="large" to="/application"
-        v-if="merchantInfo && merchantInfo.status == 2">申请未通过，请重新申请</Button>
+        v-if="merchantInfo && merchantInfo.status == 2"
+        v-text="$t('myads.shenqwtg')">申请未通过，请重新申请</Button>
       <Button
         type="primary" class="u-m-t-40"
         :disabled="true"
-        size="large" v-if="merchantInfo && merchantInfo.status == 3">该商户已被禁用</Button>
+        size="large" v-if="merchantInfo && merchantInfo.status == 3"
+        v-text="$t('myads.gaishyb')">该商户已被禁用</Button>
     </div>
-
-    <Modal
-      v-model="modalShow"
-      title="申请商户"
-      :mask-closable="false"
-      :footer-hide="true"
-    >
-      <Form
-        ref="formApply"
-        :model="formApply"
-        :rules="rules"
-        :label-width="136"
-      >
-        <FormItem label="商家昵称" prop="storeName">
-          <Input v-model="formApply.storeName" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="联系方式" prop="concat">
-          <Input v-model="formApply.concat" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="总计划投入 (CNY)" prop="planInvestment">
-          <Input v-model="formApply.planInvestment" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="总数字货币 (USDT)" prop="totalDigitalCurrency">
-          <Input v-model="formApply.totalDigitalCurrency" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="微信">
-          <Input v-model="formApply.wechat" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="Facebook (选填)" prop="facebook">
-          <Input v-model="formApply.facebook" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="Twitter (选填)" prop="twitter">
-          <Input v-model="formApply.twitter" placeholder="请输入"></Input>
-        </FormItem>
-        <FormItem label="视频认证">
-          <Upload action="//jsonplaceholder.typicode.com/posts/">
-            <Button icon="ios-cloud-upload-outline">选择视频</Button>
-          </Upload>
-        </FormItem>
-        <FormItem label="资产截图">
-          <Upload action="//jsonplaceholder.typicode.com/posts/">
-            <Button icon="ios-cloud-upload-outline">选择图片</Button>
-          </Upload>
-        </FormItem>
-
-        <div class="u-text-right">
-          <Button type="text" @click="formApply = false">{{ $t('publice.qx') }}</Button>
-          <Button
-            type="primary"
-            @click="handleSubmit('formApply')"
-            :loading="applyLoading"
-            class="u-m-l-8"
-            >{{ $t('publice.qd') }}</Button
-          >
-        </div>
-      </Form>
-    </Modal>
-
 
     <!-- 发布广告弹窗 -->
     <Modal
@@ -159,6 +107,7 @@
                     to="/set-payment"
                     v-if="paymentList.length == 0">设置支付方式</Button>
                 <div v-else>
+                  <!-- 类型购买传 payTypeId -->
                   <Select v-model="releaseForm.paymentIds" size="large" multiple filterable :placeholder="$t('publice.qxz')" 
                     v-if="releaseForm.side == 1">
                     <Option v-for="item in payTypeList" :label="item.name" :value="item.id" :key="item.id" class="u-flex">
@@ -166,14 +115,6 @@
                       <span class="u-p-l-6">{{item.name}}</span>
                     </Option>
                   </Select>
-                  <!-- 类型购买传 payTypeId -->
-                  <!-- <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')" 
-                    v-if="releaseForm.side == 1">
-                    <Option v-for="item in paymentList" :value="item.payTypeId" :key="item.payTypeId">
-                      {{ item.payTypeId == 4 ? $t('trade.zfb') : item.payTypeId == 3 ? $t('trade.wx') : $t('trade.yhk')}} - 
-                      {{ item.accountName }} {{ item.account }}
-                    </Option>
-                  </Select> -->
                   <!-- 类型出售传 id  -->
                   <Select v-model="releaseForm.paymentIds" size="large" multiple :placeholder="$t('publice.qxz')"
                     v-if="releaseForm.side == 2">
@@ -199,7 +140,7 @@
 import { mapMutations } from 'vuex'
 import { getCurrencyList, getLegalList, release, setRelease } from '@/api/trade'
 import { getPaymentList, getPayType } from '@/api/user'
-import { getAdvertisers, merchantApply } from '@/api/myads'
+import { getAdvertisers } from '@/api/myads'
 export default {
   data() {
     return {
@@ -224,7 +165,6 @@ export default {
         { currency: 'BTC' },
         { currency: 'ETH' },
       ],
-      modalShow: false,
       releaseModal: false,
       payTypeList: [],
       releaseForm: {
@@ -294,31 +234,6 @@ export default {
     getPayType() {
       getPayType().then(res => {
         this.payTypeList = res
-      })
-    },
-    /* 商户申请 */
-    handleSubmit(name) {
-      console.log(JSON.parse(JSON.stringify(this.formApply)))
-      // return
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.applyLoading = true
-          merchantApply({
-            ...this.formApply,
-            // 视频认证 路径 必填
-            "videoProve": "/and/123123",
-            // 资产截图 路径 必填
-            "assetsProve": "/and/1223",
-          }).then(() => {
-            this.$Notice.success({
-              title: '提示',
-              desc: "申请成功"
-            })
-            this.modalShow = false
-          }).finally(() => {
-            this.applyLoading = false
-          })
-        }
       })
     },
     /* 获取商户信息 */
