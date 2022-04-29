@@ -1,6 +1,5 @@
-// 使用百度在线翻译简体 - 翻译结果 key 首字母为大写
+// 使用百度在线翻译简体
 // let obj = {}
-// 将对象 key 改成小写，内容首字母改成大写
 // let obj2 = {}
 // for(let key in obj) {
 //     obj2[key.toLowerCase()] = obj[key].charAt(0).toUpperCase() + obj[key].slice(1)
@@ -19,7 +18,7 @@ module.exports = {
     header: {
         "buymoney": "Buy",
         "sellmoney": "Sell",
-        "wdgg": "My ad",
+        "wdgg": "My Ads",
         "qb": "Wallet",
         "order": "Order",
         "congz": "Recharge",
@@ -47,14 +46,14 @@ module.exports = {
         "fbjygz": "Transaction rules in legal currency"
     },
     home: {
-        "qqzaq": "The safest C2C trading platform in the world",
+        "qqzaq": "The world's most secure P2P trading platform.",
         "mmszhb": "In expay, you can buy and sell digital currency safely and portable with 0 handling charge",
-        "ljgm": "Buy now",
+        "ljgm": "Buy Now",
         "yi": "Billion",
-        "bz": "Currency",
-        "zxj": "Latest price",
-        "zdf": "Rise and fall range",
-        "ltsz": "Current market value",
+        "bz": "Coin",
+        "zxj": "Price",
+        "zdf": "Change",
+        "ltsz": "Market Cap",
         "dys": "Advantages",
         "aqkk": "Safe and reliable",
         "qwzy": "The strictest risk control in the whole network, with T + 1 and T + 2 withdrawal restrictions. Face recognition + big data to identify money laundering and fraud. ",
@@ -179,10 +178,11 @@ module.exports = {
         "sj": "Time",
         "leix": "Type",
         "shul": "Quantity",
-        "zhuangt": "Status"
+        "zhuangt": "Status",
+        "jmhb": "Cryptocurrency"
     },
     myads: {
-        "wdgg": "My ad",
+        "wdgg": "My Ads",
         "lisigg": "Historical advertising",
         "fabuxgg": "Publish new advertisement",
         "sqsh": "Applying merchant",

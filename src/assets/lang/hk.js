@@ -172,7 +172,8 @@ module.exports = {
         sj: '時間',
         leix: '類型',
         shul: '數量',
-        zhuangt: '狀態'
+        zhuangt: '狀態',
+        jmhb: '加密貨幣'
     },
     myads: {
         wdgg: '我的廣告',

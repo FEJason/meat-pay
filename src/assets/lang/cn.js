@@ -174,7 +174,8 @@ module.exports = {
         sj: '时间',
         leix: '类型',
         shul: '数量',
-        zhuangt: '状态'
+        zhuangt: '状态',
+        jmhb: '加密货币'
     },
     myads: {
         wdgg: '我的广告',

@@ -33,7 +33,7 @@
           :placeholder="$t('finance.ss')" @on-change="search"/>
         <div class="hidden-xs u-m-l-30">
           <Checkbox v-model="single" @on-change="hiddenMin" style="user-select: none;"
-            v-text="$t('finance.yc0zc')">隐藏0资产</Checkbox>
+            >{{$t('finance.yc0zc')}}</Checkbox>
         </div>
       </div>
       <div class="u-p-t-20 u-p-b-10">{{ $t('finance.jmhb') }}</div>
