@@ -305,3 +305,12 @@ export const setVerify = (query) => {
         method: 'put'
     })
 }
+
+/**
+ * 费率
+ */
+ export const getFeeList = () => {
+    return request({
+        url: `/wallet/rates/list`,
+    })
+}

@@ -1,141 +1,161 @@
 <template>
   <div class="page-wrap">
     <div class="header">
-      <div class="con">
-        <h2>费率说明</h2>
-        <ul class="list-wrap">
-          <li class="u-flex u-row-between">
-            <div class="left u-flex">
-              <img src="@/assets/img/fees-icon-01.png" alt="fee" />
-              <div class="u-p-l-10">
-                <h3 class="u-font-16">交易费率</h3>
-                <p>扣取收到的资产</p>
-              </div>
-            </div>
-            <div class="right">
-              <p>Maker (挂单) 0.200%</p>
-              <p>Taker (吃单) 0.200%</p>
-            </div>
-          </li>
-          <li class="u-flex u-row-between">
-            <div class="left u-flex">
-              <img src="@/assets/img/fees-icon-02.png" alt="fee" />
-              <div class="u-p-l-10">
-                <h3 class="u-font-16">充值费率</h3>
-                <p>充值免费</p>
-              </div>
-            </div>
-            <div class="right u-font-16">免费</div>
-          </li>
-          <li class="u-flex u-row-between">
-            <div class="left u-flex">
-              <img src="@/assets/img/fees-icon-03.png" alt="fee" />
-              <div class="u-p-l-10">
-                <h3 class="u-font-16">提现费率</h3>
-                <p>手续费根据区块实际情况定期调整</p>
-              </div>
-            </div>
-            <div class="right"></div>
-          </li>
-        </ul>
-      </div>
+      充值&提现费率
     </div>
-    <div class="table-wrap">
-      <div class="u-flex u-row-between u-p-b-20 u-border-bottom">
-        <h3 class="u-font-18">币种费率信息</h3>
-        <Input prefix="ios-search" placeholder="搜索" style="width: auto" />
+    <div class="body">
+      <div class="top">
+        <div class="u-flex u-row-between">
+          <div class="u-flex-1">
+            <div>充值手续费</div>
+            <div class="u-tips-color">Expay不收取数字币充值手续费。</div>
+          </div>
+          <div class="u-flex-1">
+            <div>提现费率</div>
+            <div class="u-tips-color">通过区块网络提币时，您将支付相应主网产生的手续费。提现费率由区块链网络决定。请检查最新数据。</div>
+          </div>
+        </div>
+        <div>
+          <Input class="search" prefix="ios-search" placeholder="请选择数字币" @on-change="seachInputChange" v-model="searchValue"/>
+        </div>
       </div>
-      <Table :columns="columns1" :data="listData"></Table>
+      <div class="con u-border-bottom u-m-b-60">
+        <Table :columns="columns" :data="feeData" disabled-hover>
+          <template slot-scope="{ row, index }" slot="slotName">
+            <div class="table-column">
+              <!-- <img :src="row.icon" alt="icon" style="width: 30px;" class="u-m-8"> -->
+              <div>{{row.currencyName}}</div>
+            </div>
+          </template>
+          <!-- <template slot-scope="{ row, index }" slot="slotNames">
+            <div class="u-flex">
+              <div class="table-column">{{row.names}}</div>
+            </div>
+          </template> -->
+          <template slot-scope="{ row, index }" slot="slotType">
+            <div class="u-flex table-column" v-for="item in row.tokenChainList" :key="item.tokenId">
+              <div class="u-p-r-4">{{item.chainName}}</div>
+              <div class="hint" v-if="item.isOutState">暂停提币</div>
+            </div>
+          </template>
+          <template slot-scope="{ row, index }" slot="slotMin">
+            <div class="u-flex table-column" v-for="item in row.tokenChainList" :key="item.tokenId">
+              <div class="u-p-r-4">{{item.leastPayOut}}</div>
+            </div>
+          </template>
+          <template slot-scope="{ row, index }" slot="slotIsFree">
+            <div class="table-column">免费</div>
+          </template>
+          <template slot-scope="{ row, index }" slot="slotFee">
+             <div class="u-flex table-column" v-for="item in row.tokenChainList" :key="item.tokenId">
+              <div class="u-p-r-4">{{item.payOutFee}}</div>
+            </div>
+          </template>
+        </Table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { getCurrencyList } from '@/api/finance'
 export default {
   name: 'Fess',
   data() {
     return {
-      columns1: [
-        {
-          // 币种
-          title: '币种',
-          key: 'symbol'
-        },
-        {
-          // 最小提币数量
-          title: '最小提币数量',
-          key: 'min'
-        },
-        {
-          // 提取手续费
-          title: '提取手续费',
-          align: 'right',
-          key: 'fee'
-        }
+      searchValue: '',
+      columns: [
+          {
+              title: '币种',
+              slot: 'slotName'
+          },
+          // {
+          //     title: '全称',
+          //     slot: 'slotNames'
+          // },
+          {
+              title: '主网类型',
+              slot: 'slotType'
+          },
+          {
+              title: '最小提现数量',
+              slot: 'slotMin'
+          },
+          {
+              title: '充值手续费',
+              slot: 'slotIsFree'
+          },
+          {
+              title: '提币手续费',
+              slot: 'slotFee'
+          }
       ],
-      listData: [
-        {
-          symbol: 'BTC',
-          min: '0.1',
-          fee: '0.1'
-        },
-        {
-          symbol: 'USDT',
-          min: '0.1',
-          fee: '0.1'
-        }
-      ]
+      searchData: [],
+      feeData: []
     }
   },
-  mounted() {
-    this.SET_HADERSTYLE('home')
+  created() {
+    this.getCurrencyList()
   },
   methods: {
-    ...mapMutations(['SET_HADERSTYLE'])
-  },
-  destroyed() {
-    this.SET_HADERSTYLE('')
+    async getCurrencyList() {
+      let res = await getCurrencyList()
+      this.feeData = res
+      this.searchData = res
+    },
+    seachInputChange() {
+      if (!this.searchValue) {
+        this.feeData = this.searchData
+        return
+      }
+      this.feeData = this.searchData.filter(item => {
+        return item.currencyName.indexOf(this.searchValue.toUpperCase()) != -1
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+::v-deep .ivu-table td {
+  vertical-align: top;
+}
+::v-deep .ivu-table th{
+  height: 44px !important;
+  border-top: 1px solid #e8eaec;
+}
 .page-wrap {
-  background-color: #eff3f6;
-  padding-bottom: 100px;
-}
-.header {
-  height: 314px;
-  background: url('../../assets/img/fees-bg.png') no-repeat;
-  background-size: cover;
-  color: #fff;
-  .con {
-    width: 1200px;
-    margin: 0 auto;
-    padding-top: 109px;
-    h2 {
-      padding-bottom: 37px;
-      font-size: 32px;
-    }
+  .header {
+    padding: 40px 132px;
+    font-size: 40px;
   }
-  .list-wrap {
-    display: flex;
-    justify-content: space-between;
-    li {
-      padding: 10px 20px;
-      width: 375px;
-      height: 89px;
-      background: url('../../assets/img/fees-01.png') no-repeat;
-    }
+  .body {
+    padding: 32px 132px;
   }
 }
-.table-wrap {
-  width: 1200px;
-  margin: 0 auto;
-  background-color: #fff;
-  padding: 20px;
-  margin-top: 20px;
-  color: #333;
+.search {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  ::v-deep input {
+    border-radius: 20px;
+    width: 145px;
+  }
 }
+.table-column {
+  padding-top: 20px;
+  &:last-child {
+    padding-bottom: 20px;
+  }
+}
+.hint {
+    font-size: 12px;
+    height: 20px;
+    padding-left: 8px;
+    padding-right: 8px;
+    line-height: 20px;
+    background-color: rgba(253,92,183,0.1);
+    color: #DD3652;
+    border-radius: 4px;
+}
+
 </style>

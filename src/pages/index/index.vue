@@ -54,6 +54,43 @@
         </div>
       </div>
     </div>
+    <div class="content section-a hidden-xs">
+      <div>
+        <div class="title">安全便捷交易</div>
+        <Row type="flex" justify="space-between">
+          <Col span="6">
+            <div class="ser">Step 1</div>
+            <div class="img-wrap">
+              <img src="@/assets/img/home/home-icon-01.png" alt="img">
+            </div>
+            <h3>选择广告</h3>
+            <p>选择您想要交易的数字货币，筛选法币或支付方式，选择一个广告，点击购买。</p>
+          </Col>
+          <Col span="6">
+            <div class="ser">Step 2</div>
+            <div class="img-wrap">
+              <img src="@/assets/img/home/home-icon-02.png" alt="img">
+            </div>
+            <h3>下订单</h3>
+            <p>输入购买数量，选择支付方式，然后按照卖家提供的收款方式线下转账给商家。</p>
+          </Col>
+          <Col span="6">
+            <div class="ser">Step 3</div>
+            <div class="img-wrap">
+              <img src="@/assets/img/home/home-icon-03.png" alt="img">
+            </div>
+            <h3>完成转账</h3>
+            <p>按照显示给您的付款说明进行操作。支付完成后，通知对方释放数字资产。</p>
+          </Col>
+        </Row>
+      </div>
+    </div>
+    <div class="section-b hidden-xs">
+      <div class="content">
+        <h3>50多种支付方式</h3>
+        <p>我们的宗旨是为全球各地的用户提供对点交易数字货币的服务</p>
+      </div>
+    </div>
     <div class="adv-wrap hidden-xs u-flex u-row-between">
       <div class="left">
         <div class="title">Expay{{$t('home.dys')}}</div>
@@ -89,6 +126,34 @@
       </div>
       <div class="right u-text-center">
         <img src="@/assets/img/home/adv-04.png" alt="image" style="width: 650px;">
+      </div>
+    </div>
+    <div class="section-a section-d hidden-xs">
+      <div class="content">
+        <div class="tit">Expay商家计划</div>
+        <Row type="flex" justify="space-between">
+          <Col span="7" class-name="item">
+            <div class="img-wrap">
+              <img src="@/assets/img/home/home-icon-04.png" alt="img">
+            </div>
+            <h3>0手续费发广告</h3>
+            <p>Expay在全球有超过5000位联盟商家，超低手续费发布购买或出售广告。</p>
+          </Col>
+          <Col span="7" class-name="item">
+            <div class="img-wrap">
+              <img src="@/assets/img/home/home-icon-05.png" alt="img">
+            </div>
+            <h3>VIP特权</h3>
+            <p>Expay联盟商家享受VIP特权，更低手续费，快速交易，定期线下沟通等。</p>
+          </Col>
+          <Col span="7" class-name="item">
+            <div class="img-wrap">
+              <img src="@/assets/img/home/home-icon-06.png" alt="img">
+            </div>
+            <h3>24/7客户支持</h3>
+            <p>Expay联盟商家享受专属客户服务，24/7小时全球客服为您解决订单问题。</p>
+          </Col>
+        </Row>
       </div>
     </div>
   </div>
@@ -176,6 +241,11 @@ export default {
     color: #f15057 !important;
     font-weight: bold;
 }
+
+.content {
+  width: 1200px;
+  margin: 0 auto;
+}
 .header-wrap {
   position: relative;
   width: 100%;
@@ -243,6 +313,89 @@ export default {
 }
 .table-wrap-xs {
   padding: 10px;
+}
+.section-a {
+  margin-top: 80px;
+  .title {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 38px 0;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background-color: #eee;
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background-color: #eee;
+    }
+  }
+  .ser, .img-wrap {
+    padding: 12px 0;
+  }
+  h3 {
+    font-size: 24px;
+    font-weight: 700 !important;
+    padding-bottom: 12px;
+  }
+  p {
+    font-size: 14px;
+    line-height: 20px;
+    color: #707A8A;
+  }
+}
+.section-b {
+  text-align: center;
+  background-color: #445368;
+  color: #fff;
+  padding: 38px 0;
+  margin-top: 80px;
+  h3 {
+    font-weight: 700 !important;
+    font-size: 40px;
+    line-height: 48px;
+    padding-bottom: 22px;
+  }
+  p {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+.section-d {
+  padding: 44px 0 82px;
+  background-color: #FAFAFA;
+  .tit {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    padding-bottom: 50px;
+  }
+  .item {
+    padding: 21px 33px;
+    background-color: #FFFFFF;
+    border: 1px solid #EAECEF;
+    border-radius: 16px;
+    .img-wrap {
+      padding-top: 0;
+    }
+    p {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
 }
 /* 手机端 */
 @media (max-width: 767px) {

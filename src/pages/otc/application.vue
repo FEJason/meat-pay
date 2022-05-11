@@ -65,11 +65,11 @@
         </div>
         <div class="u-flex u-row-between u-m-t-6">
           <div>
-            <Icon type="md-checkmark-circle" size="16"  color="#0ecb81" v-if="certificationInfo"/>
+            <Icon type="md-checkmark-circle" size="16"  color="#0ecb81" v-if="certificationInfo && certificationInfo.level == 1"/>
             <Icon type="md-close-circle" size="16" color="#f6465d" v-else/>
             <span>完成身份验证</span>
           </div>
-          <div class="u-flex" v-if="!certificationInfo">
+          <div class="u-flex" v-if="!(certificationInfo && certificationInfo.level == 1)">
             <Button type="text" icon="md-refresh" size="small"
               :loading="idLoading"
               @click="refresh(1)"></Button>
@@ -214,6 +214,7 @@
 import { mapActions, mapState } from "vuex"
 import { getAssetList } from '@/api/finance'
 import { merchantApply } from '@/api/myads'
+import { getAdvertisers } from '@/api/myads'
 export default {
   data() {
     return {
@@ -247,7 +248,9 @@ export default {
       applicationShow: false,
       isDisabled: true,
       loading: false,
-      assetList: [{balance: 0}]
+      assetList: [{balance: 0}],
+      // 商户状态： 0:申请中，1：正常，2：申请成为广告商未通过，3：禁用
+      merchantInfo: {},
     }
   },
   computed: {
@@ -256,14 +259,21 @@ export default {
       return this.securityInfo.emailSetting[0] && this.securityInfo.mobileSetting[0]
     },
     isGreater() {
-      return this.assetList[0].balance >= 15000
+      return this.assetList[0].balance >= 15000 || this.merchantInfo && this.merchantInfo.status == 2
     }
   },
   created() {
     this.getAssetList()
+    this.getAdvertisers()
   },
   methods: {
     ...mapActions(['getSecurity', 'getCertification']),
+    /* 获取商户信息 */
+    getAdvertisers() {
+      getAdvertisers().then(res => {
+        this.merchantInfo = res || null
+      })
+    },
     /* 上传前 */
     beforeUpload(data) {
       if (data && data.size >= 1024000 * 200) {
