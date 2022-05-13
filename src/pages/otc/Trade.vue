@@ -34,13 +34,6 @@
         </div>
       </div>
 
-      <!-- <div class="u-p-r-12">
-        <a href="javascript:void(0)" @click="goBusiness" class="u-font-14">
-          <Icon type="ios-contact" color="#007AFF" size="16"/>
-          {{ $t('trade.cwsj') }}
-        </a>
-        <Button class="u-m-l-10" type="success" @click="clickRelease">{{ $t('trade.fbwtd') }}</Button>
-      </div> -->
     </div>
 
     <div class="table-wrap">
@@ -775,23 +768,17 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import {
   getCurrencyList,
   getLegalList,
   getAdList,
-  release,
-  setRelease,
   getIdAdv,
   otcOrder,
   queryPayWay
 } from '@/api/trade'
 import { getPaymentList } from '@/api/user'
-import yjuiSelect from '@/components/yjui-select/yjui-select'
 export default {
-  components: {
-    yjuiSelect
-  },
   data() {
     // 总价效验
     const validateTotalPrice = (rule, value, callback) => {
@@ -948,7 +935,6 @@ export default {
   },
   watch: {
     $route(to, from) {
-      // console.log('监听路由变化', this.$route.params.c)
       let c = this.$route.params.c
       if (c) {
         this.buyOrSell = this.$route.params.c.split('-')[0]
@@ -1124,7 +1110,6 @@ export default {
           this.popShow = true
         } else {
           this.modalShow = true
-          // this.$set( row, 'modalShow', true)
         }
         this.marketNo = row.marketNo
         this.tradeId = row.id
@@ -1193,26 +1178,8 @@ export default {
         })
       })
     },
-    /* 成为商家 */
-    goBusiness() {
-      if (this.isLogin) {
-        // 提示用户下载App完成视频认证
-        this.$Message.warning('后期跳转新页面，提示用户下载App完成视频认证')
-        // this.$router.push({
-        //   path: "/identbusiness"
-        // });
-      } else {
-        // this.$Message.warning("请先登录");
-        this.$router.push({
-          path: '/login'
-        })
-      }
-    },
     /* 加载广告 */
     loadAd(pageNo) {
-      console.log('pageNo', pageNo) // 当前页
-      console.log('this.coinActive', this.coinActive)
-
       // 根据当前币种找对应ID
       let currencyId = this.coins.filter(item => {
         return item.currency == this.coinActive.toUpperCase()
