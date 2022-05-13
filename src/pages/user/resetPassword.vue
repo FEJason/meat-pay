@@ -176,7 +176,6 @@ export default {
     uVerificationCode
   },
   data() {
-    // 邮箱号验证
     const validateEmail = (rule, value, callback) => {
       let isEmail = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
       if (value == "") {
@@ -351,29 +350,6 @@ export default {
           }).finally(() => {
             this.submitLoading = false
           })
-          
-          
-          // const obj = encryption({
-          //   data: name == 'formMobile'? this.formMobile : this.formEmail,
-          //   key: 'thanks,metacloud',
-          //   param: ['password']
-          // })
-          // console.log(obj)
-          // this.submitLoading = true
-          // register(
-          //   obj
-          // ).then(res => {
-          //   this.$Notice.success({
-          //     title: this.$t('publice.ts'),
-          //     desc: this.$t('register.zccg')
-          //   })
-          //   this.$router.push({
-          //     path: '/login'
-          //   })
-          //   console.log(res)
-          // }).finally(() => {
-          //   this.submitLoading = false
-          // })
         }
       });
     },

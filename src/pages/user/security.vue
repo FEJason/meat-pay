@@ -1597,7 +1597,6 @@ export default {
     onOff(type) {
       this.safeShow = true
 
-      // 打开安全弹窗、重置倒计时
       this.$refs.uCodeEmail && this.$refs.uCodeEmail.reset()
       this.$refs.uCodeMobile && this.$refs.uCodeMobile.reset()
 
@@ -1625,11 +1624,6 @@ export default {
     },
     /* 绑定 */
     bindFn() {
-      // 绑定前先验证
-      // console.log(JSON.parse(JSON.stringify(this.securityInfo)))
-      // this.safeShow = true
-      // this.safeType = 10
-
       this.mobileShow = true
     },
     /* 获取谷歌认证 */
@@ -1652,7 +1646,6 @@ export default {
       }
     },
     frontHandleSuccess(res, file, fileList) {
-      // this.$refs.upload1.fileList = [fileList[fileList.length - 1]]
       if (res.code == 0) {
         this.frontCardImg = this.imgPreview = res.data.url
       } else {
@@ -1660,7 +1653,6 @@ export default {
       }
     },
     backHandleSuccess(res, file, fileList) {
-      // this.$refs.upload2.fileList = [fileList[fileList.length - 1]]
       if (res.code == 0) {
         this.backCardImg = this.imgNext = res.data.url
       } else {
@@ -1668,7 +1660,6 @@ export default {
       }
     },
     handHandleSuccess(res, file, fileList) {
-      // this.$refs.upload3.fileList = [fileList[fileList.length - 1]]
       if (res.code == 0) {
         this.handCardImg = this.imgLast = res.data.url
       } else {
@@ -1699,7 +1690,6 @@ export default {
     },
     /* 提交 */
     submit(name, type) {
-      // console.log(type);
       switch (name) {
         // 安全验证
         case 'formValidate':
@@ -1720,9 +1710,6 @@ export default {
           break
         // 实名认证
         case 'formValidate6':
-          // console.log(JSON.parse(JSON.stringify(this.formValidate6)))
-          // return
-          // state == 3 被驳回调另一个接口
           let request = this.certificationInfo.state == 3 ? certificationEdit : certification
           request({
             // 认证级别[0:未认证,1:基础认证,2:视频认证]，初次认证：默认1
@@ -1785,7 +1772,6 @@ export default {
             }
             // 更换谷歌
             else if (type == 18) {
-              // 成功弹出 - 安全验证(手机验证或谷歌验证)
               this.stepsKey = res
               this.googleShow = false
               this.safeShow = true
@@ -1802,12 +1788,9 @@ export default {
             emailCode: this.formValidate2a.vailCode1,
             verifyType: 17
           }).then(res => {
-            // 保存返回值，第2步使用
             this.stepsKey = res
-            // 成功弹出第二步
-            // console.log(this.stepsKey);
             this.editEemailShowa = false
-            this.editEemailShowb = true // 弹出第2步
+            this.editEemailShowb = true
           })
           break
         // 更换邮箱 第2步
@@ -1819,7 +1802,6 @@ export default {
             verifyType: 20
           }).then(res => {
             this.stepsKey = res
-            // 成功弹出 - 安全验证(手机验证或谷歌验证)
             this.editEemailShowb = false
             this.safeShow = true
             this.safeType = 23
@@ -1830,7 +1812,6 @@ export default {
           setVerify({
             email: this.formValidate2.mail,
             emailCode: this.formValidate2.vailCode1,
-            // stepsKey: this.stepsKey,
             verifyType: 11
           }).then(res => {
             this.emailShow = false
@@ -1880,7 +1861,6 @@ export default {
             verifyType: 19
           }).then(res => {
             this.stepsKey = res
-            // 成功弹出 - 安全验证(手机验证或谷歌验证)
             this.mobileShowb = false
             this.safeShow = true
             this.safeType = 22
@@ -2073,10 +2053,6 @@ export default {
           break
         // 绑定手机 第1步
         case index == 2:
-          // if (this.formValidate3.mobile == '') {
-          //   this.$refs.formValidate3.validateField("mobile");
-          //   return
-          // }
           countName && this.$refs[countName].start()
           formName && (this[formName].disabled = true)
           sendCode({

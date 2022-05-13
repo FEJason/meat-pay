@@ -263,7 +263,6 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          // 未勾选用户协议，提示
           if (!this.agree) {
             this.$Notice.info({
               title: this.$t('publice.ts'),

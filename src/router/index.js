@@ -149,7 +149,7 @@ const routes = [
       {
         path: '/inmail-info/:id',
         component: () => import('../pages/user/inmailInfo'),
-        meta: { title: '消息' }
+        meta: { title: '消息详情' }
       },
       // 账户&安全
       {
@@ -164,13 +164,6 @@ const routes = [
         name: 'setpayment',
         component: () => import('../pages/user/setPayment'),
         meta: { title: '设置' }
-      },
-      // 币币订单
-      {
-        path: '/transac',
-        name: 'transac',
-        component: () => import('../pages/user/transac'),
-        meta: { title: '币币订单' }
       },
       // 工具 - 官方验证通道
       {

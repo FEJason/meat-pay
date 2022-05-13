@@ -371,10 +371,6 @@ export default {
         this.payTypeList = res
       })
     },
-    /* 添加收款方式 */
-
-    /* 开关 */
-    switichChange() {},
     /* 银行卡提交 */
     submit(name) {
       let params = {}

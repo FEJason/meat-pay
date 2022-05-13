@@ -1426,39 +1426,7 @@ export default {
   .containers {
     width: 100%;
     margin: 20px 0;
-    .fiat {
-      border-radius: 5px;
-      height: 250px;
-      background: url('../../assets/images/otc_bg.jpg') no-repeat center center;
-      background-size: 100%;
-      display: flex; //flex布局
-      justify-content: center; //使子项目水平居中
-      align-items: center; //使子项目垂直居中
-      .to_business {
-        color: #fff;
-        text-align: center;
-        h3 {
-          font-size: 46px;
-          letter-spacing: 20px;
-        }
-        span {
-          font-size: 20px;
-          letter-spacing: 10px;
-          display: block;
-        }
-        a {
-          width: 220px;
-          height: 45px;
-          display: inline-block;
-          background: #ffa400;
-          border-radius: 5px;
-          font-size: 20px;
-          line-height: 45px;
-          color: #000;
-          margin-top: 20px;
-        }
-      }
-    }
+    
     .content {
       width: 100%;
       margin: 20px auto;
