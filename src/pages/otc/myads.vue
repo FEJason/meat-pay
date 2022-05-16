@@ -59,7 +59,7 @@
       v-model="releaseModal"
       :mask-closable="false"
       :footer-hide="true">
-      <div slot="header" class="u-font-18">发布广告</div>
+      <div slot="header" class="u-font-18" v-text="$t('myads.fabuxgg')">发布新广告</div>
       <div class="detail u-p-l-20 u-p-r-20">
           <Form ref="releaseForm" :model="releaseForm" :rules="rules"
             label-position="top">
@@ -67,8 +67,8 @@
               <FormItem :label="$t('trade.gglx')" prop="side">
                   <Select v-model="releaseForm.side" size="large"
                     @on-change="sideChange">
-                      <Option value="1">我要购买</Option>
-                      <Option value="2">我要出售</Option>
+                      <Option value="1">{{ $t('myads.wygm') }}</Option>
+                      <Option value="2">{{ $t('myads.wycs') }}</Option>
                   </Select>
               </FormItem>
               <div class="p-flex">

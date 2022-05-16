@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="page-con">
-      <h1 class="u-m-b-30">登录</h1>
+      <h1 class="u-m-b-30" v-text="$t('login.dl')">登录</h1>
       <Form ref="form" :model="form" :rules="rules">
         <FormItem prop="username">
           <Input type="text" v-model="form.username" :placeholder="$t('login.qsrs')" class="user"></Input>
@@ -20,7 +20,7 @@
             <span>{{ $t('login.myzh') }}</span>
             <router-link to="/register">{{ $t('login.ljzc') }}</router-link>
           </div>
-          <router-link to="/reset-password">找回密码</router-link>
+          <router-link to="/reset-password" v-text="$t('login.zhmm')">找回密码</router-link>
 
         </div>
       </Form>

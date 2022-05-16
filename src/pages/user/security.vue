@@ -24,10 +24,10 @@
         class="certification u-m-t-20 u-p-20"
       >
         <div>
-          <h2>邀请</h2>
+          <h2 v-text="$t('security.yaoq')">邀请</h2>
           <div class="u-p-t-10 link-wrap">
             <div>
-              <p class="u-font-12">邀请链接</p>
+              <p class="u-font-12" v-text="$t('security.yaoqlj')">邀请链接</p>
               <div class="u-flex">
                 <p>{{ `http://192.168.0.109:8016/#/register?ref=${userInfo.inviteCode}` }}</p>
                 <Icon type="md-copy" size="24" class="u-tips-color" style="cursor: pointer;"
@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="right">
-              <p class="u-font-12">我的邀请码</p>
+              <p class="u-font-12" v-text="$t('security.wdyqm')">我的邀请码</p>
               <div class="u-flex">
                 <p>{{ userInfo.inviteCode }}</p>
                 <Icon type="md-copy" size="24" class="u-tips-color" style="cursor: pointer;"
@@ -59,7 +59,7 @@
           <div class="u-p-t-10">
             <span class="u-link" v-if="certificationInfo && certificationInfo.level == 1">
               <Icon type="md-checkmark-circle" size="14" />
-              实名认证
+              {{ $t('security.smrz') }}
             </span>
             <span
               class="u-link"
@@ -67,13 +67,13 @@
               v-if="!certificationInfo || certificationInfo.level == 0"
             >
               <Icon type="md-close-circle" size="14" />
-              实名认证
+              {{ $t('security.smrz') }}
             </span>
           </div>
         </div>
         <!-- 未认证 -->
         <p v-if="!certificationInfo">
-          <span class="u-link" @click="realNameShow = true">去认证</span>
+          <span class="u-link" @click="realNameShow = true">{{ $t('security.qrenz') }}</span>
         </p>
         <!-- 实名认证 [0:待审核,1:审核中,2:审核通过,3:审核失败] -->
         <p v-if="certificationInfo && certificationInfo.state === 0">

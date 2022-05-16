@@ -56,39 +56,39 @@
     </div>
     <div class="content section-a hidden-xs">
       <div>
-        <div class="title">安全便捷交易</div>
+        <div class="title" v-text="$t('home.aqbjjy')">安全便捷交易</div>
         <Row type="flex" justify="space-between">
           <Col span="6">
             <div class="ser">Step 1</div>
             <div class="img-wrap">
               <img src="@/assets/img/home/home-icon-01.png" alt="img">
             </div>
-            <h3>选择广告</h3>
-            <p>选择您想要交易的数字货币，筛选法币或支付方式，选择一个广告，点击购买。</p>
+            <h3 v-text="$t('home.xzgg')">选择广告</h3>
+            <p v-text="$t('home.xznxyjy')">选择您想要交易的数字货币，筛选法币或支付方式，选择一个广告，点击购买。</p>
           </Col>
           <Col span="6">
             <div class="ser">Step 2</div>
             <div class="img-wrap">
               <img src="@/assets/img/home/home-icon-02.png" alt="img">
             </div>
-            <h3>下订单</h3>
-            <p>输入购买数量，选择支付方式，然后按照卖家提供的收款方式线下转账给商家。</p>
+            <h3 v-text="$t('home.xiadd')">下订单</h3>
+            <p v-text="$t('home.shurgm')">输入购买数量，选择支付方式，然后按照卖家提供的收款方式线下转账给商家。</p>
           </Col>
           <Col span="6">
             <div class="ser">Step 3</div>
             <div class="img-wrap">
               <img src="@/assets/img/home/home-icon-03.png" alt="img">
             </div>
-            <h3>完成转账</h3>
-            <p>按照显示给您的付款说明进行操作。支付完成后，通知对方释放数字资产。</p>
+            <h3 v-text="$t('home.wczz')">完成转账</h3>
+            <p v-text="$t('home.anzxs')">按照显示给您的付款说明进行操作。支付完成后，通知对方释放数字资产。</p>
           </Col>
         </Row>
       </div>
     </div>
     <div class="section-b hidden-xs">
       <div class="content">
-        <h3>50多种支付方式</h3>
-        <p>我们的宗旨是为全球各地的用户提供对点交易数字货币的服务</p>
+        <h3 v-text="$t('home.zhiffs50')">50多种支付方式</h3>
+        <p v-text="$t('home.womdzzs')">我们的宗旨是为全球各地的用户提供对点交易数字货币的服务</p>
       </div>
     </div>
     <div class="adv-wrap hidden-xs u-flex u-row-between">
@@ -130,28 +130,28 @@
     </div>
     <div class="section-a section-d hidden-xs">
       <div class="content">
-        <div class="tit">Expay商家计划</div>
+        <div class="tit" v-text="$t('home.shangjjh')">Expay商家计划</div>
         <Row type="flex" justify="space-between">
           <Col span="7" class-name="item">
             <div class="img-wrap">
               <img src="@/assets/img/home/home-icon-04.png" alt="img">
             </div>
-            <h3>0手续费发广告</h3>
-            <p>Expay在全球有超过5000位联盟商家，超低手续费发布购买或出售广告。</p>
+            <h3 v-text="$t('home.fee0')">0手续费发广告</h3>
+            <p v-text="$t('home.zaiqqy')">Expay在全球有超过5000位联盟商家，超低手续费发布购买或出售广告。</p>
           </Col>
           <Col span="7" class-name="item">
             <div class="img-wrap">
               <img src="@/assets/img/home/home-icon-05.png" alt="img">
             </div>
-            <h3>VIP特权</h3>
-            <p>Expay联盟商家享受VIP特权，更低手续费，快速交易，定期线下沟通等。</p>
+            <h3 v-text="$t('home.tequan')">VIP特权</h3>
+            <p v-text="$t('home.lianmsj')">Expay联盟商家享受VIP特权，更低手续费，快速交易，定期线下沟通等。</p>
           </Col>
           <Col span="7" class-name="item">
             <div class="img-wrap">
               <img src="@/assets/img/home/home-icon-06.png" alt="img">
             </div>
-            <h3>24/7客户支持</h3>
-            <p>Expay联盟商家享受专属客户服务，24/7小时全球客服为您解决订单问题。</p>
+            <h3 v-text="$t('home.kehzc')">24/7客户支持</h3>
+            <p v-text="$t('home.lianmsjzsku')">Expay联盟商家享受专属客户服务，24/7小时全球客服为您解决订单问题。</p>
           </Col>
         </Row>
       </div>

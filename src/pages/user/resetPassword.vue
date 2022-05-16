@@ -1,11 +1,11 @@
 <template>
   <div class="page-wrap">
     <div class="page-con">
-      <h1>重置登录密码</h1>
-      <div class="hint u-m-t-30 u-m-b-20">重置登录密码后，24小时内禁止提币和OTC划转</div>
+      <h1 v-text="$t('resetPass.czdlmm')">重置登录密码</h1>
+      <div class="hint u-m-t-30 u-m-b-20" v-text="$t('resetPass.jztb')">重置登录密码后，24小时内禁止提币</div>
       <ul class="email-phone u-flex">
-        <li :class="{'on': changeActive == 0}" @click="handleTab(0)">邮箱</li>
-        <li :class="{'on': changeActive == 1}" @click="handleTab(1)">手机</li>
+        <li :class="{'on': changeActive == 0}" @click="handleTab(0)" v-text="$t('resetPass.youx')">邮箱</li>
+        <li :class="{'on': changeActive == 1}" @click="handleTab(1)" v-text="$t('resetPass.shouj')">手机</li>
       </ul>
       <Form ref="formEmail" :model="formEmail" :rules="rules" v-if="changeActive == 0">
         <FormItem prop="email">
@@ -55,7 +55,7 @@
       class="detail"
       v-model="visible"
       width="480px"
-      title="安全验证"
+      :title="$t('security.aqyz')"
       :mask-closable="false"
       :footer-hide="true"
       @on-cancel="visible = false"
@@ -67,7 +67,7 @@
         label-position="top"
       >
         <!-- 邮箱验证码 -->
-        <FormItem :label="$t('uc.safe.emailcode')" prop="emailCode" v-if="changeActive == 0">
+        <FormItem :label="$t('security.yxyzm')" prop="emailCode" v-if="changeActive == 0">
           <Input v-model="formValidate.emailCode" size="large">
             <div class="timebox" slot="append">
               <Button
@@ -92,7 +92,7 @@
           </Input>
         </FormItem>
         <!-- 手机验证码 -->
-        <FormItem :label="$t('uc.safe.phonecode')" prop="mobileCode" v-if="changeActive == 1">
+        <FormItem :label="$t('security.sjyzm')" prop="mobileCode" v-if="changeActive == 1">
           <Input v-model="formValidate.mobileCode" size="large">
             <div class="timebox" slot="append">
               <Button
@@ -118,13 +118,13 @@
         </FormItem>
         <div class="u-text-right u-m-t-30">
           <Button type="text" @click="visible = false">{{
-            $t('uc.api.cancel')
+            $t('publice.qx')
           }}</Button>
           <Button
             type="primary"
             :loading="loading"
             @click="submit('formValidate')"
-            >{{ $t('common.ok') }}</Button
+            >{{ $t('publice.qd') }}</Button
           >
         </div>
       </Form>
@@ -135,7 +135,7 @@
       class="detail"
       v-model="visibleThree"
       width="480px"
-      title="重置密码"
+      :title="$t('resetPass.czmm')"
       :mask-closable="false"
       :footer-hide="true"
       @on-cancel="visibleThree = false"
@@ -146,7 +146,7 @@
         :rules="ruleValidate"
         label-position="top"
       >
-        <FormItem label="密码" prop="password">
+        <FormItem :label="$t('resetPass.ps')" prop="password">
           <Input type="password" password v-model="formValidateT.password" size="large"></Input>
         </FormItem>
         <div class="u-text-right u-m-t-30">

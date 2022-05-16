@@ -1,22 +1,22 @@
 <template>
   <div class="page-wrap">
-    <div class="header">
+    <div class="header" v-text="$t('fees.cztxfl')">
       充值&提现费率
     </div>
     <div class="body">
       <div class="top">
         <div class="u-flex u-row-between">
           <div class="u-flex-1">
-            <div>充值手续费</div>
-            <div class="u-tips-color">Expay不收取数字币充值手续费。</div>
+            <div v-text="$t('fees.czsxf')">充值手续费</div>
+            <div class="u-tips-color" v-text="$t('fees.bsqszb')">Expay不收取数字币充值手续费。</div>
           </div>
           <div class="u-flex-1">
-            <div>提现费率</div>
-            <div class="u-tips-color">通过区块网络提币时，您将支付相应主网产生的手续费。提现费率由区块链网络决定。请检查最新数据。</div>
+            <div v-text="$t('fees.txfl')">提现费率</div>
+            <div class="u-tips-color" v-text="$t('fees.tgqkwltb')">通过区块网络提币时，您将支付相应主网产生的手续费。提现费率由区块链网络决定。请检查最新数据。</div>
           </div>
         </div>
         <div>
-          <Input class="search" prefix="ios-search" placeholder="请选择数字币" @on-change="seachInputChange" v-model="searchValue"/>
+          <Input class="search" prefix="ios-search" :placeholder="$t('fees.qxzszb')" @on-change="seachInputChange" v-model="searchValue"/>
         </div>
       </div>
       <div class="con u-border-bottom u-m-b-60">
@@ -35,7 +35,7 @@
           <template slot-scope="{ row, index }" slot="slotType">
             <div class="u-flex table-column" v-for="item in row.tokenChainList" :key="item.tokenId">
               <div class="u-p-r-4">{{item.chainName}}</div>
-              <div class="hint" v-if="item.isOutState">暂停提币</div>
+              <div class="hint" v-if="item.isOutState" v-text="$t('fees.zttb')">暂停提币</div>
             </div>
           </template>
           <template slot-scope="{ row, index }" slot="slotMin">
@@ -44,7 +44,7 @@
             </div>
           </template>
           <template slot-scope="{ row, index }" slot="slotIsFree">
-            <div class="table-column">免费</div>
+            <div class="table-column" v-text="$t('fees.mf')">免费</div>
           </template>
           <template slot-scope="{ row, index }" slot="slotFee">
              <div class="u-flex table-column" v-for="item in row.tokenChainList" :key="item.tokenId">
@@ -66,27 +66,23 @@ export default {
       searchValue: '',
       columns: [
           {
-              title: '币种',
+              title: this.$t('fees.biz'),
               slot: 'slotName'
           },
-          // {
-          //     title: '全称',
-          //     slot: 'slotNames'
-          // },
           {
-              title: '主网类型',
+              title: this.$t('fees.zwlx'),
               slot: 'slotType'
           },
           {
-              title: '最小提现数量',
+              title: this.$t('fees.zxtxsl'),
               slot: 'slotMin'
           },
           {
-              title: '充值手续费',
+              title: this.$t('fees.czsxf'),
               slot: 'slotIsFree'
           },
           {
-              title: '提币手续费',
+              title: this.$t('fees.tbsxf'),
               slot: 'slotFee'
           }
       ],

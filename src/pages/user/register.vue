@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="page-con">
-      <h1 class="u-m-b-30">注册</h1>
+      <h1 class="u-m-b-30" v-text="$t('register.zc')">注册</h1>
       <ul class="email-phone u-flex">
         <li :class="{'on': changeActive == 0}" @click="handleTab(0)">{{ $t('register.yxzc') }}</li>
         <li :class="{'on': changeActive == 1}" @click="handleTab(1)">{{ $t('register.sjzc') }}</li>

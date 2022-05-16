@@ -5,7 +5,7 @@
       class="detail"
       v-model="visible"
       width="480px"
-      title="安全验证"
+      :title="$t('security.aqyz')"
       :mask-closable="false"
       :footer-hide="true"
       @on-cancel="cancel"
@@ -20,9 +20,9 @@
           <!-- 邮箱验证码 -->
           <div v-if="securityInfo.emailSetting[1] || safeType == 8">
             <div class="u-p-b-10" style="color: #9aa5b5">
-              获取并输入邮箱 {{ securityInfo.email }} 收到的验证码
+              {{ $t('security.hqbsr') }} {{ securityInfo.email }} {{ $t('security.sddyzm') }}
             </div>
-            <FormItem :label="$t('uc.safe.emailcode')" prop="emailCode">
+            <FormItem :label="$t('security.yxyzm')" prop="emailCode">
               <Input v-model="formValidate.emailCode" size="large">
                 <div class="timebox" slot="append">
                   <Button
@@ -50,9 +50,9 @@
           <!-- 手机验证码 -->
           <div v-if="securityInfo.mobileSetting[1] || safeType == 7">
             <div class="u-p-b-10" style="color: #9aa5b5">
-              获取并输入手机 {{ securityInfo.mobile }} 收到的验证码
+              {{ $t('security.hqbsrsj') }} {{ securityInfo.mobile }} {{ $t('security.sddyzm') }}
             </div>
-            <FormItem :label="$t('uc.safe.phonecode')" prop="mobileCode">
+            <FormItem :label="$t('security.sjyzm')" prop="mobileCode">
               <Input v-model="formValidate.mobileCode" size="large">
                 <div class="timebox" slot="append">
                   <Button
@@ -80,25 +80,25 @@
           <!-- 资金密码 -->
           <!-- 37 - 提币 -->
           <div v-if="securityInfo.tradeSetting[0] && safeType == 37">
-            <FormItem label="资金密码" prop="password">
+            <FormItem :label="$t('security.zjmm')" prop="password">
               <Input v-model="formValidate.password" type="password" size="large"></Input>
             </FormItem>
           </div>
           <!-- 谷歌验证码 -->
           <div v-if="securityInfo.googleSetting[1] || safeType == 9">
-            <FormItem :label="$t('uc.safe.googlecode')" prop="googleAuthCode">
+            <FormItem :label="$t('security.ggyzm')" prop="googleAuthCode">
               <Input v-model="formValidate.googleAuthCode" size="large"></Input>
             </FormItem>
           </div>
           <div class="u-text-right">
             <Button type="text" @click="cancel">{{
-              $t('uc.api.cancel')
+              $t('publice.qx')
             }}</Button>
             <Button
               type="primary"
               :loading="loading"
               @click="handleSubmit('formValidate', safeType)"
-              >{{ $t('common.ok') }}</Button
+              >{{  $t('publice.qd') }}</Button
             >
           </div>
         </Form>
@@ -162,7 +162,7 @@ export default {
         googleAuthCode: [
           {
             required: true,
-            message: '请输入谷歌验证码',
+            message: this.$t('security.qsrggyzm'),
             trigger: 'blur'
           }
         ],
@@ -183,7 +183,7 @@ export default {
         password: [
           {
             required: true,
-            message: '请输入资金密码',
+            message: this.$t('security.qsrzjmm'),
             trigger: 'blur'
           }
         ]
@@ -242,8 +242,8 @@ export default {
       })
         .then(() => {
           this.$Notice.success({
-            title: '提示',
-            desc: '成功'
+            title: this.$t('publice.ts'),
+            desc: this.$t('publice.cg')
           })
         })
         .catch(() => {
