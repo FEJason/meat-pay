@@ -103,7 +103,7 @@
               </div>
               <div class="u-flex u-row-between">
                 <div v-text="$t('finance.dj')">冻结</div>
-                <div>{{ hideBalance ? '****' : row.freeze }}</div>
+                <div>{{ hideBalance ? '****' : $yj.accAdd(row.freeze, row.payOutFreeze, row.tradeFreeze) }}</div>
               </div>
               <div class="u-flex u-row-between">
                 <div v-text="$t('finance.btcgz')">BTC估值</div>
