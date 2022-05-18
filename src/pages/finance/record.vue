@@ -64,7 +64,7 @@
           </li>
         </ul>
       </div>
-      <div class="u-text-center u-p-t-30">
+      <div class="u-text-center u-p-t-30 u-p-b-30">
         <Page :total="totalPage" @on-change="onChange" />
       </div>
     </div>
