@@ -4,8 +4,8 @@
       <div class="header"></div>
       <div class="card-wrap">
         <div class="title u-flex">
-          <h2>收款方式</h2>
-          <p class="u-font-12 u-p-l-20">
+          <h2 v-text="$t('payment.shoukfs')">收款方式</h2>
+          <p class="u-font-12 u-p-l-20" v-text="$t('payment.qinwbsy')">
             请务必使用您本人的实名账户，
             被激活的收款方式将在交易时向买方展示，最多激活3种
           </p>
@@ -13,7 +13,7 @@
         <div class="list-wrap u-font-14">
           <div class="u-flex u-row-right u-p-t-20 u-p-b-20">
             <Button type="primary" icon="md-add" @click="addShow = true"
-              >添加收款方式</Button
+              v-text="$t('payment.tianjsk')">添加收款方式</Button
             >
           </div>
           <div
@@ -23,9 +23,12 @@
           >
             <div class="left u-flex u-font-12">
               <div class="u-flex" style="width: 120px; text-align: left">
-                <div class="icon-wrap" style="color: #00C096" v-if="item.payTypeId == 3">微信支付</div>
-                <div class="icon-wrap" style="color: #007AFF" v-else-if="item.payTypeId == 4">支付宝</div>
-                <div class="icon-wrap" style="color: #f4a661" v-else>{{ $t('uc.account.backcardno') }}</div>
+                <div class="icon-wrap" style="color: #00C096" v-if="item.payTypeId == 3" 
+                  v-text="$t('payment.weix')">微信支付</div>
+                <div class="icon-wrap" style="color: #007AFF" v-else-if="item.payTypeId == 4"
+                  v-text="$t('payment.zhifb')">支付宝</div>
+                <div class="icon-wrap" style="color: #f4a661" v-else
+                  v-text="$t('payment.yinghk')">银行卡</div>
               </div>
 
             </div>
@@ -46,7 +49,7 @@
               </div>
 
               <div class="u-flex edit">
-                <div class="u-m-r-20 u-link" @click="edit(item)">修改</div>
+                <div class="u-m-r-20 u-link" @click="edit(item)" v-text="$t('payment.xiug')">修改</div>
                 <i-switch
                   size="large"
                   :value="item.status == 1 ? true : false"
@@ -66,7 +69,7 @@
     <Modal
       class="detail"
       v-model="blankShow"
-      :title="$t('uc.account.backcardno')"
+      :title="$t('payment.tianjyhk')"
       :mask-closable="false"
       :footer-hide="true"
     >
@@ -79,44 +82,30 @@
             :label-width="85"
           >
             <!-- 姓名 -->
-            <FormItem :label="$t('uc.account.name')">
+            <FormItem :label="$t('payment.xinm')">
               <Input disabled size="large" v-model="realNameInfo.cardName"></Input>
             </FormItem>
             <!-- 开户银行 -->
-            <FormItem :label="$t('uc.account.bankaccount')" prop="accountName">
+            <FormItem :label="$t('payment.kaihyh')" prop="accountName">
               <Input v-model="blankForm.accountName" size="large"></Input>
             </FormItem>
             <!-- 开户支行 -->
-            <FormItem :label="$t('uc.account.bankbranch')" prop="accountInfo">
+            <FormItem :label="$t('payment.kaihzh')" prop="accountInfo">
               <Input v-model="blankForm.accountInfo" size="large"></Input>
             </FormItem>
             <!-- 银行账号 -->
-            <FormItem :label="$t('uc.account.bankno')" prop="account">
+            <FormItem :label="$t('payment.yinghzh')" prop="account">
               <Input
                 v-model="blankForm.account"
                 size="large"
                 type="text"
               ></Input>
             </FormItem>
-            <!-- 确认卡号 -->
-            <!-- <FormItem :label="$t('uc.account.confirmbankno')" prop="bankNoConfirm">
-                      <Input v-model="blankForm.bankNoConfirm" size="large" type="text"></Input>
-                  </FormItem> -->
-            <!-- passwd -->
-            <!-- <FormItem :label="$t('uc.account.fundpwd')" prop="password">
-              <Input
-                v-model="blankForm.password"
-                type="password"
-                size="large"
-              ></Input>
-            </FormItem> -->
-            <!-- Button -->
             <FormItem class="u-text-right">
-              <Button type="text" @click="blankShow = false" class="u-m-r-10"
-                >取消</Button
+              <Button type="text" @click="blankShow = false" class="u-m-r-10">{{ $t("publice.qx") }}</Button
               >
               <Button type="primary" @click="submit('blankForm')" :loading="blankLoading">{{
-                $t("uc.account.save")
+                $t("publice.qd")
               }}</Button>
             </FormItem>
           </Form>
@@ -128,7 +117,7 @@
     <Modal
       class="detail"
       v-model="aliShow"
-      title="支付宝"
+      :title="$t('payment.zhifb')"
       :mask-closable="false"
       :footer-hide="true"
     >
@@ -136,22 +125,22 @@
         <div class="detail-list">
           <Form ref="aliForm" :model="aliForm" :rules="rules" :label-width="85">
             <!-- 姓名 -->
-            <FormItem :label="$t('uc.account.name')">
+            <FormItem :label="$t('payment.xinm')">
               <Input disabled size="large" v-model="realNameInfo.cardName"></Input>
             </FormItem>
             <!-- 支付宝账号 -->
-            <FormItem label="支付宝账号" prop="account">
+            <FormItem :label="$t('payment.zhifbzh')" prop="account">
               <Input v-model="aliForm.account" size="large"></Input>
             </FormItem>
             <FormItem class="u-text-right">
               <Button type="text" @click="aliShow = false" class="u-m-r-10"
-                >取消</Button
+                >{{ $t("publice.qx") }}</Button
               >
               <Button
                 type="primary"
                 @click="submit('aliForm')"
                 :loading="blankLoading"
-                >{{ $t('uc.account.save') }}</Button
+                >{{ $t("publice.qd") }}</Button
               >
             </FormItem>
           </Form>
@@ -163,7 +152,7 @@
     <Modal
       class="detail"
       v-model="weChatShow"
-      title="微信"
+      :title="$t('payment.weix')"
       :mask-closable="false"
       :footer-hide="true"
     >
@@ -176,22 +165,22 @@
             :label-width="85"
           >
             <!-- 姓名 -->
-            <FormItem :label="$t('uc.account.name')">
+            <FormItem :label="$t('payment.xinm')">
               <Input disabled size="large" v-model="realNameInfo.cardName"></Input>
             </FormItem>
             <!-- 微信账号 -->
-            <FormItem label="微信账号" prop="account">
+            <FormItem :label="$t('payment.weixzh')" prop="account">
               <Input v-model="weChatForm.account" size="large"></Input>
             </FormItem>
             <FormItem class="u-text-right">
               <Button type="text" @click="weChatShow = false" class="u-m-r-10"
-                >取消</Button
+                >{{ $t("publice.qx") }}</Button
               >
               <Button
                 type="primary"
                 @click="submit('weChatForm')"
                 :loading="blankLoading"
-                >{{ $t('uc.account.save') }}</Button
+                >{{ $t("publice.qd") }}</Button
               >
             </FormItem>
           </Form>
@@ -202,17 +191,17 @@
     <Modal
       class="detail"
       v-model="addShow"
-      title="添加收款方式"
+      :title="$t('payment.tianjsk')"
       :mask-closable="false"
       :footer-hide="true"
     >
       <div class="detail">
-        <div class="u-p-b-10">收款方式</div>
+        <div class="u-p-b-10" v-text="$t('payment.shoukfs')">收款方式</div>
         <Select
           filterable
           v-model="payTypeId"
           size="large"
-          placeholder="请输入关键字"
+          :placeholder="$t('payment.qingsrgjz')"
           @on-change="changePayType"
         >
           <Option v-for="item in payTypeList" :label="item.name" :value="item.id" :key="item.id" class="u-flex">
@@ -221,8 +210,8 @@
           </Option>
         </Select>
         <div class="u-flex u-row-right u-p-t-20">
-          <Button type="text" @click="addShow = false">取消</Button>
-          <Button type="primary" @click="confirmPayType">确定</Button>
+          <Button type="text" @click="addShow = false">{{ $t("publice.qx") }}</Button>
+          <Button type="primary" @click="confirmPayType">{{ $t("publice.qd") }}</Button>
         </div>
       </div>
     </Modal>

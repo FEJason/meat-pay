@@ -1,10 +1,10 @@
 // 使用百度在线翻译简体
-// let obj = {}
-// let obj2 = {}
-// for(let key in obj) {
-//     obj2[key.toLowerCase()] = obj[key].charAt(0).toUpperCase() + obj[key].slice(1)
-// }
-// console.log(obj2)
+let obj = {}
+let obj2 = {}
+for(let key in obj) {
+    obj2[key.toLowerCase()] = obj[key].charAt(0).toUpperCase() + obj[key].slice(1)
+}
+console.log(obj2)
 
 module.exports = {
     publice: {
@@ -44,6 +44,23 @@ module.exports = {
         "yhxy": "User agreement",
         "ystk": "Privacy clause",
         "fbjygz": "Transaction rules in legal currency"
+    },
+    payment: {
+        "shoukfs": "Collection method",
+        "qinwbsy": "Please be sure to use your own real name account. The activated collection methods will be displayed to the buyer during the transaction, with up to 3 activated methods",
+        "tianjsk": "Add collection method",
+        "xiug": "Modify",
+        "weix": "Wechat payment",
+        "zhifb": "Alipay",
+        "yinghk": "Bank card",
+        "tianjyhk": "Add bank card",
+        "xinm": "Name",
+        "kaihyh": "Deposit bank",
+        "kaihzh": "Opening branch",
+        "yinghzh": "Account number",
+        "zhifbzh": "Alipay account number",
+        "weixzh": "Wechat account",
+        "qingsrgjz": "Please enter keyword"
     },
     fees: {
         "cztxfl": "Recharge & withdrawal rate",

@@ -37,6 +37,23 @@ module.exports = {
         ystk: '隐私条款',
         fbjygz: '法币交易规则'
     },
+    payment: {
+        shoukfs: '收款方式',
+        qinwbsy: '请务必使用您本人的实名账户，被激活的收款方式将在交易时向买方展示，最多激活3种',
+        tianjsk: '添加收款方式',
+        xiug: '修改',
+        weix: '微信支付',
+        zhifb: '支付宝',
+        yinghk: '银行卡',
+        tianjyhk: '添加银行卡',
+        xinm: '姓名',
+        kaihyh: '开户银行',
+        kaihzh: '开户支行',
+        yinghzh: '银行账号',
+        zhifbzh: '支付宝账号',
+        weixzh: '微信账号',
+        qingsrgjz: '请输入关键字'
+    },
     fees: {
         cztxfl: '充值&提现费率',
         czsxf: '充值手续费',

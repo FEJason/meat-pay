@@ -37,6 +37,23 @@ module.exports = {
         ystk: '隱私條款',
         fbjygz: '法幣交易規則'
     },
+    payment: {
+        shoukfs: '收款方式',
+        qinwbsy: '請務必使用您本人的實名賬户，被激活的收款方式將在交易時向買方展示，最多激活3種',
+        tianjsk: '添加收款方式',
+        xiug: '修改',
+        weix: '微信支付',
+        zhifb: '支付寶',
+        yinghk: '銀行卡',
+        tianjyhk: '添加銀行卡',
+        xinm: '姓名',
+        kaihyh: '開户銀行',
+        kaihzh: '開户支行',
+        yinghzh: '銀行賬號',
+        zhifbzh: '支付寶賬號',
+        weixzh: '微信賬號',
+        qingsrgjz: '請輸入關鍵字'
+    },
     fees: {
         cztxfl: '充值&提現費率',
         czsxf: '充值手續費',
