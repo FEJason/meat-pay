@@ -50,6 +50,16 @@ import request from '@/request/request'
 }
 
 /**
+ * 充值记录
+ */
+ export const getRecordList = (query) => {
+  return request({
+      url: `/wallet/assets/account/recharge/record-list`,
+      params: query
+  })
+}
+
+/**
  * 提币
  */
  export const withdraw = (query) => {

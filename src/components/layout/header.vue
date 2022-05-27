@@ -33,8 +33,9 @@
           <router-link to="/otc/orders" class="link u-m-r-24"
             v-text="$t('header.order')">订单</router-link>
           
-          <Button to="/deposit" type="primary"
-            v-text="$t('header.congz')">充值</Button>
+          <Button type="primary"
+            v-text="$t('header.congz')"
+            @click="goToDeposit">充值</Button>
 
           <!-- 个人中心 -->
           <Dropdown class="u-p-l-24 u-p-r-24">
@@ -170,7 +171,7 @@ export default {
     this.$i18n.locale = this.lang;
   },
   computed: {
-    ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle', 'userInfo', 'notRead']),
+    ...mapState(['activeNav', 'lang', 'isLogin', 'headerStyle', 'userInfo', 'notRead', 'certificationInfo']),
     languageValue() {
       let curlang = this.lang;
       if (curlang == "en") {
@@ -205,6 +206,19 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ATCIVENAV', 'SET_ISLOGIN']),
+    /* 充值 */
+    goToDeposit() {
+      if(!this.certificationInfo) {
+        this.$router.push('/deposit')
+        // this.$router.push('/security')
+        // this.$Notice.info({
+        //   title: this.$t('publice.ts'),
+        //   desc: this.$t('请先完成实名认证')
+        // })
+      } else {
+        this.$router.push('/deposit')
+      }
+    },
     /* 通知 */
     handleNotice() {
       this.$router.push('/inmail')

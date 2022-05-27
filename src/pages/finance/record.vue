@@ -25,15 +25,18 @@
         <div class="table-wrap hidden-xs">
           <Table :columns="columns" :data="tableData" :loading="tableLoading">
             <template slot-scope="{ row, index }" slot="slotBillType">
-              {{ formatType[row.billType.toString()] }}
+              {{ active == 0 ? '充值' : '提现'}}
             </template>
             <template slot-scope="{ row, index }" slot="status">
-              <div>{{ formatStatus[row.status] }}</div>
+              <div>{{ active == 0 ? formatStatus1[row.status.toString()] : formatStatus[row.status.toString()] }}</div>
+            </template>
+            <template slot-scope="{ row, index }" slot="slotExpand">
+              <div>哈哈哈</div>
             </template>
           </Table>
         </div>
         <!-- 移动端列表 -->
-        <ul class="xs-list hidden-lg" v-for="row in tableData" :key="row.timeStamp">
+        <!-- <ul class="xs-list hidden-lg" v-for="row in tableData" :key="row.timeStamp">
           <li>
             <div>时间</div>
             <div>
@@ -62,18 +65,18 @@
               {{ formatStatus[row.status] }}
             </div>
           </li>
-        </ul>
+        </ul> -->
       </div>
-      <div class="u-text-center u-p-t-30 u-p-b-30">
+      <!-- <div class="u-text-center u-p-t-30 u-p-b-30">
         <Page :total="totalPage" @on-change="onChange" />
-      </div>
+      </div> -->
     </div>
 
   </div>
 </template>
 
 <script>
-import { getCurrencyList, getRecord } from '@/api/finance'
+import { getCurrencyList, getRecord, getRecordList } from '@/api/finance'
 // import safeModal from '@components/safeModal/safeModal'
 // import QrcodeVue from "qrcode.vue"
 
@@ -92,6 +95,11 @@ export default {
         1: '进行中',
         2: '失败',
         3: '完成'
+      },
+      formatStatus1: {
+        0: '确认中',
+        1: '成功',
+        2: '失败'
       },
       formatType: {
         1: '充值',
@@ -113,7 +121,7 @@ export default {
           title: this.$t('finance.leix'),
           align: 'right',
           slot: 'slotBillType',
-          key: 'billType'
+          key: 'status'
         },
         {
           title: this.$t('finance.shul'),
@@ -125,6 +133,12 @@ export default {
           align: 'right',
           slot: 'status'
         },
+        // {
+        //   type: 'expand',
+        //   title: '操作',
+        //   align: 'center',
+        //   slot: 'slotExpand'
+        // },
       ],
       queryData: {
         type: 1,
@@ -137,34 +151,52 @@ export default {
     }
   },
   created() {
-    this.getRecord()
-    this.getCurrencyList()
+    this.getList()
+    // this.getCurrencyList()
   },
   methods: {
     /* 切换页码 */
     onChange(page) {
       this.queryData.current = page
-      this.getRecord()
+      this.getList()
     },
     /* 切换tab */
     tabChange(index) {
       this.active = index
       this.tableTitle = this.tabList[index]
-      this.getRecord(index)
+      this.getList()
     },
-    /* 获取财务记录 */
-    getRecord() {
+    /* 获取列表 */
+    getList() {
       switch(this.active) {
         case 0:
-          this.queryData.type = 1
+          this.getRecordList()
           break;
         case 1:
           this.queryData.type = 2
-          break;
-        case 2:
-          this.queryData.type = 7
+          this.getWithdrawList()
           break;
       }
+    },
+    /* 充值记录 */
+    getRecordList() {
+      this.tableLoading = true
+      getRecordList({
+        createTime: this.$yj.timeFormat(new Date().getTime())
+      }).then(res => {
+        if (res && res.length) {
+          this.tableData = res
+          // this.totalPage = res.total
+        } else {
+          this.tableData = []
+          this.totalPage = 0
+        }
+      }).finally(() => {
+        this.tableLoading = false
+      })
+    },
+    /* 提币记录 */
+    getWithdrawList() {
       this.tableLoading = true
       getRecord({
         walletType: 'otc',
@@ -181,7 +213,6 @@ export default {
         this.tableLoading = false
       })
     },
-
     /* 复制地址 */
     copySuccess() {
       this.$Notice.success({
