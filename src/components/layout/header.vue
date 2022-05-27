@@ -209,12 +209,11 @@ export default {
     /* 充值 */
     goToDeposit() {
       if(!this.certificationInfo) {
-        this.$router.push('/deposit')
-        // this.$router.push('/security')
-        // this.$Notice.info({
-        //   title: this.$t('publice.ts'),
-        //   desc: this.$t('请先完成实名认证')
-        // })
+        this.$router.push('/security')
+        this.$Notice.info({
+          title: this.$t('publice.ts'),
+          desc: this.$t('请先完成实名认证')
+        })
       } else {
         this.$router.push('/deposit')
       }

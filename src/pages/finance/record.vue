@@ -30,9 +30,9 @@
             <template slot-scope="{ row, index }" slot="status">
               <div>{{ active == 0 ? formatStatus1[row.status.toString()] : formatStatus[row.status.toString()] }}</div>
             </template>
-            <template slot-scope="{ row, index }" slot="slotExpand">
-              <div>哈哈哈</div>
-            </template>
+            <!-- <template slot-scope="{ row, index }" slot="slotOperation">
+              <div class="u-link">详情</div>
+            </template> -->
           </Table>
         </div>
         <!-- 移动端列表 -->
@@ -134,10 +134,9 @@ export default {
           slot: 'status'
         },
         // {
-        //   type: 'expand',
         //   title: '操作',
         //   align: 'center',
-        //   slot: 'slotExpand'
+        //   slot: 'slotOperation'
         // },
       ],
       queryData: {
