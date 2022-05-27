@@ -54,8 +54,17 @@ import request from '@/request/request'
  */
  export const getRecordList = (query) => {
   return request({
-      url: `/wallet/assets/account/recharge/record-list`,
+      url: `/wallet/assets/account/recharge/record-page`,
       params: query
+  })
+}
+
+/**
+ * 充值详情
+ */
+ export const getRecordDetails = (query) => {
+  return request({
+      url: `/wallet/assets/account/recharge/${query.id}`,
   })
 }
 

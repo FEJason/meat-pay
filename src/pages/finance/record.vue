@@ -30,9 +30,9 @@
             <template slot-scope="{ row, index }" slot="status">
               <div>{{ active == 0 ? formatStatus1[row.status.toString()] : formatStatus[row.status.toString()] }}</div>
             </template>
-            <!-- <template slot-scope="{ row, index }" slot="slotOperation">
-              <div class="u-link">详情</div>
-            </template> -->
+            <template slot-scope="{ row, index }" slot="slotOperation">
+              <div class="u-link" @click="openDetails(row.id)">详情</div>
+            </template>
           </Table>
         </div>
         <!-- 移动端列表 -->
@@ -67,16 +67,45 @@
           </li>
         </ul> -->
       </div>
-      <!-- <div class="u-text-center u-p-t-30 u-p-b-30">
+      <div class="u-text-center u-p-t-30 u-p-b-30">
         <Page :total="totalPage" @on-change="onChange" />
-      </div> -->
+      </div>
     </div>
-
+    <Modal
+        v-model="modal"
+        title="详情"
+        footer-hide>
+        <div class="detail">
+          <p class="u-p-b-20 u-flex">
+            <span>提现网络</span>
+            <span class="u-p-l-20 u-tips-color">{{ recordDetails.contractName }}</span>
+          </p>
+          <p class="u-p-b-20 u-flex">
+            <span>确认数</span>
+            <span class="u-p-l-20 u-tips-color">{{ recordDetails.chainConfirmNum }}</span>
+          </p>
+          <p class="u-p-b-20 u-flex">
+            <span>收款地址</span>
+            <span class="u-p-l-20 u-tips-color">{{ recordDetails.toAddress }}</span>
+          </p>
+          <p class="u-p-b-20 u-flex">
+            <span>交易哈希</span>
+            <span class="u-p-l-20 u-tips-color" style="max-width: 300px; word-wrap: break-word;">{{ recordDetails.txHash}}</span>
+          </p>
+          <p class="u-p-b-20 u-flex">
+            <span>日期</span>
+            <span class="u-p-l-20 u-tips-color" style="max-width: 300px; word-wrap: break-word;">{{ recordDetails.createTime}}</span>
+          </p>
+          <div class="u-p-t-20">
+            <Button type="primary" long :to="recordDetails.scanUrl + recordDetails.txHash">查询链上详细信息</Button>
+          </div>
+        </div>
+    </Modal>
   </div>
 </template>
 
 <script>
-import { getCurrencyList, getRecord, getRecordList } from '@/api/finance'
+import { getCurrencyList, getRecord, getRecordList, getRecordDetails } from '@/api/finance'
 // import safeModal from '@components/safeModal/safeModal'
 // import QrcodeVue from "qrcode.vue"
 
@@ -87,6 +116,7 @@ export default {
   },
   data() {
     return {
+      modal: false,
       active: this.$route.query.active || 0,
       tableTitle: this.$t('finance.congbjl'),
       tabList: [this.$t('finance.congbjl'), this.$t('finance.tbjl')],
@@ -133,11 +163,11 @@ export default {
           align: 'right',
           slot: 'status'
         },
-        // {
-        //   title: '操作',
-        //   align: 'center',
-        //   slot: 'slotOperation'
-        // },
+        {
+          title: '操作',
+          align: 'right',
+          slot: 'slotOperation'
+        },
       ],
       queryData: {
         type: 1,
@@ -146,7 +176,8 @@ export default {
         currencyId: '',
         timeStamp: '',
       },
-      totalPage: 0
+      totalPage: 0,
+      recordDetails: {},
     }
   },
   created() {
@@ -154,6 +185,19 @@ export default {
     // this.getCurrencyList()
   },
   methods: {
+    ok () {
+      this.$Message.info('Clicked ok');
+    },
+    cancel () {
+      this.$Message.info('Clicked cancel');
+    },
+    openDetails(id) {
+      this.modal = true
+      getRecordDetails({id})
+        .then(res => {
+          this.recordDetails = res
+        })
+    },
     /* 切换页码 */
     onChange(page) {
       this.queryData.current = page
@@ -183,9 +227,9 @@ export default {
       getRecordList({
         createTime: this.$yj.timeFormat(new Date().getTime())
       }).then(res => {
-        if (res && res.length) {
-          this.tableData = res
-          // this.totalPage = res.total
+        if (res.records && res.records.length) {
+          this.tableData = res.records
+          this.totalPage = res.total
         } else {
           this.tableData = []
           this.totalPage = 0
@@ -276,6 +320,13 @@ fieldset[disabled] .ivu-input {
     }
     .on {
       border-bottom: 2px solid #333;
+    }
+  }
+}
+.detail {
+  p {
+    span:nth-child(1) {
+      min-width: 60px;
     }
   }
 }
